@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<center><h1>Welcome back {{current_user.username}}!</h1>
+  <h2>Voting helps steer the family: 
+{% for post in posts %}
+<ul>&#128205;{{ post.studying }} - {{ post.description }}</ul>
+{% endfor %}
+    </h2>
+    <h1>Vote to change the temperature:</h1>
+    <div class="page border">
+        <div class="form">
+            <form method="post">
+                {{ form.hidden_tag() }}
+                <p>
+                    {{ form.studying.label }}<br>
+                    {{ form.studying(size=32) }}<br>
+                    {% for error in form.studying.errors %}
+                    <span style="color: red;">[{{ error }}]</span>
+                    {% endfor %}
+                </p>
+                <p>
+                    {{ form.country.label }}<br>
+                    {{ form.country(size=64) }}<br>
+                    {% for error in form.country.errors %}
+                    <span style="color: red;">[{{ error }}]</span>
+                    {% endfor %}
+                </p>
+                <p>
+                    {{ form.description.label }}<br>
+                    {{ form.description(size=32) }}<br>
+                    {% for error in form.description.errors %}
+                    <span style="color: red;">[{{ error }}]</span>
+                    {% endfor %}
+                </p>
+                <p>{{ form.submit() }}</p>
+            </form></center>
+        </div>
+    </div>
+{% endblock %}

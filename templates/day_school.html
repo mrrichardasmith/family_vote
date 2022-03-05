@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<center><div class="page">
+    <div class="form">
+      <h1>How was your day?</h1>
+      <form class="login-form" action="" method="post" novalidate>
+        {{ dayform.hidden_tag() }}
+      <tabel>
+        <tr>
+        {% for subfield in dayform.yourday %}
+            <td>{{ subfield.label }}</td>
+            <td>{{ subfield }}</td>
+        {% endfor %}
+        </tr>
+      </tabel>
+
+      <p>{{ dayform.why.label }}</p>
+      <p>{{ dayform.why(size=20) }}</p>
+      
+      <p>{{ dayform.submit() }}</p>
+
+     </form>
+   </div>
+</div>
+</center>
+
+
+{% endblock %}

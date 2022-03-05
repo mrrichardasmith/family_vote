@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<center>
+	<h1 style="color:olivedrab">Where The Family votes</h1>
+	<h3 >Family Voters Currently Think:</h3>
+	<div class="container_large">
+	{% for post in posts %}
+		<ul class="pull-left" >&#127829;{{ post.studying }} - {{ post.description }} - {{ post.id }}</ul>
+	{% endfor %}
+	</div>
+	<div class="large_container">
+		<table>
+			<tr>
+				<th>Family Member</th>
+				<th>Date/Time</th>
+				<th>Thought</th>
+				<th>Country</th>
+				<th>thoughts</th>
+			</tr>
+			
+			{% for thought in thoughts %}
+			<tr>
+				<td>{{ thought.username }}</td>
+				<td>{{ thought.timestamp }}</td> 
+				<td>{{ thought.thinking_about }}</td> 
+				<td>{{ thought.country }}</td> 
+				<td>{{ thought.thoughts }}</td>
+
+			</tr>
+			{% endfor %}
+		</table>
+		<table>
+			<tr>
+				<th>Family Member</th>
+				<th>Date</th>
+				<th>How Day Went</th>
+				<th>Why</th>
+			</tr>
+			
+			{% for day in days %}
+			<tr>
+				<td>{{ day.username }}</td>
+				<td>{{ day.date }}</td>
+				<td>{{ day.yourday }}</td>
+				<td>{{ day.why }} </td>
+			</tr>
+			{% endfor %}
+		</table>
+	</div>
+	
+</center>
+
+
+
+
+{% endblock %}
