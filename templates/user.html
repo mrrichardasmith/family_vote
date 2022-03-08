@@ -3,34 +3,33 @@
 {% block content %}
 
 <center><h1>Welcome back {{current_user.username}}!</h1>
-  <h2>Voting helps steer the family: 
+  <h2>Transparency helps steer the family</h2> 
 {% for post in posts %}
-<ul>&#128205;{{ post.studying }} - {{ post.description }}</ul>
+<ul>&#128205;{{ post.likesDislikes }} - {{ post.reason }}</ul>
 {% endfor %}
-    </h2>
-    <h1>Vote to change the temperature:</h1>
+    
     <div class="page border">
         <div class="form">
             <form method="post">
                 {{ form.hidden_tag() }}
                 <p>
-                    {{ form.studying.label }}<br>
-                    {{ form.studying(size=32) }}<br>
-                    {% for error in form.studying.errors %}
+                    {{ form.likesDislikes.label }}<br>
+                    {{ form.likesDislikes(size=32) }}<br>
+                    {% for error in form.likesDislikes.errors %}
                     <span style="color: red;">[{{ error }}]</span>
                     {% endfor %}
                 </p>
                 <p>
                     {{ form.country.label }}<br>
-                    {{ form.country(size=64) }}<br>
+                    {{ form.country(size=1) }}<br>
                     {% for error in form.country.errors %}
                     <span style="color: red;">[{{ error }}]</span>
                     {% endfor %}
                 </p>
                 <p>
-                    {{ form.description.label }}<br>
-                    {{ form.description(size=32) }}<br>
-                    {% for error in form.description.errors %}
+                    {{ form.reason.label }}<br>
+                    {{ form.reason(size=32) }}<br>
+                    {% for error in form.reason.errors %}
                     <span style="color: red;">[{{ error }}]</span>
                     {% endfor %}
                 </p>

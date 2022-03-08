@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<center><div class="border">
+    <div class="form border">
+      <form class="login-form" action="" method="post" novalidate>
+        {{ peopleForm.hidden_tag() }}
+        <h1>Who are the people in our lives?</h1>
+        <Table>
+          <tr>
+            <td>{{ peopleForm.good.label }}</td>
+            <td>{{ peopleForm.good }}</td>
+          </tr>
+          <tr>
+            <td>{{ peopleForm.bad.label }}</td>
+            <td>{{ peopleForm.bad }}</td>
+          </tr>
+          <tr>
+            <td>{{ peopleForm.ugly.label }}</td>
+            <td>{{ peopleForm.ugly }}</td>
+          </tr>
+        </Table>
+          <p>
+            {{ peopleForm.morewords.label }}<br>
+            {{ peopleForm.morewords(size=6) }}
+          </p>
+          <p>
+            {{ peopleForm.submit }}
+          </p>
+     </form>
+   </div>
+</div>
+</center>
+
+
+{% endblock %}

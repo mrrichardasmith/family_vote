@@ -32,7 +32,7 @@
   box-sizing: border-box;
   font-size: 14px;
 }
-.form button {
+.button {
   font-family: "Bitter", sans-serif;
   text-transform: uppercase;
   outline: 0;
@@ -46,12 +46,12 @@
   transition: all 0.3 ease;
   cursor: pointer;
 }
-.form button:hover,.form button:active,.form button:focus {
+.button:hover,.form button:active,.form button:focus {
   background: #43A047;
 }
 .form .message {
   margin: 15px 0 0;
-  color: #b3b3b3;
+  color: #928287;
   font-size: 12px;
 }
 .form .message a {
@@ -60,6 +60,12 @@
 }
 .form .register-form {
   display: none;
+}
+.container_small  {
+  position: relative;
+  z-index: 1;
+  max-width: 100px;
+  margin: 0 auto;
 }
 .container {
   position: relative;
@@ -70,8 +76,7 @@
 .container_large  {
   position: relative;
   z-index: 1;
-  max-width: 500px;
-  margin: 0 auto;
+  max-width: 60%;
 }
 .container:before, .container:after {
   content: "";
@@ -100,7 +105,7 @@
 .container .info span .fa {
   color: #EF3B3A;
 }
-.vote {
+.survey {
   position: relative;
   z-index: 1;
   background: #FFFFFF;
@@ -115,6 +120,11 @@
   text-align: left;
 }
 
+.text-center  {
+  text-align: center;
+  margin: auto;
+}
+
 body {
   font-family: Bitter;
 }
@@ -125,29 +135,45 @@ th, td {
   text-align: left;
 }
 
+.item1 { grid-area: dash1; }
+.item2 { grid-area: dash2; }
+.item3 { grid-area: dash3; }
+.item4 { grid-area: dash4; }
+.item5 { grid-area: dash5; }
+
+.grid-container {
+  display: grid;
+  grid-template-areas:
+    'dash1 dash1 dash1 dash1 dash1'
+    'dash2 dash2 dash2 dash3 dash3'
+    'dash4 dash4 dash4 dash5 dash5';
+  gap: 50px;
+  padding: 20px;
+}
+
+
 .border  {
-  border: #ffa700 solid 2px;
+  border: #fff1d8 solid 2px;
 }
   
 </style>
  
         {% if title %}
-        <title>{{ title }} - Family Voting</title>
+        <title>{{ title }} - Family Focus</title>
         {% else %}
-        <title>Vote on It</title>
+        <title>Whats Happening</title>
         {% endif %}
     </head>
     <body>
            <div>
-      <center><h3>Family Vote - be heard</h3><center>
+      <center><h3>Family Focus</h3><center>
       
       <a href="{{ url_for('index') }}">Home</a>
       {% if current_user.is_anonymous %}
       <a href="{{ url_for('login') }}">Login</a>
       {% else %}
-      <a href="{{ url_for('user', username=current_user.username) }}">Profile</a>
-      <a href="{{ url_for('vote', username=current_user.username) }}">Voting</a>
-      <a href="{{ url_for('day', username=current_user.username) }}">Day</a>
+      <!--<a href="{{ url_for('user', username=current_user.username) }}">Likes Dislikes</a>-->
+      <a href="{{ url_for('day', username=current_user.username) }}">Family Daily</a>
       <a href="{{ url_for('logout') }}">Logout</a>
       {% endif %}
     </div>
