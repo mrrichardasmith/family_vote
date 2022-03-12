@@ -17,11 +17,11 @@ class LoginForm(FlaskForm):
     remember_me = BooleanField('Remember Me')
     submit = SubmitField('Sign In')
 
-class DestinationForm(FlaskForm):
-    likesDislikes = StringField('Likes and Dislikes')
+class LikesDislikesForm(FlaskForm):
+    likes_dislikes = RadioField('Like or Dislike', choices=['Likes', 'Dislikes'], validators=[DataRequired()])
     country = SelectField(u'Country', choices=[('USA', 'United States'), ('UK', 'United Kingdom'), ('EU', 'Europe')])
     reason = StringField('More Words')
-    submit = SubmitField('Post')
+    submit = SubmitField('Submit')
 
     def validate_username(self, username):
         user = User.query.filter_by(username=username.data).first()

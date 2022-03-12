@@ -39,11 +39,12 @@
 					<th>Family Member</th>
 				</tr>
 				
-				{% for post in posts %}
+				{% for likedislike in likesdislikes %}
 				<tr>
-					<td>{{ post.likesDislikes }}</td>
-					<td>{{ post.reason }}</td>
-					<td>{{ post.username }}</td>
+					<td>{{ likedislike.likes_dislikes }}</td>
+					<td>{{ likedislike.reason }}</td>
+					<td>{{ likedislike.username }}</td>
+					<td>{{ likedislike.country }}</td>
 				</tr>
 					{% endfor %}
 				

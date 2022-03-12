@@ -11,19 +11,31 @@
           <tr>
             <td>{{ peopleForm.good.label }}</td>
             <td>{{ peopleForm.good }}</td>
+            {% for error in peopleForm.good.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
           </tr>
           <tr>
             <td>{{ peopleForm.bad.label }}</td>
             <td>{{ peopleForm.bad }}</td>
+            {% for error in peopleForm.bad.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
           </tr>
           <tr>
             <td>{{ peopleForm.ugly.label }}</td>
             <td>{{ peopleForm.ugly }}</td>
+            {% for error in peopleForm.ugly.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
           </tr>
         </Table>
           <p>
             {{ peopleForm.morewords.label }}<br>
             {{ peopleForm.morewords(size=6) }}
+            {% for error in peopleForm.morewords.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
           </p>
           <p>
             {{ peopleForm.submit }}

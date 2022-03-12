@@ -11,7 +11,7 @@ class User(UserMixin, db.Model):
     username = db.Column(db.String(65), index=True, unique=True)
     email = db.Column(db.String(120), index=True, unique=False)
     password_hash = db.Column(db.String(120))
-    posts = db.relationship('Post', backref='user.id', lazy='dynamic')
+    Likesdislikes = db.relationship('Likesdislikes', backref='user.id', lazy='dynamic')
     thinking = db.relationship('Thinking', backref='', lazy='dynamic')
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -22,16 +22,16 @@ class User(UserMixin, db.Model):
         return '<User {}>'.format(self.username)
 
 
-class Post(db.Model):
+class Likesdislikes(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    likesDislikes = db.Column(db.String(140))
+    likes_dislikes = db.Column(db.String(7))
     country = db.Column(db.String(140))
     reason = db.Column(db.String(140))
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     username = db.Column(db.Integer, db.ForeignKey('user.username'))
 
     def __repr__(self):
-        return '<Post {}>'.format(self.reason)
+        return '<Likesdislikes {}>'.format(self.reason)
 
 class Thinking(db.Model):
     id = db.Column(db.Integer, primary_key=True)
