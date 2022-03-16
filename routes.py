@@ -1,6 +1,7 @@
+from cgitb import html
 from flask import request, render_template, flash, redirect,url_for
-from models import User, Likesdislikes, Thinking, Day_school, People
-from forms import RegistrationForm, LoginForm, LikesDislikesForm, ThinkingForm, DaySchoolForm, GoodBadUglyForm
+from models import User, Likesdislikes, Thinking, Day_school, People, Admin
+from forms import RegistrationForm, LoginForm, LikesDislikesForm, ThinkingForm, DaySchoolForm, GoodBadUglyForm, AdminForm
 from werkzeug.urls import url_parse
 from flask_login import current_user, login_user, logout_user, login_required
 from app import app, db
@@ -44,13 +45,35 @@ def user(username):
 
     return render_template('user.html')
 	
-	  
+@app.route('/admin/<username>', methods=['GET', 'POST'])
+@login_required
+def admin(username):
+  admin_form = AdminForm()
+  if request.method == 'GET':
+    admin = User.query.filter(User.username == username).first()
+    print(admin.username, admin.admin)
+    confirm_admin = ''
+    if admin.admin:
+      confirm_admin = True
+      return render_template('admin.html', confirm_admin=confirm_admin, admin_form=admin_form)
+    else:
+      confirm_admin = False
+      return render_template('admin.html', confirm_admin=confirm_admin)
+
+  if request.method == 'POST' and admin_form.validate():
+    new_adminform = Admin(registration=admin_form.registration.data)
+    db.session.add(new_adminform)
+    db.session.commit()
+    return redirect(url_for('admin', username=current_user.username))
+
+
+
 @app.route('/')
 def index():
   #by deducting a number of days from the current datetime you have an comparable datetime to compare to the database, we could still run into time issues.
   #We could separate the day, Month, year and time before saving it to separate columns in the database to make it easier to query
   #Until we put in more suphisticated filtering it solves for pulling in the whole table
-  new_date = datetime.now() - timedelta(days = 1)
+  new_date = datetime.now() - timedelta(days = 5)
   print(new_date)
   #function route currently not scalable because its calling for all the data in the tables which will grow over time.
   likesdislikes = Likesdislikes.query.filter(Likesdislikes.timestamp > new_date).all()
@@ -74,17 +97,13 @@ def index():
   print( people_date.date.day, people_date.date.month, people_date.date.year )
   people = People.query.filter(People.date > new_date).all() 
 
-  thoughts_greaterthan = Thinking.query.filter(Thinking.username == 'logan')
-  for thought in thoughts_greaterthan:
-    print(thought.timestamp.year)
   thoughts = Thinking.query.filter(Thinking.timestamp > new_date).all()
-  days = Day_school.query.filter(Day_school.date > new_date).all()
-  
 
-  last5days = Day_school.query.filter(Day_school.date > new_date).all()
-  print(last5days)
-  for day in last5days:
-    print(day.date.day)
+  lucky = Thinking.query.filter(Thinking.thoughts.like('%lucky%')).all()
+  for luck in lucky:
+    print(luck)
+
+  days = Day_school.query.filter(Day_school.date > new_date).all()
   
   if not likesdislikes:
     likesdislikes=[]

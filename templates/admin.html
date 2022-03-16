@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<center><div class="page">
+    <div class="form">
+        <h1>Family Admin Page</h1>
+        {% if confirm_admin == True %}
+        <h2>Close the portal door here!</h2>
+        <form class="login-form" action="" method="post" novalidate>
+          {{ admin_form.hidden_tag() }}
+        <p>{{ admin_form.registration.label }}</p>
+        <p>{{ admin_form.registration }}</p>
+        <p>{{ admin_form.submit() }}</p>
+        </form>
+        {% else %}>
+        <h2>Admin permissions let you close the registration</h2>
+        <h3>If you want admin just ask</h3>
+        {% endif %}
+        
+      
+   </div>
+</div>
+</center>
+
+
+{% endblock %}

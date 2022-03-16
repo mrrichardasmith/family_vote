@@ -41,7 +41,7 @@ class ThinkingForm(FlaskForm):
 
 class DaySchoolForm(FlaskForm):
     yourday = RadioField('Your Day Was', choices=['Great', 'OK', 'Blah', 'Ugh!', 'Bad'], validators=[DataRequired()])
-    why = StringField('One Word Why', validators=[DataRequired()])
+    why = StringField('More Words Why', validators=[DataRequired()])
     submit = SubmitField('Day Done')
 
 class GoodBadUglyForm(FlaskForm):
@@ -50,4 +50,7 @@ class GoodBadUglyForm(FlaskForm):
     ugly = StringField('Was anybody mean to you today?')
     morewords = TextAreaField('More Words')
     submit = SubmitField('Submit')
-    
+
+class AdminForm(FlaskForm):
+      registration = BooleanField('Disable Registration')  
+      submit = SubmitField('Save Change')

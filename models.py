@@ -13,6 +13,7 @@ class User(UserMixin, db.Model):
     password_hash = db.Column(db.String(120))
     Likesdislikes = db.relationship('Likesdislikes', backref='user.id', lazy='dynamic')
     thinking = db.relationship('Thinking', backref='', lazy='dynamic')
+    admin = db.Column(db.String(5))
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
     def check_password(self, password):
@@ -67,6 +68,9 @@ class People(db.Model):
     def __repr__(self):
         return '<People {}>'.format(self.morewords)
 
+class Admin(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    registration = db.Column(db.Boolean)
     
 
 @login.user_loader 
