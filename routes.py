@@ -74,27 +74,27 @@ def index():
   #We could separate the day, Month, year and time before saving it to separate columns in the database to make it easier to query
   #Until we put in more suphisticated filtering it solves for pulling in the whole table
   new_date = datetime.now() - timedelta(days = 5)
-  print(new_date)
+  #print(new_date)
   #function route currently not scalable because its calling for all the data in the tables which will grow over time.
   likesdislikes = Likesdislikes.query.filter(Likesdislikes.timestamp > new_date).all()
   #pull one record using the ID
   likesdislikes_id = Likesdislikes.query.get(1)
   #print one property referenced by a foreign key in another class.
-  print(likesdislikes_id.username)
+  #print(likesdislikes_id.username)
   #filtering starts with the model name then .query.filter then the modelname again and the property with logic and all()
   #In this case we filter by the likes only
   likesdislikes_like = Likesdislikes.query.filter(Likesdislikes.likes_dislikes == 'Likes').all()
-  print(likesdislikes_like)
+  #print(likesdislikes_like)
   # In this case we filter by id's greater than 1 and save all of them
   likesdislikes_greater = Likesdislikes.query.filter(Likesdislikes.id > 1).all()
-  print(likesdislikes_greater)
+  #print(likesdislikes_greater)
   # In this case we filter by username which is a field we get through relationship with User and then call all records by a user that are Likes
   likesdislikes_username = Likesdislikes.query.filter(Likesdislikes.username == 'richard', Likesdislikes.likes_dislikes == 'Likes').all()
-  print(likesdislikes_username)
+  #print(likesdislikes_username)
   # The first record from a list of records that match the logic specified in this case just the first record.
   people_date = People.query.first()
   #print the year, month, day from a datetime object stored in the database
-  print( people_date.date.day, people_date.date.month, people_date.date.year )
+  #print( people_date.date.day, people_date.date.month, people_date.date.year )
   people = People.query.filter(People.date > new_date).all() 
 
   thoughts = Thinking.query.filter(Thinking.timestamp > new_date).all()
