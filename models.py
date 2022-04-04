@@ -90,6 +90,7 @@ class Account(db.Model):
     windfall = db.Column(db.Float)
     rent = db.Column(db.Float)
     housekeeping = db.Column(db.Float)
+    extra_groceries = db.Column(db.Float)
     electric = db.Column(db.Float)
     counciltax = db.Column(db.Float)
     internet = db.Column(db.Float)

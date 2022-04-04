@@ -3,7 +3,7 @@ from cgitb import html
 from xmlrpc.client import DateTime
 from flask import request, render_template, flash, redirect, url_for
 from models import User, Likesdislikes, Thinking, Day_school, People, Admin, Life_hacks, Account, Workfood
-from forms import RegistrationForm, LoginForm, LikesDislikesForm, ThinkingForm, DaySchoolForm, GoodBadUglyForm, AdminForm, LifeHacksForm, AccountForm, workfoodForm
+from forms import RegistrationForm, LoginForm, LikesDislikesForm, ThinkingForm, DaySchoolForm, GoodBadUglyForm, AdminForm, LifeHacksForm, AccountForm, WorkfoodForm
 from werkzeug.urls import url_parse
 from flask_login import current_user, login_user, logout_user, login_required
 from app import app, db
@@ -92,17 +92,17 @@ def index():
   #pull one record using the ID
   likesdislikes_id = Likesdislikes.query.get(1)
   #print one property referenced by a foreign key in another class.
-  print(likesdislikes_id.username)
+  #print(likesdislikes_id.username)
   #filtering starts with the model name then .query.filter then the modelname again and the property with logic and all()
   #In this case we filter by the likes only
   likesdislikes_like = Likesdislikes.query.filter(Likesdislikes.likes_dislikes == 'Likes').all()
   print(likesdislikes_like)
   # In this case we filter by id's greater than 1 and save all of them
   likesdislikes_greater = Likesdislikes.query.filter(Likesdislikes.id > 1).all()
-  print(likesdislikes_greater)
+  #print(likesdislikes_greater)
   # In this case we filter by username which is a field we get through relationship with User and then call all records by a user that are Likes
   likesdislikes_username = Likesdislikes.query.filter(Likesdislikes.username == 'richard', Likesdislikes.likes_dislikes == 'Likes').all()
-  print(likesdislikes_username)
+  #print(likesdislikes_username)
 
   days = Day_school.query.filter(Day_school.date > new_date).all()
   
@@ -194,6 +194,8 @@ def accounts():
       total += active.rent 
     if active != None and active.housekeeping != None:
       total += active.housekeeping
+    if active != None and active.extra_groceries != None:
+      total += active.extra_groceries
     if active != None and active.electric != None:
       total += active.electric
     if active != None and active.internet != None:
@@ -220,7 +222,7 @@ def accounts():
     return render_template('accounts.html', user=current_user, account=account, active=active, remaining=remaining)
 
   if request.method == 'POST':
-    #extra groceries
+    
     #extra grocery details
     #water
     #transport
@@ -230,7 +232,7 @@ def accounts():
     #Investments
     #Insurance
     if active == None:
-      new_account = Account(month=todayDate.month, year=todayDate.year, salary_deposit=account.salary_deposit.data, windfall=account.windfall.data, rent=account.rent.data,  housekeeping=account.housekeeping.data, electric=account.electric.data, internet=account.internet.data, counciltax=account.counciltax.data, streaming=account.streaming.data, family_entertainment=account.family_entertainment.data, takeaway=account.takeaway.data, shopping=account.shopping.data, workfood=account.workfood.data, username=current_user.username )
+      new_account = Account(month=todayDate.month, year=todayDate.year, salary_deposit=account.salary_deposit.data, windfall=account.windfall.data, rent=account.rent.data,  housekeeping=account.housekeeping.data, extra_groceries=account.extra_groceries.data, electric=account.electric.data, internet=account.internet.data, counciltax=account.counciltax.data, streaming=account.streaming.data, family_entertainment=account.family_entertainment.data, takeaway=account.takeaway.data, shopping=account.shopping.data, workfood=account.workfood.data, username=current_user.username )
       db.session.add(new_account)  
 
     if active != None and active.salary_deposit == None:
@@ -244,6 +246,9 @@ def accounts():
         
     if active != None and active.housekeeping == None:
       active.housekeeping=account.housekeeping.data
+
+    if active != None and active.extra_groceries == None:
+      active.extra_groceries=account.extra_groceries.data
 
     if active != None and active.electric == None:
       active.electric=account.electric.data
@@ -275,16 +280,19 @@ def accounts():
 @app.route('/workfood', methods=['GET', 'POST'])
 @login_required
 def workfood():
-  workfood = workfoodForm()
+  foodform = WorkfoodForm()
   todayDate = datetime.now()
 
   if request.method == 'GET':
+    work_food = Workfood.query.filter(Workfood.username == 'richard').all()
+    for food in work_food:
+      print(food.month)
 
-    return render_template('workfood.html', workfood=workfood)
+    return render_template('workfood.html', foodform=foodform)
 
   if request.method == 'POST':
 
-    new_workfood = Workfood(month=todayDate.month, year=todayDate.year, work_breakfast=workfood.work_breakfast.data, work_lunch=workfood.work_lunch.data, after_work_social=workfood.after_work_social.data, work_snacks_me=workfood.work_snacks_me.data, work_snacks_share=workfood.work_snacks_share.data, username=current_user.username)
+    new_workfood = Workfood(month=todayDate.month, year=todayDate.year, work_breakfast=foodform.work_breakfast.data, work_lunch=foodform.work_lunch.data, after_work_social=foodform.after_work_social.data, work_snacks_me=foodform.work_snacks_me.data, work_snacks_share=foodform.work_snacks_share.data, username=current_user.username)
     db.session.add(new_workfood)
     db.session.commit()
     return redirect(url_for('workfood')) 
@@ -298,10 +306,8 @@ def likesdislikes():
   if request.method == 'GET':
     user = current_user
     user = User.query.filter_by(username=user.username).first()
-    print(user.username)
     likesdislikes = Likesdislikes.query.filter_by(username=user.username)
-    for likedislike in likesdislikes:
-      print(likedislike)
+    
     
     return render_template('likesdislikes.html', likesdislikes=likesdislikes, form=form)
   
@@ -346,7 +352,7 @@ def peoplereport():
     # The first record from a list of records that match the logic specified in this case just the first record.
     people_date = People.query.first()
     #print the year, month, day from a datetime object stored in the database
-    print( people_date.date.day, people_date.date.month, people_date.date.year )
+    #print( people_date.date.day, people_date.date.month, people_date.date.year )
     return render_template('peoplereport.html', people=people)
 
 @app.route('/thoughts_report')

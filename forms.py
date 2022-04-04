@@ -65,6 +65,7 @@ class AccountForm(FlaskForm):
     windfall = DecimalField('Extra funds')
     rent = DecimalField('Rent')
     housekeeping = DecimalField('Houskeeping')
+    extra_groceries = DecimalField('Extra Groceries')
     electric = DecimalField('Electric')
     internet = DecimalField('Internet')
     counciltax = DecimalField('Council Tax')
@@ -75,7 +76,7 @@ class AccountForm(FlaskForm):
     workfood = DecimalField('Work Food')
     submit = SubmitField('Rack the Tab')
 
-class workfoodForm(FlaskForm):
+class WorkfoodForm(FlaskForm):
     work_breakfast = DecimalField('Breakfast Before Work')
     work_lunch = DecimalField('Lunch on Work Days')
     after_work_social = DecimalField('Social Drinks evening')
