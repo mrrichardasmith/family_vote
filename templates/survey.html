@@ -2,20 +2,15 @@
 
 {% block content %}
 
-<div class="container_large border">
-  <h1>Hi {{ current_user.username }} </h1>   
-  <h1>This is the Page where the family voting happens</h1>
-  <div class="survey">
+<div class="page">
       <form class="form" method="post">
-      {{ form.hidden_tag() }}      
+        <h1 class="HeadingColor">Hi {{ current_user.username.capitalize() }} </h1>   
+        <h1 class="HeadingColor">Sharing your thoughts helps everybody in the family</h1>
+        {{ form.hidden_tag() }}      
         <p>
         {{ form.thinking_about.label }}<br>
         {{ form.thinking_about(size=32)  }}
-      </p>
-      <p>
-        {{ form.country.label}}<br>
-        {{ form.country(size=1) }}
-      </p>
+        </p>
       <p>
         {{ form.thoughts.label }}<br>
         {{ form.thoughts(size=32)  }}
@@ -23,10 +18,9 @@
       <p>
         {{ form.submit() }}
       </p>
-
-      <p>Here is a logout Link <a href="{{ url_for('logout') }}">Logout</a></p>
+      <p class="message">Not feeling it? <a href="{{ url_for('likesdislikes') }}"><strong>Skip question!</strong></a></p>
   </form></center>
-</div>
+  {% include "nav_update.html" %}
 </div>
     
 {% endblock %}

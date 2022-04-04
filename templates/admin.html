@@ -4,19 +4,24 @@
 
 <center><div class="page">
     <div class="form">
-        <h1>Family Admin Page</h1>
-        {% if confirm_admin == True %}
-        <h2>Close the portal door here!</h2>
+        <h1 class="mainTextColor">Family Site Configs</h1>
+        {% if admin.admin == 'admin' %}
+        <h2>{{ admin.admin }}</h2>
         <form class="login-form" action="" method="post" novalidate>
           {{ admin_form.hidden_tag() }}
         <p>{{ admin_form.registration.label }}</p>
-        <p>{{ admin_form.registration }}</p>
+        {% if registration.registration == True %}
+        <p><input type="checkbox" id={{ registration.registration }} name={{ registration.registration }} value=True checked></p>
+        {% else %}
+        <p><input type="checkbox" id={{ registration.registration }} name={{ registration.registration }} value=True ></p>
+        {% endif %}
         <p>{{ admin_form.submit() }}</p>
         </form>
         {% else %}>
-        <h2>Admin permissions let you close the registration</h2>
+        <h2>You don't have Admin permissions but they only let you close the registration</h2>
         <h3>If you want admin just ask</h3>
         {% endif %}
+        
         
       
    </div>

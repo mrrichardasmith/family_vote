@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="page">
+    <h1 class="mainTextColor">Things we like and dislike about here or there</h1>
+    <div>
+        <table>
+            <tr>
+                <th>Family Member</th>
+                <th>Likes & Dislikes</th>
+                <th>Reasons</th>
+                <th>Country</th>
+                
+            </tr>
+            
+            {% for likedislike in likesdislikes %}
+            <tr>
+                <td>{{ likedislike.username }}</td>
+                <td>{{ likedislike.likes_dislikes }}</td>
+                <td>{{ likedislike.reason }}</td>
+                <td>{{ likedislike.country }}</td>
+            </tr>
+                {% endfor %}
+            
+        </table>
+    </div>
+    {% include "nav_update.html" %}
+</div>
+
+{% endblock %}

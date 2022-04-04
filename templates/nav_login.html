@@ -1,0 +1,23 @@
+<div class="nav">
+    <div class="innerNav">
+        
+            <div class="navOption">
+                <a href="{{ url_for('index') }}"><img class="navPic" src="{{ url_for('static', filename='pictures/home.png') }}"></a>  
+                <p><a href="{{ url_for('index') }}">Home</a></p>
+            </div>
+       
+        
+            {% if current_user.is_anonymous %}
+            <div class="navOption">
+                <a href="{{ url_for('login') }}"><img class="navPic" src="{{ url_for('static', filename='pictures/lock.png') }}"></a>
+                <p><a href="{{ url_for('login') }}">Login</a></p>
+            </div>
+            {% else %}
+            
+        <div class="navOption">
+            <img class="navPic" src="{{ url_for('static', filename='pictures/exit.png') }}">
+            <p><a href="{{ url_for('logout') }}">Logout</a></p>                
+        </div>
+        {% endif %}
+    </div>
+</div>

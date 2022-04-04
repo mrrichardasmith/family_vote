@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="page">
+		  
+    <h1 class="mainTextColor">Family Life Hacks</h1>
+    <table>
+        <tr>
+            <th>Family Member</th>
+            <th>Title</th>
+            <th>Description</th>
+            
+        </tr>
+        {% for hack in hacks %}
+        <tr>
+            <td>{{ hack.username }}</td>
+            <td>{{ hack.hacktitle }}</td>
+            <td>{{ hack.hackdescription }}</td> 
+            
+        </tr>
+        {% endfor %}
+    </table>
+    {% include "nav_update.html" %}
+</div>
+
+
+{% endblock %}

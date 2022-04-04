@@ -8,6 +8,7 @@
         {{ form.hidden_tag() }}
         
           <h1 style="text-align: center">{{ form.likes_dislikes.label }}</h1>
+          <div><img id="landingPic" src="{{ url_for('static', filename='pictures/thumbsupdown.png') }}"></div>
           <tabel>
             <tr>
             {% for subfield in form.likes_dislikes %}
@@ -36,8 +37,10 @@
           <p>
             <td>{{ form.submit() }}</td>
           </p>
+          <p class="message">Not feeling it? <a href="{{ url_for('index') }}"><strong>Skip question!</strong></a></p>
      </form>
    </div>
+   {% include "nav_update.html" %}
 </div>
 </center>
 

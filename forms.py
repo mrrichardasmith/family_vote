@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField, SelectField, DateTimeField, RadioField, TextAreaField
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, SelectField, DateTimeField, RadioField, TextAreaField, DecimalField
 from wtforms.validators import ValidationError, DataRequired, EqualTo, Email
 from models import User
 
@@ -35,9 +35,13 @@ class LikesDislikesForm(FlaskForm):
 
 class ThinkingForm(FlaskForm):
     thinking_about = StringField('What are you thinking about', validators=[DataRequired()])
-    country = SelectField(u'Country', choices=[('USA', 'United States'), ('UK', 'United Kingdom'), ('EU', 'Europe')])
     thoughts = StringField('Your thoughts', validators=[DataRequired()])
     submit = SubmitField('Say It')
+
+class LifeHacksForm(FlaskForm):
+    hack_title = StringField('Title', validators=[DataRequired()])
+    hack_description = TextAreaField('Life Hack Description', validators=[DataRequired()])
+    submit = SubmitField('Hack It')
 
 class DaySchoolForm(FlaskForm):
     yourday = RadioField('Your Day Was', choices=['Great', 'OK', 'Blah', 'Ugh!', 'Bad'], validators=[DataRequired()])
@@ -52,5 +56,29 @@ class GoodBadUglyForm(FlaskForm):
     submit = SubmitField('Submit')
 
 class AdminForm(FlaskForm):
-      registration = BooleanField('Disable Registration')  
-      submit = SubmitField('Save Change')
+    registration = BooleanField('Disable Registration')  
+    submit = SubmitField('Save Change')
+
+class AccountForm(FlaskForm):
+    start = SubmitField('Start Month')
+    salary_deposit = DecimalField('Monthly Salary Deposit', validators=[DataRequired()])
+    windfall = DecimalField('Extra funds')
+    rent = DecimalField('Rent')
+    housekeeping = DecimalField('Houskeeping')
+    electric = DecimalField('Electric')
+    internet = DecimalField('Internet')
+    counciltax = DecimalField('Council Tax')
+    streaming = DecimalField('Streaming')
+    family_entertainment = DecimalField('Family Entertainment')
+    takeaway = DecimalField('Takeaway')
+    shopping = DecimalField('Shopping')
+    workfood = DecimalField('Work Food')
+    submit = SubmitField('Rack the Tab')
+
+class workfoodForm(FlaskForm):
+    work_breakfast = DecimalField('Breakfast Before Work')
+    work_lunch = DecimalField('Lunch on Work Days')
+    after_work_social = DecimalField('Social Drinks evening')
+    work_snacks_me = DecimalField('Snacks Draw')
+    work_snacks_share = DecimalField('Snacks Share')
+    submit = SubmitField('Update')

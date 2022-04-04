@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+
+<div class="page">
+    <form class="form" action="" method="post" novalidate>
+    {{ workfood.hidden_tag() }}
+        <h1 class="mainTextColor">Work Food Transparency</h1>
+        <table>
+            <tr>
+                <th>{{ workfood.work_breakfast.label }}</th>
+                <td>{{ workfood.work_breakfast }}</td>
+            </tr>
+            <tr>
+                <th>{{ workfood.work_lunch.label }}</th>
+                <td>{{ workfood.work_lunch }}</td>
+            </tr>
+            <tr>
+                <th>{{ workfood.after_work_social.label }}</th>
+                <td>{{ workfood.after_work_social }}</td>
+            </tr>
+            <tr>
+                <th>{{ workfood.work_snacks_me.label }}</th>
+                <td>{{ workfood.work_snacks_me }}</td>
+            </tr>
+            <tr>
+                <th>{{ workfood.work_snacks_share.label }}</th>
+                <td>{{ workfood.work_snacks_share }}</td>
+            </tr>
+        </table>
+            <p>{{ workfood.submit() }}</p>
+    </form>
+</div>
+
+
+
+
+{% endblock %}

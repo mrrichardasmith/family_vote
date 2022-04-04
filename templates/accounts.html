@@ -1,0 +1,176 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="page">
+    
+    <form class="form" action="" method="post" novalidate>
+    <h1 class="mainTextColor">Monthly Financial Status</h1>
+        {{ account.hidden_tag() }}
+    <table>
+        
+        {% if active.salary_deposit == None or active == None %}
+        <tr>
+            <th>{{ account.salary_deposit.label }}</th>
+            <td>{{ account.salary_deposit }}</td>
+        </tr>
+        {% else %}
+        <tr class="green">
+            <th>{{ account.salary_deposit.label }}</th>
+            <td>{{ active.salary_deposit }}</td>
+        </tr>
+        {% endif %}
+        {% if active == None %}
+        <tr>
+            <th>Month</th>
+            <td>{{ account.start }}</td>
+        </tr>
+        {% else %}
+        <tr>
+            <th>Month</th>
+            <td>{{ active.month }}</td>
+        </tr>
+        {% endif %}
+        {% if active.windfall == None %}
+        <tr>
+            <th>{{ account.windfall.label }}</th>
+            <td>{{ account.windfall }}</td>
+        </tr>
+        {% else %}
+        <tr class="green">
+            <th>Windfall Funds</th>
+            <td>{{ active.windfall }}</td>
+        </tr>
+        {% endif %}
+        {% if active.rent == None %}
+        <tr>
+            <th>{{ account.rent.label }}</th>
+            <td>{{ account.rent }}</td>
+        </tr>
+        {% else %}
+        <tr>
+            <th>Rent</th>
+            <td>{{ active.rent }}</td>
+        </tr>
+        {% endif %}
+        {% if active.housekeeping == None %}
+        <tr>
+            <th>{{ account.housekeeping.label }}</th>
+            <td>{{ account.housekeeping }}</td>
+        </tr>
+        {% else %}
+        <tr>
+            <th>Housekeeping</th>
+            <td>{{ active.housekeeping }}</td>
+        </tr>
+        {% endif %}
+        {% if active.electric == None %}
+        <tr>
+            <th>Electric / Gas</th>
+            <td>{{ account.electric }}</td>
+        </tr>
+        {% else %}
+        <tr>
+            <th>Electric / Gas</th>
+            <td>{{ active.electric }}</td>
+        </tr>
+        {% endif %}
+        {% if active.internet == None %}
+        <tr>
+            <th>Internet</th>
+            <td>{{ account.internet }}</td>
+        </tr>
+        {% else %}
+        <tr>
+            <th>Internet</th>
+            <td>{{ active.internet }}</td>
+        </tr>
+        {% endif %}
+        {% if active.counciltax == None %}
+        <tr>
+            <th>{{ account.counciltax.label }}</th>
+            <td>{{ account.counciltax }}</td>
+        </tr>
+        {% else %}
+        <tr>
+            <th>Council Tax</th>
+            <td>{{ active.counciltax }}</td>
+        </tr>
+        {% endif %}
+        {% if active.streaming == None %}
+        <tr>
+            <th>{{ account.streaming.label }}</th>
+            <td>{{ account.streaming }}</td>
+        </tr>
+        {% else %}
+        <tr>
+            <th>Streaming</th>
+            <td>{{ active.streaming }}</td>
+        </tr>
+        {% endif %}
+        {% if active.family_entertainment == None %}
+        <tr>
+            <th>{{ account.family_entertainment.label }}</th>
+            <td>{{ account.family_entertainment }}</td>
+        </tr>
+        {% else %}
+        <tr>
+            <th>Family Entertainment</th>
+            <td>{{ active.family_entertainment }}</td>
+        </tr>
+        {% endif %}
+        {% if active.takeaway == None %}
+        <tr>
+            <th>{{ account.takeaway.label }}</th>
+            <td>{{ account.takeaway }}</td>
+        </tr>
+        {% else %}
+        <tr>
+            <th>Takeaway</th>
+            <td>{{ active.takeaway }}</td>
+        </tr>
+        {% endif %}
+        {% if active.shopping == None %}
+        <tr>
+            <th>{{ account.shopping.label }}</th>
+            <td>{{ account.shopping }}</td>
+        </tr>
+        {% else %}
+        <tr>
+            <th>More Stuff</th>
+            <td>{{ active.shopping }}</td>
+        </tr>
+        {% endif %}
+        {% if active.workfood == None %}
+        <tr>
+            <th>{{ account.workfood.label }}</th>
+            <td>{{ account.workfood }}</td>
+        </tr>
+        {% else %}
+        <tr>
+            <th>Work Food</th>
+            <td>{{ active.workfood }}</td>
+        </tr>
+        {% endif %}
+        
+        {% if active.month %}
+        {% endif %}
+        {% if remaining > 0 %}
+        <tr class="green">
+        {% else %}
+        <tr class="red">
+        {% endif %}
+            <th>Total Remaining</th>
+            <td><strong>{{ remaining }}</strong></td>
+        </tr>
+    </table>
+    <p>{{ account.submit() }}</p>
+</form>
+    
+    
+</div>
+
+
+
+
+{% endblock %}

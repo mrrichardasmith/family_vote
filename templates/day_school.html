@@ -4,7 +4,8 @@
 
 <center><div class="page">
     <div class="form">
-      <h1>How was your day?</h1>
+      <h1 class="mainTextColor">How was your day?</h1>
+      <img id="landingPic" src="{{ url_for('static', filename='pictures/howday2.png') }}">
       <form class="login-form" action="" method="post" novalidate>
         {{ dayform.hidden_tag() }}
       <tabel>
@@ -20,9 +21,10 @@
       <p>{{ dayform.why(size=20) }}</p>
       
       <p>{{ dayform.submit() }}</p>
-
+      <p class="message mainTextColor">Not feeling it? <a href="{{ url_for('people') }}"><strong>Skip question!</strong></a></p>
      </form>
    </div>
+   {% include "nav_update.html" %}
 </div>
 </center>
 

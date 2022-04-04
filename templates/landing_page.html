@@ -2,99 +2,15 @@
 
 {% block content %}
 
-<div class="grid-container">
-	<div class="item1">
-		<div class="container_large text-center border">
-			<h1 style="color:olivedrab">Family Dashboard</h1>
+<div class="page">
+    <div class="item1">
+		<div class="container_large text-center">
+			<h1 class="mainTextColor">Family Dashboard</h1>
+			<img id="landingPic" src="{{ url_for('static', filename='pictures/yesnomaybe.jpg') }}">
 		</div>
 	</div>
-		
-	<div class="item2">
-		<h1>Family Daily Pulse</h1>
-		<table>
-			<tr>
-				<th>Family Member</th>
-				<th>Date</th>
-				<th>Day Went</th>
-				<th>Why</th>
-			</tr>
-			
-			{% for day in days %}
-			<tr>
-				<td>{{ day.username }}</td>
-				<td>{{ day.date }}</td>
-				<td style="color: palevioletred"><strong>{{ day.yourday }}</strong></td>
-				<td>{{ day.why }} </td>
-			</tr>
-			{% endfor %}
-		</table>
-	</div>
-	<div class="item3">
-		<h1>Things we like and dislike about here or there</h1>
-		<div>
-			<table>
-				<tr>
-					<th>Likes & Dislikes</th>
-					<th>Reasons</th>
-					<th>Family Member</th>
-				</tr>
-				
-				{% for likedislike in likesdislikes %}
-				<tr>
-					<td>{{ likedislike.likes_dislikes }}</td>
-					<td>{{ likedislike.reason }}</td>
-					<td>{{ likedislike.username }}</td>
-					<td>{{ likedislike.country }}</td>
-				</tr>
-					{% endfor %}
-				
-			</table>
-		</div>
-	</div>  
-	<div class="item4">
-		<h1>Family Members Thoughts</h1>
-		<table>
-			<tr>
-				<th>Family Member</th>
-				<th>Date/Time</th>
-				<th>Thought</th>
-				<th>More Words</th>
-				<th>Country</th>
-			</tr>
-			{% for thought in thoughts %}
-			<tr>
-				<td>{{ thought.username }}</td>
-				<td>{{ thought.timestamp }}</td> 
-				<td>{{ thought.thinking_about }}</td>  
-				<td>{{ thought.thoughts }}</td>
-				<td>{{ thought.country }}</td>
-			</tr>
-			{% endfor %}
-		</table>
-	</div>
-	<div class="item5">
-		<h1>Relationships beyond our immediate family?</h1>
-		<table>
-			<tr>
-				<th>Username</th>
-				<th>Date</th>
-				<th>Good</th>
-				<th>Difficult</th>
-				<th>Mean</th>
-				<th>More Words</th>
-			</tr>
-			{% for p in people%}
-			<tr>
-				<td>{{ p.username}}</td>
-				<td>{{ p.date}}</td>
-				<td>{{ p.good}}</td>
-				<td>{{ p.bad}}</td>
-				<td>{{ p.ugly}}</td>
-				<td>{{ p.morewords}}</td>
-			</tr>
-			{% endfor %}
-		</table>
-	</div>
+    {% include "nav_update.html" %}
 </div>
+
 
 {% endblock %}

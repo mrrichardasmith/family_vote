@@ -1,5 +1,7 @@
 from datetime import datetime
+from email.policy import default
 from enum import unique
+from operator import index
 from werkzeug.security import generate_password_hash, check_password_hash
 from app import db, login
 from flask_login import UserMixin
@@ -37,7 +39,6 @@ class Likesdislikes(db.Model):
 class Thinking(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     thinking_about = db.Column(db.String(140))
-    country = db.Column(db.String(20))
     thoughts = db.Column(db.String(140))
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     username = db.Column(db.String, db.ForeignKey('user.username'))
@@ -45,6 +46,13 @@ class Thinking(db.Model):
 
     def __repr__(self):
         return '<Thinking {}>'.format(self.username)
+
+class Life_hacks(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    date = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+    hacktitle = db.Column(db.String(120))
+    hackdescription = db.Column(db.String(500))
+    username = db.Column(db.String, db.ForeignKey('user.username'))
 
 class Day_school(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -72,6 +80,38 @@ class Admin(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     registration = db.Column(db.Boolean)
     
+
+class Account(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    date = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+    month = db.Column(db.Integer)
+    year = db.Column(db.Integer)
+    salary_deposit = db.Column(db.Float)
+    windfall = db.Column(db.Float)
+    rent = db.Column(db.Float)
+    housekeeping = db.Column(db.Float)
+    electric = db.Column(db.Float)
+    counciltax = db.Column(db.Float)
+    internet = db.Column(db.Float)
+    streaming = db.Column(db.Float)
+    family_entertainment = db.Column(db.Float)
+    takeaway = db.Column(db.Float)
+    shopping = db.Column(db.Float)
+    workfood = db.Column(db.Float)
+    username = db.Column(db.String, db.ForeignKey('user.username'))
+
+class Workfood(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    date = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+    month = db.Column(db.Integer)
+    year = db.Column(db.Integer)
+    work_breakfast = db.Column(db.Float)
+    work_lunch = db.Column(db.Float)
+    after_work_social = db.Column(db.Float)
+    work_snacks_me = db.Column(db.Float)
+    work_snacks_share = db.Column(db.Float)
+    username = db.Column(db.String, db.ForeignKey('user.username'))
+
 
 @login.user_loader 
 def load_user(id): 

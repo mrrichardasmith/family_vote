@@ -3,13 +3,13 @@
 {% block content %}
 
 <center>
-    <h1>Welcome back {{current_user.username}}!</h1>
-    <h2>This page is all you</h2> 
+    <h1>Welcome back {{current_user.username.capitalize()}}!</h1>
+    <h2>This page is all You</h2> 
 
     
     <div class="page border">
         <div>
-            Hello World
+            {{ username.capitalize() }}
         </div>
     </div>
 </center>

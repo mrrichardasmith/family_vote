@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<center>
+    <div class="report">
+        <div>
+            <h1 class="mainTextColor">Family Daily Pulse</h1>
+            <table>
+                <tr>
+                    <th>Family Member</th>
+                    <th>Date</th>
+                    <th>Day Went</th>
+                    <th>Why</th>
+                    <th>ID</th>
+                </tr>
+                
+                {% for day in days %}
+                <tr>
+                    <td>{{ day.username }}</td>
+                    <td>{{ day.date }}</td>
+                    <td style="color: palevioletred"><strong>{{ day.yourday }}</strong></td>
+                    <td>{{ day.why }} </td>
+                    <td>{{ day.id }}</td>
+                    <td><button><img id="iconPic" src="{{ url_for('static', filename='pictures/trash.png') }}"></button></td>
+                </tr>
+                 {% endfor %}
+            </table>
+        </div>
+   </div>
+</center>
+
+
+{% endblock %}

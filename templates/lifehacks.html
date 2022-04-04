@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="page">
+    <form class="form" method="post">
+      <h1 class="mainTextColor">Hi {{ current_user.username.capitalize() }} </h1>   
+      <h1 class="mainTextColor">Family Life Hacks</h1>
+      {{ hack.hidden_tag() }}      
+      <p>
+      {{ hack.hack_title.label }}<br>
+      {{ hack.hack_title(size=60)  }}
+      </p>
+    <p>
+      {{ hack.hack_description.label }}<br>
+      <textarea id="1" name="hack_description" rows="8" cols="40"></textarea>
+    </p>
+    <p>
+      {{ hack.submit() }}
+    </p>
+    <p class="message">Not feeling it? <a href="{{ url_for('index') }}"><strong>Skip question!</strong></a></p>
+</form></center>
+{% include "nav_update.html" %}
+</div>
+
+
+
+
+
+
+
+{% endblock %}
