@@ -196,10 +196,18 @@ def accounts():
       total += active.housekeeping
     if active != None and active.extra_groceries != None:
       total += active.extra_groceries
+    if active != None and active.water != None:
+      total += active.water
     if active != None and active.electric != None:
       total += active.electric
     if active != None and active.internet != None:
       total += active.internet
+    if active != None and active.subscriptions != None:
+      total += active.subscriptions
+    if active != None and active.investments != None:
+      total += active.investments
+    if active != None and active.insurance != None:
+      total += active.insurance
     if active != None and active.counciltax != None:
       total += active.counciltax
     if active != None and active.streaming != None:
@@ -208,6 +216,12 @@ def accounts():
       total += active.family_entertainment
     if active != None and active.takeaway != None:
       total += active.takeaway
+    if active != None and active.transport != None:
+      total += active.transport
+    if active != None and active.fitness != None:
+      total += active.fitness
+    if active != None and active.bakery != None:
+      total += active.bakery  
     if active != None and active.shopping != None:
       total += active.shopping  
     if active != None and active.workfood != None:
@@ -225,14 +239,31 @@ def accounts():
     
     #extra grocery details
     #water
-    #transport
-    #bakery
-    #Fitness
-    #subscriptions
-    #Investments
-    #Insurance
+    
     if active == None:
-      new_account = Account(month=todayDate.month, year=todayDate.year, salary_deposit=account.salary_deposit.data, windfall=account.windfall.data, rent=account.rent.data,  housekeeping=account.housekeeping.data, extra_groceries=account.extra_groceries.data, electric=account.electric.data, internet=account.internet.data, counciltax=account.counciltax.data, streaming=account.streaming.data, family_entertainment=account.family_entertainment.data, takeaway=account.takeaway.data, shopping=account.shopping.data, workfood=account.workfood.data, username=current_user.username )
+      new_account = Account(month=todayDate.month, 
+                            year=todayDate.year, 
+                            salary_deposit=account.salary_deposit.data, 
+                            windfall=account.windfall.data, 
+                            rent=account.rent.data,  
+                            housekeeping=account.housekeeping.data, 
+                            extra_groceries=account.extra_groceries.data, 
+                            water=account.water.data,
+                            electric=account.electric.data, 
+                            internet=account.internet.data,
+                            subscriptions=account.subscriptions.data,
+                            investments=account.investments.data,
+                            insurance=account.insurance.data, 
+                            counciltax=account.counciltax.data, 
+                            streaming=account.streaming.data, 
+                            family_entertainment=account.family_entertainment.data, 
+                            takeaway=account.takeaway.data, 
+                            transport=account.transport.data, 
+                            fitness=account.fitness.data, 
+                            bakery=account.bakery.data, 
+                            shopping=account.shopping.data, 
+                            workfood=account.workfood.data, 
+                            username=current_user.username )
       db.session.add(new_account)  
 
     if active != None and active.salary_deposit == None:
@@ -250,12 +281,24 @@ def accounts():
     if active != None and active.extra_groceries == None:
       active.extra_groceries=account.extra_groceries.data
 
+    if active != None and active.water == None:
+      active.water=account.water.data
+
     if active != None and active.electric == None:
       active.electric=account.electric.data
 
     if active != None and active.internet == None:
       active.internet=account.internet.data
-        
+
+    if active != None and active.subscriptions == None:
+      active.subscriptions=account.subscriptions.data
+
+    if active != None and active.investments == None:
+      active.investments=account.investments.data
+    
+    if active != None and active.insurance == None:
+      active.insurance=account.insurance.data
+
     if active != None and active.counciltax == None:
       active.counciltax = account.counciltax.data
 
@@ -267,6 +310,15 @@ def accounts():
 
     if active != None and active.takeaway == None:
       active.takeaway = account.takeaway.data
+
+    if active != None and active.transport == None:
+      active.transport = account.transport.data
+
+    if active != None and active.fitness == None:
+      active.fitness = account.fitness.data
+
+    if active != None and active.bakery == None:
+      active.bakery = account.bakery.data
     
     if active != None and active.shopping == None:
       active.shopping = account.shopping.data

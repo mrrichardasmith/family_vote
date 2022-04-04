@@ -1,3 +1,4 @@
+from asyncio import transports
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField, SubmitField, SelectField, DateTimeField, RadioField, TextAreaField, DecimalField
 from wtforms.validators import ValidationError, DataRequired, EqualTo, Email
@@ -66,12 +67,19 @@ class AccountForm(FlaskForm):
     rent = DecimalField('Rent')
     housekeeping = DecimalField('Houskeeping')
     extra_groceries = DecimalField('Extra Groceries')
+    water = DecimalField('Water')
     electric = DecimalField('Electric')
     internet = DecimalField('Internet')
+    subscriptions = DecimalField('Subscripions')
+    investments = DecimalField('Investments')
+    insurance = DecimalField('Insurance')
     counciltax = DecimalField('Council Tax')
     streaming = DecimalField('Streaming')
     family_entertainment = DecimalField('Family Entertainment')
     takeaway = DecimalField('Takeaway')
+    transport = DecimalField('Transport')
+    fitness = DecimalField('Fitness')
+    bakery = DecimalField('Bakery')
     shopping = DecimalField('Shopping')
     workfood = DecimalField('Work Food')
     submit = SubmitField('Rack the Tab')

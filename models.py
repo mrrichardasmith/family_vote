@@ -1,3 +1,4 @@
+from asyncio import transports
 from datetime import datetime
 from email.policy import default
 from enum import unique
@@ -91,12 +92,19 @@ class Account(db.Model):
     rent = db.Column(db.Float)
     housekeeping = db.Column(db.Float)
     extra_groceries = db.Column(db.Float)
+    water = db.Column(db.Float)
     electric = db.Column(db.Float)
     counciltax = db.Column(db.Float)
     internet = db.Column(db.Float)
+    subscriptions = db.Column(db.Float)
+    investments = db.Column(db.Float)
+    insurance = db.Column(db.Float)
     streaming = db.Column(db.Float)
     family_entertainment = db.Column(db.Float)
     takeaway = db.Column(db.Float)
+    transport = db.Column(db.Float)
+    fitness = db.Column(db.Float)
+    bakery = db.Column(db.Float)
     shopping = db.Column(db.Float)
     workfood = db.Column(db.Float)
     username = db.Column(db.String, db.ForeignKey('user.username'))

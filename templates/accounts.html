@@ -75,6 +75,17 @@
             <td>{{ active.extra_groceries }}</td>
         </tr>
         {% endif %}
+        {% if active.water == None %}
+        <tr>
+            <th>{{ account.water.label }}</th>
+            <td>{{ account.water }}</td>
+        </tr>
+        {% else %}
+        <tr>
+            <th>Water</th>
+            <td>{{ active.water }}</td>
+        </tr>
+        {% endif %}
         {% if active.electric == None %}
         <tr>
             <th>Electric / Gas</th>
@@ -95,6 +106,39 @@
         <tr>
             <th>Internet</th>
             <td>{{ active.internet }}</td>
+        </tr>
+        {% endif %}
+        {% if active.subscriptions == None %}
+        <tr>
+            <th>Subscriptions</th>
+            <td>{{ account.subscriptions }}</td>
+        </tr>
+        {% else %}
+        <tr>
+            <th>Subscriptions</th>
+            <td>{{ active.subscriptions }}</td>
+        </tr>
+        {% endif %}
+        {% if active.investments == None %}
+        <tr>
+            <th>Investments</th>
+            <td>{{ account.investments }}</td>
+        </tr>
+        {% else %}
+        <tr>
+            <th>Investments</th>
+            <td>{{ active.investments }}</td>
+        </tr>
+        {% endif %}
+        {% if active.insurance == None %}
+        <tr>
+            <th>Insurance</th>
+            <td>{{ account.insurance }}</td>
+        </tr>
+        {% else %}
+        <tr>
+            <th>Insurance</th>
+            <td>{{ active.insurance }}</td>
         </tr>
         {% endif %}
         {% if active.counciltax == None %}
@@ -139,6 +183,39 @@
         <tr>
             <th>Takeaway</th>
             <td>{{ active.takeaway }}</td>
+        </tr>
+        {% endif %}
+        {% if active.transport == None %}
+        <tr>
+            <th>{{ account.transport.label }}</th>
+            <td>{{ account.transport }}</td>
+        </tr>
+        {% else %}
+        <tr>
+            <th>Transport</th>
+            <td>{{ active.transport }}</td>
+        </tr>
+        {% endif %}
+        {% if active.fitness == None %}
+        <tr>
+            <th>{{ account.fitness.label }}</th>
+            <td>{{ account.fitness }}</td>
+        </tr>
+        {% else %}
+        <tr>
+            <th>Fitness</th>
+            <td>{{ active.fitness }}</td>
+        </tr>
+        {% endif %}
+        {% if active.bakery == None %}
+        <tr>
+            <th>{{ account.bakery.label }}</th>
+            <td>{{ account.bakery }}</td>
+        </tr>
+        {% else %}
+        <tr>
+            <th>Bakery</th>
+            <td>{{ active.bakery }}</td>
         </tr>
         {% endif %}
         {% if active.shopping == None %}
