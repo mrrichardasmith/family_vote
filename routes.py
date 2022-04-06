@@ -34,8 +34,10 @@ def register():
       return redirect(url_for('index'))
     form = RegistrationForm()
     if form.validate_on_submit():
-        user = User(username=form.username.data, email=form.email.data)
+        user = User(username=form.username.data, 
+                    email=form.email.data)
         user.set_password(form.password.data)
+
         db.session.add(user)
         db.session.commit()
         flash('Congratulations, you are now a registered user!')
@@ -96,7 +98,7 @@ def index():
   #filtering starts with the model name then .query.filter then the modelname again and the property with logic and all()
   #In this case we filter by the likes only
   likesdislikes_like = Likesdislikes.query.filter(Likesdislikes.likes_dislikes == 'Likes').all()
-  print(likesdislikes_like)
+  #print(likesdislikes_like)
   # In this case we filter by id's greater than 1 and save all of them
   likesdislikes_greater = Likesdislikes.query.filter(Likesdislikes.id > 1).all()
   #print(likesdislikes_greater)
@@ -121,7 +123,9 @@ def survey():
 
   if request.method == 'POST' and form.validate():
 #Thinking is a database class as can be seen if you look at the import statements above and check the models.
-    new_thoughts = Thinking(thinking_about = form.thinking_about.data, thoughts=form.thoughts.data, username=current_user.username )
+    new_thoughts = Thinking(thinking_about = form.thinking_about.data, 
+                            thoughts=form.thoughts.data, 
+                            username=current_user.username )
 #commands to send the new class to the database to persist the data, note the need for the two statements.
     db.session.add(new_thoughts)
     db.session.commit()
@@ -136,7 +140,10 @@ def day():
     return render_template('day_school.html', dayform=dayform)
 
   if request.method == 'POST' and dayform.validate():
-    new_day = Day_school( yourday = dayform.yourday.data, why=dayform.why.data, username=current_user.username )
+    new_day = Day_school(yourday=dayform.yourday.data, 
+                         why=dayform.why.data, 
+                         username=current_user.username)
+
     db.session.add(new_day)
     db.session.commit()
     return redirect(url_for('people'))
@@ -149,7 +156,12 @@ def people():
     return render_template('people.html', peopleForm=new_people)
 
   if request.method == 'POST' and new_people.validate():
-    new_people = People(good=new_people.good.data, bad=new_people.bad.data, ugly=new_people.ugly.data, morewords=new_people.morewords.data, username=current_user.username)
+    new_people = People(good=new_people.good.data, 
+                        bad=new_people.bad.data, 
+                        ugly=new_people.ugly.data, 
+                        morewords=new_people.morewords.data, 
+                        username=current_user.username)
+
     db.session.add(new_people)
     db.session.commit()
     return redirect(url_for('survey'))
@@ -175,7 +187,10 @@ def lifehacks():
 
   if request.method == 'POST' and hack.validate():
     print('Family Hacks')
-    new_hack = Life_hacks(hacktitle=hack.hack_title.data, hackdescription=hack.hack_description.data, username=current_user.user)
+    new_hack = Life_hacks(hacktitle=hack.hack_title.data, 
+                          hackdescription=hack.hack_description.data, 
+                          username=current_user.username)
+    
     db.session.add(new_hack)
     db.session.commit()
     return redirect(url_for('lifehacks'))
@@ -238,7 +253,6 @@ def accounts():
   if request.method == 'POST':
     
     #extra grocery details
-    #water
     
     if active == None:
       new_account = Account(month=todayDate.month, 
@@ -334,17 +348,28 @@ def accounts():
 def workfood():
   foodform = WorkfoodForm()
   todayDate = datetime.now()
-
+  print(todayDate.year)
+  
   if request.method == 'GET':
-    work_food = Workfood.query.filter(Workfood.username == 'richard').all()
-    for food in work_food:
-      print(food.month)
+    current_food = Workfood.query.filter(Workfood.username == 'richard'
+                                         and Workfood.day == todayDate.day
+                                         and Workfood.month == todayDate.month
+                                         and Workfood.year == todayDate.year).first()
 
-    return render_template('workfood.html', foodform=foodform)
+    return render_template('workfood.html', foodform=foodform, current_food=current_food)
 
   if request.method == 'POST':
 
-    new_workfood = Workfood(month=todayDate.month, year=todayDate.year, work_breakfast=foodform.work_breakfast.data, work_lunch=foodform.work_lunch.data, after_work_social=foodform.after_work_social.data, work_snacks_me=foodform.work_snacks_me.data, work_snacks_share=foodform.work_snacks_share.data, username=current_user.username)
+    new_workfood = Workfood(day=todayDate.day,
+                            month=todayDate.month, 
+                            year=todayDate.year, 
+                            work_breakfast=foodform.work_breakfast.data, 
+                            work_lunch=foodform.work_lunch.data, 
+                            after_work_social=foodform.after_work_social.data, 
+                            work_snacks_me=foodform.work_snacks_me.data, 
+                            work_snacks_share=foodform.work_snacks_share.data, 
+                            username=current_user.username)
+    
     db.session.add(new_workfood)
     db.session.commit()
     return redirect(url_for('workfood')) 
@@ -365,7 +390,11 @@ def likesdislikes():
   
   if request.method == 'POST':
     print('Likes & Dislikes POST')
-    new_likesdislikes = Likesdislikes(likes_dislikes=form.likes_dislikes.data, country=form.country.data, reason=form.reason.data, username=current_user.username)
+    new_likesdislikes = Likesdislikes(likes_dislikes=form.likes_dislikes.data, 
+                                      country=form.country.data, 
+                                      reason=form.reason.data, 
+                                      username=current_user.username)
+    
     db.session.add(new_likesdislikes)
     db.session.commit()
 

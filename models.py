@@ -1,4 +1,3 @@
-from asyncio import transports
 from datetime import datetime
 from email.policy import default
 from enum import unique
@@ -112,6 +111,7 @@ class Account(db.Model):
 class Workfood(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     date = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+    day = db.Column(db.Integer)
     month = db.Column(db.Integer)
     year = db.Column(db.Integer)
     work_breakfast = db.Column(db.Float)
