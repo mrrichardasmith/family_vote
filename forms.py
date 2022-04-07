@@ -91,3 +91,8 @@ class WorkfoodForm(FlaskForm):
     work_snacks_me = DecimalField('Snacks Draw')
     work_snacks_share = DecimalField('Snacks Share')
     submit = SubmitField('Update')
+
+class ExtragroceriesForm(FlaskForm):
+    extra_groceries_description = TextAreaField('Extra Items', validators=[DataRequired()])
+    extra_housekeeping = DecimalField('Cost')
+    submit = SubmitField('Declare Extra')

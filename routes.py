@@ -1,6 +1,6 @@
 from flask import request, render_template, flash, redirect, url_for
-from models import User, Likesdislikes, Thinking, Day_school, People, Admin, Life_hacks, Account, Workfood
-from forms import RegistrationForm, LoginForm, LikesDislikesForm, ThinkingForm, DaySchoolForm, GoodBadUglyForm, AdminForm, LifeHacksForm, AccountForm, WorkfoodForm
+from models import User, Likesdislikes, Thinking, Day_school, People, Admin, Life_hacks, Account, Workfood, Extragroceries
+from forms import RegistrationForm, LoginForm, LikesDislikesForm, ThinkingForm, DaySchoolForm, GoodBadUglyForm, AdminForm, LifeHacksForm, AccountForm, WorkfoodForm, ExtragroceriesForm
 from werkzeug.urls import url_parse
 from flask_login import current_user, login_user, logout_user, login_required
 from app import app, db
@@ -512,7 +512,15 @@ def lifehacksreport():
     hacks = Life_hacks.query.filter(Life_hacks.date > new_date).all()
     
     return render_template('lifehacks_report.html', hacks=hacks)
+
+@app.route('/extra_groceries')
+@login_required
+def extragroceries():
+  if request.method == 'GET':
+    extragroceries = ExtragroceriesForm()
     
+    return render_template('extragroceries.html', extragroceries=extragroceries)
+
 
 @app.route('/logout')
 def logout():

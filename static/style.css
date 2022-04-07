@@ -215,3 +215,8 @@ th, td {
 .noline {
   text-decoration: none;
 }
+
+.halfwidthcentered  {
+  max-width: 50%;
+  margin: auto;
+}

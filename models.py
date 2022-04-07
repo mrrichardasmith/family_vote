@@ -121,7 +121,13 @@ class Workfood(db.Model):
     work_snacks_share = db.Column(db.Float)
     username = db.Column(db.String, db.ForeignKey('user.username'))
     sum_food = db.Column(db.Float)
-
+  
+class Extragroceries(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    date = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+    day = db.Column(db.Integer)
+    month = db.Column(db.Integer)
+    year = db.Column(db.Integer)
 
 @login.user_loader 
 def load_user(id): 
