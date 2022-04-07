@@ -9,26 +9,44 @@
         <h1 class="mainTextColor">Work Food Transparency</h1>
         <table>
             <tr>
+                <th></th>
+                <td></td>
+                <th>Total</th>
+            </tr>
+            <tr>
                 <th>{{ foodform.work_breakfast.label }}</th>
                 <td>{{ foodform.work_breakfast }}</td>
-                <td>{{ current_food.work_breakfast }}</td>
+                <td>£{{ sum_breakfast }}</td>
             </tr>
             <tr>
                 <th>{{ foodform.work_lunch.label }}</th>
                 <td>{{ foodform.work_lunch }}</td>
-                <td>{{ current_food.work_lunch }}</td>
+                <td>£{{ sum_lunch }}</td>
             </tr>
             <tr>
                 <th>{{ foodform.after_work_social.label }}</th>
                 <td>{{ foodform.after_work_social }}</td>
+                <td>£{{ sum_social }}</td>
             </tr>
             <tr>
                 <th>{{ foodform.work_snacks_me.label }}</th>
                 <td>{{ foodform.work_snacks_me }}</td>
+                <td>£{{ sum_snacks_me }}</td>
             </tr>
             <tr>
                 <th>{{ foodform.work_snacks_share.label }}</th>
                 <td>{{ foodform.work_snacks_share }}</td>
+                <td>£{{ sum_snacks_share }}</td>
+            </tr>
+            <tr>
+                <td></td>
+                <th>Grand Total</th>
+                <td></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>£{{ grand_total }}</td>
+                <td></td>
             </tr>
         </table>
             <p>{{ foodform.submit() }}</p>

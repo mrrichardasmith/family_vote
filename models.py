@@ -120,6 +120,7 @@ class Workfood(db.Model):
     work_snacks_me = db.Column(db.Float)
     work_snacks_share = db.Column(db.Float)
     username = db.Column(db.String, db.ForeignKey('user.username'))
+    sum_food = db.Column(db.Float)
 
 
 @login.user_loader 

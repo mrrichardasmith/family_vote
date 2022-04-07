@@ -1,6 +1,3 @@
-from asyncio.windows_events import NULL
-from cgitb import html
-from xmlrpc.client import DateTime
 from flask import request, render_template, flash, redirect, url_for
 from models import User, Likesdislikes, Thinking, Day_school, People, Admin, Life_hacks, Account, Workfood
 from forms import RegistrationForm, LoginForm, LikesDislikesForm, ThinkingForm, DaySchoolForm, GoodBadUglyForm, AdminForm, LifeHacksForm, AccountForm, WorkfoodForm
@@ -251,8 +248,8 @@ def accounts():
     return render_template('accounts.html', user=current_user, account=account, active=active, remaining=remaining)
 
   if request.method == 'POST':
-    
     #extra grocery details
+    
     
     if active == None:
       new_account = Account(month=todayDate.month, 
@@ -348,18 +345,65 @@ def accounts():
 def workfood():
   foodform = WorkfoodForm()
   todayDate = datetime.now()
-  print(todayDate.year)
   
   if request.method == 'GET':
-    current_food = Workfood.query.filter(Workfood.username == 'richard'
-                                         and Workfood.day == todayDate.day
+    sum_breakfast = 0
+    sum_lunch = 0
+    sum_social = 0
+    sum_snacks_me = 0
+    sum_snacks_share = 0
+  
+    current_food = Workfood.query.filter(Workfood.username == current_user.username
                                          and Workfood.month == todayDate.month
-                                         and Workfood.year == todayDate.year).first()
+                                         and Workfood.year == todayDate.year).all()
+    
+    for food in current_food:
+      if food.work_breakfast != None:
+        sum_breakfast += food.work_breakfast
+      if food.work_lunch != None:
+        sum_lunch += food.work_lunch
+      if food.after_work_social != None:
+        sum_social += food.after_work_social
+      if food.work_snacks_me != None:
+        sum_snacks_me += food.work_snacks_me
+      if food.work_snacks_share != None:
+        sum_snacks_share += food.work_snacks_share
 
-    return render_template('workfood.html', foodform=foodform, current_food=current_food)
+    sum_food = Workfood.query.filter(Workfood.username == current_user.username
+                                     and Workfood.month == todayDate.month
+                                     and Workfood.year == todayDate.year).all()
+      
+    grand_total = 0
+    if sum_food != None:
+      for sum in sum_food:
+        grand_total += sum.sum_food
+      print(grand_total)
+
+    return render_template('workfood.html', 
+                            foodform=foodform, 
+                            current_food=current_food, 
+                            sum_breakfast=sum_breakfast,
+                            sum_lunch=sum_lunch,
+                            sum_social=sum_social,
+                            sum_snacks_me=sum_snacks_me,
+                            sum_snacks_share=sum_snacks_share,
+                            grand_total=grand_total)
 
   if request.method == 'POST':
+    sum_food = 0
 
+    if foodform.work_breakfast.data != None:
+      sum_food += foodform.work_breakfast.data
+    if foodform.work_lunch.data != None:
+      sum_food += foodform.work_lunch.data
+    if foodform.after_work_social.data != None:
+      sum_food += foodform.after_work_social.data
+    if foodform.work_snacks_me.data != None:
+      sum_food += foodform.work_snacks_me.data
+    if foodform.work_snacks_share.data != None:
+      sum_food += foodform.work_snacks_share.data
+
+    print(sum_food) 
     new_workfood = Workfood(day=todayDate.day,
                             month=todayDate.month, 
                             year=todayDate.year, 
@@ -367,13 +411,14 @@ def workfood():
                             work_lunch=foodform.work_lunch.data, 
                             after_work_social=foodform.after_work_social.data, 
                             work_snacks_me=foodform.work_snacks_me.data, 
-                            work_snacks_share=foodform.work_snacks_share.data, 
-                            username=current_user.username)
-    
+                            work_snacks_share=foodform.work_snacks_share.data,
+                            username=current_user.username,
+                            sum_food=sum_food)
+
     db.session.add(new_workfood)
     db.session.commit()
-    return redirect(url_for('workfood')) 
 
+    return redirect(url_for('workfood')) 
 
 
 @app.route('/likesdislikes', methods=['GET', 'POST'])
