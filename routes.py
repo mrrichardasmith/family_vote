@@ -196,12 +196,26 @@ def lifehacks():
 @app.route('/accounts', methods=['GET', 'POST'])
 @login_required
 def accounts():
+
   account = AccountForm()
   todayDate = datetime.now()
-  active = Account.query.filter(Account.month == todayDate.month).first()
+  active = Account.query.filter(Account.month == todayDate.month and Account.year == todayDate.year).first()
+  
   if  request.method == 'GET':
+
     total = 0
     remaining = 0
+
+    current_food = Workfood.query.filter(Workfood.username == current_user.username
+                                         and Workfood.month == todayDate.month
+                                         and Workfood.year == todayDate.year).all()
+
+    grand_total = 0
+    if current_food != None:
+      for sum in current_food:
+        grand_total += sum.sum_food
+      print('Hello here is the grand total ' + str(grand_total))
+
     if active != None and active.rent != None:
       total += active.rent 
     if active != None and active.housekeeping != None:
@@ -236,8 +250,8 @@ def accounts():
       total += active.bakery  
     if active != None and active.shopping != None:
       total += active.shopping  
-    if active != None and active.workfood != None:
-      total += active.workfood
+    if grand_total > 0:
+      total += grand_total
     if active != None and active.salary_deposit != None:
       remaining = active.salary_deposit - total
     if active != None and active.windfall != None:
@@ -245,7 +259,7 @@ def accounts():
       print(remaining)
 
 
-    return render_template('accounts.html', user=current_user, account=account, active=active, remaining=remaining)
+    return render_template('accounts.html', user=current_user, account=account, active=active, remaining=remaining, grand_total=grand_total)
 
   if request.method == 'POST':
     #extra grocery details
@@ -272,8 +286,7 @@ def accounts():
                             transport=account.transport.data, 
                             fitness=account.fitness.data, 
                             bakery=account.bakery.data, 
-                            shopping=account.shopping.data, 
-                            workfood=account.workfood.data, 
+                            shopping=account.shopping.data,  
                             username=current_user.username )
       db.session.add(new_account)  
 
@@ -344,7 +357,7 @@ def accounts():
 @login_required
 def workfood():
   foodform = WorkfoodForm()
-  todayDate = datetime.now()
+  todayDate = datetime.now()  
   
   if request.method == 'GET':
     sum_breakfast = 0
@@ -352,10 +365,17 @@ def workfood():
     sum_social = 0
     sum_snacks_me = 0
     sum_snacks_share = 0
-  
+
     current_food = Workfood.query.filter(Workfood.username == current_user.username
                                          and Workfood.month == todayDate.month
                                          and Workfood.year == todayDate.year).all()
+
+    grand_total = 0
+    if current_food != None:
+      for sum in current_food:
+        grand_total += sum.sum_food
+      print(grand_total)
+  
     
     for food in current_food:
       if food.work_breakfast != None:
@@ -369,15 +389,6 @@ def workfood():
       if food.work_snacks_share != None:
         sum_snacks_share += food.work_snacks_share
 
-    sum_food = Workfood.query.filter(Workfood.username == current_user.username
-                                     and Workfood.month == todayDate.month
-                                     and Workfood.year == todayDate.year).all()
-      
-    grand_total = 0
-    if sum_food != None:
-      for sum in sum_food:
-        grand_total += sum.sum_food
-      print(grand_total)
 
     return render_template('workfood.html', 
                             foodform=foodform, 
@@ -417,6 +428,8 @@ def workfood():
 
     db.session.add(new_workfood)
     db.session.commit()
+
+
 
     return redirect(url_for('workfood')) 
 

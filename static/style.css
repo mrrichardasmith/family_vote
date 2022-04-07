@@ -211,3 +211,7 @@ th, td {
 .red {
   color: #ff5252;
 }
+
+.noline {
+  text-decoration: none;
+}

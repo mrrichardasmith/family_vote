@@ -229,15 +229,17 @@
             <td>{{ active.shopping }}</td>
         </tr>
         {% endif %}
-        {% if active.workfood == None %}
+        {% if grand_total == 0 %}
         <tr>
-            <th>{{ account.workfood.label }}</th>
-            <td>{{ account.workfood }}</td>
+            <th>Work Food</th>
+            <td>£0</td>
+            <td><a class="noline" href="{{ url_for('workfood') }}">Add</a></td>
         </tr>
         {% else %}
         <tr>
             <th>Work Food</th>
-            <td>{{ active.workfood }}</td>
+            <td>{{ grand_total }}</td>
+            <td><a class="noline" href="{{ url_for('workfood') }}">details</a></td>
         </tr>
         {% endif %}
         
