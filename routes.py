@@ -200,7 +200,9 @@ def accounts():
 
   account = AccountForm()
   todayDate = datetime.now()
-  active = Account.query.filter(Account.month == todayDate.month and Account.year == todayDate.year).first()
+  active = Account.query.filter(Account.username == current_user.username
+                                and Account.month == todayDate.month 
+                                and Account.year == todayDate.year).first()
   
   if  request.method == 'GET':
 
@@ -218,17 +220,17 @@ def accounts():
         workfood_total += sum.sum_food
       print('Hello here is the work food total ' + str(workfood_total))
 
-    extra_groceries = Extragroceries.query.filter(Extragroceries.month == todayDate.month 
-                                                  and Extragroceries.year == todayDate.year 
-                                                  and Extragroceries.username == current_user.username).all()
-
+    extra_groceries = Extragroceries.query.filter(Extragroceries.username == current_user.username
+                                                  and Extragroceries.month == todayDate.month 
+                                                  and Extragroceries.year == todayDate.year).all()
+    print(current_user.username)
     extra_groceries_total = 0
     if extra_groceries != None:
       for extra in extra_groceries:
         extra_groceries_total += extra.costgroceries
 
     print(extra_groceries_total)
-    
+
 
     if active != None and active.rent != None:
       total += active.rent 
@@ -539,10 +541,22 @@ def lifehacksreport():
 def extragroceries():
   todayDate = datetime.now()
   extra = ExtragroceriesForm()
+  monthNow = month_from_number(todayDate.month)
+
   if request.method == 'GET':
-    print(month_from_number(todayDate.month))
     
-    return render_template('extragroceries.html', extra=extra)
+    extra_groceries = Extragroceries.query.filter(Extragroceries.username == current_user.username
+                                                  and Extragroceries.month == todayDate.month 
+                                                  and Extragroceries.year == todayDate.year).all()
+
+    list = []
+    for l in extra_groceries:
+      space = l.grocerydescription.split(' ')
+      for s in space:
+        list.append(s)
+  
+    
+    return render_template('extragroceries.html', extra=extra, list=list, monthNow=monthNow)
 
   if request.method == 'POST':
     print('We have extra groceries')
@@ -550,7 +564,8 @@ def extragroceries():
                                    month=todayDate.month, 
                                    year=todayDate.year,
                                    grocerydescription=extra.extra_groceries_description.data,
-                                   costgroceries=extra.extra_groceries.data) 
+                                   costgroceries=extra.extra_groceries.data,
+                                   username=current_user.username) 
 
     db.session.add(new_groceries)
     db.session.commit()

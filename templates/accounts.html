@@ -68,13 +68,13 @@
         <tr>
             <th>Extra Groceries</th>
             <td>£0</td>
-            <td><a class="noline" href="{{ url_for('extragroceries') }}">Add</a></td>
+            <td><a class="noline" href="{{ url_for('extragroceries') }}"><img class="iconPic2" src="{{ url_for('static', filename='pictures/plus.png') }}"></a></td>
         </tr>
         {% else %}
         <tr>
             <th>Extra Groceries</th>
             <td>{{ extra_groceries_total }}</td>
-            <td><a class="noline" href="{{ url_for('extragroceries') }}">Details</a></td>
+            <td><a class="noline" href="{{ url_for('extragroceries') }}"><img class="iconPic2" src="{{ url_for('static', filename='pictures/plus.png') }}"></a></td>
         </tr>
         {% endif %}
         {% if active.water == None %}
@@ -103,11 +103,13 @@
         <tr>
             <th>Internet</th>
             <td>{{ account.internet }}</td>
+            <td><img class="iconPic2" src="{{ url_for('static', filename='pictures/unlockedPadlock.png') }}"></td>
         </tr>
         {% else %}
         <tr>
             <th>Internet</th>
             <td>{{ active.internet }}</td>
+            <td><img class="iconPic2" src="{{ url_for('static', filename='pictures/unlockedPadlock.png') }}"></td>
         </tr>
         {% endif %}
         {% if active.subscriptions == None %}
@@ -147,11 +149,13 @@
         <tr>
             <th>{{ account.counciltax.label }}</th>
             <td>{{ account.counciltax }}</td>
+            <td><img class="iconPic2" src="{{ url_for('static', filename='pictures/unlockedPadlock.png') }}"></td>
         </tr>
         {% else %}
         <tr>
             <th>Council Tax</th>
             <td>{{ active.counciltax }}</td>
+            <td><img class="iconPic2" src="{{ url_for('static', filename='pictures/unlockedPadlock.png') }}"></td>
         </tr>
         {% endif %}
         {% if active.streaming == None %}
@@ -235,13 +239,13 @@
         <tr>
             <th>Work Food</th>
             <td>£0</td>
-            <td><a class="noline" href="{{ url_for('workfood') }}">Add</a></td>
+            <td><a class="noline" href="{{ url_for('workfood') }}"><img class="iconPic2" src="{{ url_for('static', filename='pictures/plus.png') }}"></a></td>
         </tr>
         {% else %}
         <tr>
             <th>Work Food</th>
             <td>{{ workfood_total }}</td>
-            <td><a class="noline" href="{{ url_for('workfood') }}">details</a></td>
+            <td><a class="noline" href="{{ url_for('workfood') }}"><img class="iconPic2" src="{{ url_for('static', filename='pictures/plus.png') }}"></a></td>
         </tr>
         {% endif %}
         
