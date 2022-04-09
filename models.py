@@ -128,6 +128,10 @@ class Extragroceries(db.Model):
     day = db.Column(db.Integer)
     month = db.Column(db.Integer)
     year = db.Column(db.Integer)
+    grocerydescription = db.Column(db.String(500))
+    username = db.Column(db.String, db.ForeignKey('user.username'))
+    costgroceries = db.Column(db.Float)
+
 
 @login.user_loader 
 def load_user(id): 

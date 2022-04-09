@@ -5,7 +5,7 @@
 <div class="page">
     
     <form class="form" action="" method="post" novalidate>
-    <h1 class="mainTextColor">Monthly Financial Status</h1>
+    <h1 class="mainTextColor">{{ current_month }} Financial Status</h1>
         {{ account.hidden_tag() }}
     <table>
         
@@ -64,15 +64,17 @@
             <td>{{ active.housekeeping }}</td>
         </tr>
         {% endif %}
-        {% if active.extra_groceries == None %}
+        {% if extra_groceries == 0 %}
         <tr>
-            <th>{{ account.extra_groceries.label }}</th>
-            <td>{{ account.extra_groceries }}</td>
+            <th>Extra Groceries</th>
+            <td>£0</td>
+            <td><a class="noline" href="{{ url_for('extragroceries') }}">Add</a></td>
         </tr>
         {% else %}
         <tr>
             <th>Extra Groceries</th>
-            <td>{{ active.extra_groceries }}</td>
+            <td>{{ extra_groceries_total }}</td>
+            <td><a class="noline" href="{{ url_for('extragroceries') }}">Details</a></td>
         </tr>
         {% endif %}
         {% if active.water == None %}
@@ -229,7 +231,7 @@
             <td>{{ active.shopping }}</td>
         </tr>
         {% endif %}
-        {% if grand_total == 0 %}
+        {% if workfood_total == 0 %}
         <tr>
             <th>Work Food</th>
             <td>£0</td>
@@ -238,7 +240,7 @@
         {% else %}
         <tr>
             <th>Work Food</th>
-            <td>{{ grand_total }}</td>
+            <td>{{ workfood_total }}</td>
             <td><a class="noline" href="{{ url_for('workfood') }}">details</a></td>
         </tr>
         {% endif %}

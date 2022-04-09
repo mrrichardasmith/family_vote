@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="page">
+    
+    <form class="form" action="" method="post" novalidate>
+        {{ extra.hidden_tag() }}
+        <h1 class="mainTextColor">Extra Groceries</h1>
+        <p>{{ extra.extra_groceries_description.label }}</p>
+        <p><textarea id="1" name="extra_groceries_description" rows="8" cols="40"></textarea></p>
+        <p>{{ extra.extra_groceries.label }}</p>
+        <div class="halfwidthcentered">
+            <p>{{ extra.extra_groceries }}</p>
+            <p>{{ extra.submit() }}</p>
+            <p><a class="noline" href="{{ url_for('accounts') }}">Full Accounts Page</a></p>
+        </div>
+    </form>
+
+
+{% endblock %}

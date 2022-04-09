@@ -5,6 +5,7 @@ from werkzeug.urls import url_parse
 from flask_login import current_user, login_user, logout_user, login_required
 from app import app, db
 from datetime import datetime, timedelta 
+from helper import month_from_number
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -192,7 +193,7 @@ def lifehacks():
     db.session.commit()
     return redirect(url_for('lifehacks'))
     
-  
+   
 @app.route('/accounts', methods=['GET', 'POST'])
 @login_required
 def accounts():
@@ -205,23 +206,36 @@ def accounts():
 
     total = 0
     remaining = 0
+    current_month = month_from_number(todayDate.month)
 
     current_food = Workfood.query.filter(Workfood.username == current_user.username
                                          and Workfood.month == todayDate.month
                                          and Workfood.year == todayDate.year).all()
 
-    grand_total = 0
+    workfood_total = 0
     if current_food != None:
       for sum in current_food:
-        grand_total += sum.sum_food
-      print('Hello here is the grand total ' + str(grand_total))
+        workfood_total += sum.sum_food
+      print('Hello here is the work food total ' + str(workfood_total))
+
+    extra_groceries = Extragroceries.query.filter(Extragroceries.month == todayDate.month 
+                                                  and Extragroceries.year == todayDate.year 
+                                                  and Extragroceries.username == current_user.username).all()
+
+    extra_groceries_total = 0
+    if extra_groceries != None:
+      for extra in extra_groceries:
+        extra_groceries_total += extra.costgroceries
+
+    print(extra_groceries_total)
+    
 
     if active != None and active.rent != None:
       total += active.rent 
     if active != None and active.housekeeping != None:
       total += active.housekeeping
-    if active != None and active.extra_groceries != None:
-      total += active.extra_groceries
+    if extra_groceries_total > 0:
+      total += extra_groceries_total
     if active != None and active.water != None:
       total += active.water
     if active != None and active.electric != None:
@@ -250,8 +264,8 @@ def accounts():
       total += active.bakery  
     if active != None and active.shopping != None:
       total += active.shopping  
-    if grand_total > 0:
-      total += grand_total
+    if workfood_total > 0:
+      total += workfood_total
     if active != None and active.salary_deposit != None:
       remaining = active.salary_deposit - total
     if active != None and active.windfall != None:
@@ -259,7 +273,14 @@ def accounts():
       print(remaining)
 
 
-    return render_template('accounts.html', user=current_user, account=account, active=active, remaining=remaining, grand_total=grand_total)
+    return render_template('accounts.html', 
+                           user=current_user,
+                           current_month=current_month, 
+                           account=account, 
+                           active=active, 
+                           remaining=remaining, 
+                           workfood_total=workfood_total,
+                           extra_groceries_total=extra_groceries_total)
 
   if request.method == 'POST':
     #extra grocery details
@@ -513,14 +534,28 @@ def lifehacksreport():
     
     return render_template('lifehacks_report.html', hacks=hacks)
 
-@app.route('/extra_groceries')
+@app.route('/extra_groceries', methods=['GET', 'POST'])
 @login_required
 def extragroceries():
+  todayDate = datetime.now()
+  extra = ExtragroceriesForm()
   if request.method == 'GET':
-    extragroceries = ExtragroceriesForm()
+    print(month_from_number(todayDate.month))
     
-    return render_template('extragroceries.html', extragroceries=extragroceries)
+    return render_template('extragroceries.html', extra=extra)
 
+  if request.method == 'POST':
+    print('We have extra groceries')
+    new_groceries = Extragroceries(day=todayDate.day,
+                                   month=todayDate.month, 
+                                   year=todayDate.year,
+                                   grocerydescription=extra.extra_groceries_description.data,
+                                   costgroceries=extra.extra_groceries.data) 
+
+    db.session.add(new_groceries)
+    db.session.commit()
+
+    return redirect(url_for('extragroceries'))
 
 @app.route('/logout')
 def logout():
@@ -545,13 +580,7 @@ def testupdate(id, yourday):
 
   return 'This is a test update'
 
-def month_from_number(number):
-  if number == 1:
-    return 'January'
-  elif number == 2:
-    return 'February'
-  else: 
-    return 'go away'
+
 
 
     
