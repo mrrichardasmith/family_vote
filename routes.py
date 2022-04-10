@@ -1,7 +1,7 @@
 from decimal import Decimal
 from flask import request, render_template, flash, redirect, url_for
-from models import User, Likesdislikes, Thinking, Day_school, People, Admin, Life_hacks, Account, Workfood, Extragroceries, Subscriptions
-from forms import RegistrationForm, LoginForm, LikesDislikesForm, ThinkingForm, DaySchoolForm, GoodBadUglyForm, AdminForm, LifeHacksForm, AccountForm, WorkfoodForm, ExtragroceriesForm, SubscriptionsForm
+from models import User, Likesdislikes, Thinking, Day_school, People, Admin, Life_hacks, Account, Workfood, Extragroceries, Subscriptions, Transport
+from forms import RegistrationForm, LoginForm, LikesDislikesForm, ThinkingForm, DaySchoolForm, GoodBadUglyForm, AdminForm, LifeHacksForm, AccountForm, WorkfoodForm, ExtragroceriesForm, SubscriptionsForm, TransportForm
 from werkzeug.urls import url_parse
 from flask_login import current_user, login_user, logout_user, login_required
 from app import app, db
@@ -490,6 +490,81 @@ def subscriptions():
 
     return render_template('subscriptions.html', subs=subs)
 
+  if request.method == 'POST':
+    new_subscriptions = Subscriptions(subscription_name=subs.subscription_name.data,
+                                      subscription_term=subs.subscription_term.data,
+                                      subscription_start_date=subs.subscription_start_date.data,
+                                      subscription_cost=subs.subscription_cost.data,
+                                      username=current_user.username)
+
+    db.session.add(new_subscriptions)
+    db.session.commit()
+
+    return redirect(url_for('accounts'))
+
+
+@app.route('/extra_groceries', methods=['GET', 'POST'])
+@login_required
+def extragroceries():
+  todayDate = datetime.now()
+  extra = ExtragroceriesForm()
+  monthNow = month_from_number(todayDate.month)
+
+  if request.method == 'GET':
+    
+    extra_groceries = Extragroceries.query.filter(Extragroceries.username == current_user.username
+                                                  and Extragroceries.month == todayDate.month 
+                                                  and Extragroceries.year == todayDate.year).all()
+
+    list = []
+    for l in extra_groceries:
+      space = l.grocerydescription.split(' ')
+      print(space)
+      for s in space:
+        list.append(s)
+      for a in list:
+        print(a)
+  
+    
+    return render_template('extragroceries.html', extra=extra, list=list, monthNow=monthNow)
+
+  if request.method == 'POST':
+    print('We have extra groceries')
+    new_groceries = Extragroceries(day=todayDate.day,
+                                   month=todayDate.month, 
+                                   year=todayDate.year,
+                                   grocerydescription=extra.extra_groceries_description.data,
+                                   costgroceries=extra.extra_groceries.data,
+                                   username=current_user.username) 
+
+    db.session.add(new_groceries)
+    db.session.commit()
+
+    return redirect(url_for('extragroceries'))
+
+@app.route('/transport', methods=['GET', 'POST'])
+@login_required
+def transport():
+  transp = TransportForm()
+  todayDate = datetime.now()
+  current_month = month_from_number(todayDate.month)
+  if request.method == 'GET':
+
+    return render_template('transport.html', transp=transp, current_month=current_month)
+
+  if request.method == 'POST':
+
+    new_transport = Transport(destination=transp.destination.data,
+                              method_of_travel=transp.method_of_travel.data,
+                              cost_of_travel=transp.cost_of_travel.data,
+                              username=current_user.username
+                              )
+
+    db.session.add(new_transport)
+    db.session.commit()
+
+    return redirect(url_for('accounts'))
+
 @app.route('/reports')
 @login_required
 def reports():
@@ -545,44 +620,6 @@ def lifehacksreport():
     
     return render_template('lifehacks_report.html', hacks=hacks)
 
-@app.route('/extra_groceries', methods=['GET', 'POST'])
-@login_required
-def extragroceries():
-  todayDate = datetime.now()
-  extra = ExtragroceriesForm()
-  monthNow = month_from_number(todayDate.month)
-
-  if request.method == 'GET':
-    
-    extra_groceries = Extragroceries.query.filter(Extragroceries.username == current_user.username
-                                                  and Extragroceries.month == todayDate.month 
-                                                  and Extragroceries.year == todayDate.year).all()
-
-    list = []
-    for l in extra_groceries:
-      space = l.grocerydescription.split(' ')
-      print(space)
-      for s in space:
-        list.append(s)
-      for a in list:
-        print(a)
-  
-    
-    return render_template('extragroceries.html', extra=extra, list=list, monthNow=monthNow)
-
-  if request.method == 'POST':
-    print('We have extra groceries')
-    new_groceries = Extragroceries(day=todayDate.day,
-                                   month=todayDate.month, 
-                                   year=todayDate.year,
-                                   grocerydescription=extra.extra_groceries_description.data,
-                                   costgroceries=extra.extra_groceries.data,
-                                   username=current_user.username) 
-
-    db.session.add(new_groceries)
-    db.session.commit()
-
-    return redirect(url_for('extragroceries'))
 
 
 @app.route('/logout')

@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    <div class="page">
+        <form class="form" action="" method="post" novalidate>
+        {{ transp.hidden_tag() }}
+            <h1 class="mainTextColor">Transport for {{ current_month }} </h1>
+            <table>
+                <tr>
+                    <th>{{ transp.destination.label}}</th>
+                    <td>{{ transp.destination }}</td>
+                </tr>
+                {% for subfield in transp.method_of_travel %}
+                <tr>
+                    <td>{{ subfield.label }}</td>
+                    <td>{{ subfield }}</td>
+                </tr>
+                {% endfor %}
+                <tr>
+                    <th>{{ transp.cost_of_travel.label }}</th>
+                    <td>{{ transp.cost_of_travel }}</td>
+                </tr>
+                
+            </table>
+                <p>{{ transp.submit() }}</p>
+                <p><a class="noline" href="{{ url_for('accounts') }}">Full Accounts Page</a></p>
+        </form>
+        
+    </div>
+
+{% endblock %}

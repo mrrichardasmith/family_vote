@@ -138,6 +138,15 @@ class Subscriptions(db.Model):
     subscription_term = db.Column(db.String(10))
     subscription_start_date = db.Column(db.DateTime, index=True)
     subscription_cost = db.Column(db.Float)
+    username = db.Column(db.String, db.ForeignKey('user.username'))
+
+class Transport(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    destination = db.Column(db.String(120))
+    method_of_travel = db.Column(db.String(10))
+    cost_of_travel = db.Column(db.Float)
+    username = db.Column(db.String, db.ForeignKey('user.username'))
+
 
 
 @login.user_loader 

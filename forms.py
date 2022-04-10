@@ -103,3 +103,9 @@ class SubscriptionsForm(FlaskForm):
     subscription_start_date = DateTimeField('Subscription Start', format='%d-%m-%y', validators=[DataRequired()])
     subscription_cost = DecimalField('Cost', validators=[DataRequired()])
     submit = SubmitField('Subscribed')
+
+class TransportForm(FlaskForm):
+    destination = StringField('Destination', validators=[DataRequired()])
+    method_of_travel = RadioField('Method of Travel', choices=['Train', 'Bus', 'Uber', 'Taxi', 'Plane'], validators=[DataRequired()])
+    cost_of_travel = DecimalField('Cost of Travel', validators=[DataRequired()])
+    submit = SubmitField('On the Move')

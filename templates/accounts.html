@@ -5,7 +5,7 @@
 <div class="page">
     
     <form class="form" action="" method="post" novalidate>
-    <h1 class="mainTextColor">{{ current_month }} Financial Status</h1>
+    <h1 class="mainTextColor">Financial Status {{ current_month }}</h1>
         {{ account.hidden_tag() }}
     <table>
         
@@ -191,17 +191,20 @@
         <tr>
             <th>Takeaway</th>
             <td>{{ active.takeaway }}</td>
+            <td><a class="noline" href="{{ url_for('takeaway') }}"><img class="iconPic2" src="{{ url_for('static', filename='pictures/plus.png') }}"></a></td>
         </tr>
         {% endif %}
         {% if active.transport == None %}
         <tr>
             <th>{{ account.transport.label }}</th>
             <td>{{ account.transport }}</td>
+            <td><a class="noline" href="{{ url_for('transport') }}"><img class="iconPic2" src="{{ url_for('static', filename='pictures/plus.png') }}"></a></td>
         </tr>
         {% else %}
         <tr>
             <th>Transport</th>
             <td>{{ active.transport }}</td>
+            <td><a class="noline" href="{{ url_for('transport') }}"><img class="iconPic2" src="{{ url_for('static', filename='pictures/plus.png') }}"></a></td>
         </tr>
         {% endif %}
         {% if active.fitness == None %}
