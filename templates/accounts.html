@@ -116,11 +116,13 @@
         <tr>
             <th>Subscriptions</th>
             <td>{{ account.subscriptions }}</td>
+            <td><a class="noline" href="{{ url_for('subscriptions') }}"><img class="iconPic2" src="{{ url_for('static', filename='pictures/plus.png') }}"></a></td>
         </tr>
         {% else %}
         <tr>
             <th>Subscriptions</th>
             <td>{{ active.subscriptions }}</td>
+            <td><a class="noline" href="{{ url_for('subscriptions') }}"><img class="iconPic2" src="{{ url_for('static', filename='pictures/plus.png') }}"></a></td>
         </tr>
         {% endif %}
         {% if active.investments == None %}

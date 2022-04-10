@@ -1,6 +1,7 @@
+from decimal import Decimal
 from flask import request, render_template, flash, redirect, url_for
-from models import User, Likesdislikes, Thinking, Day_school, People, Admin, Life_hacks, Account, Workfood, Extragroceries
-from forms import RegistrationForm, LoginForm, LikesDislikesForm, ThinkingForm, DaySchoolForm, GoodBadUglyForm, AdminForm, LifeHacksForm, AccountForm, WorkfoodForm, ExtragroceriesForm
+from models import User, Likesdislikes, Thinking, Day_school, People, Admin, Life_hacks, Account, Workfood, Extragroceries, Subscriptions
+from forms import RegistrationForm, LoginForm, LikesDislikesForm, ThinkingForm, DaySchoolForm, GoodBadUglyForm, AdminForm, LifeHacksForm, AccountForm, WorkfoodForm, ExtragroceriesForm, SubscriptionsForm
 from werkzeug.urls import url_parse
 from flask_login import current_user, login_user, logout_user, login_required
 from app import app, db
@@ -272,8 +273,11 @@ def accounts():
       remaining = active.salary_deposit - total
     if active != None and active.windfall != None:
       remaining = remaining + active.windfall 
-      print(remaining)
+      
 
+    print(remaining)
+    remaining_formatted = '{:.2f}'.format(remaining)
+    print(remaining_formatted)
 
     return render_template('accounts.html', 
                            user=current_user,
@@ -285,8 +289,6 @@ def accounts():
                            extra_groceries_total=extra_groceries_total)
 
   if request.method == 'POST':
-    #extra grocery details
-    
     
     if active == None:
       new_account = Account(month=todayDate.month, 
@@ -481,6 +483,13 @@ def likesdislikes():
 
     return redirect(url_for('index'))
     
+@app.route('/subscriptions', methods=['GET', 'POST'])
+def subscriptions():
+  subs = SubscriptionsForm()
+  if request.method == 'GET':
+
+    return render_template('subscriptions.html', subs=subs)
+
 @app.route('/reports')
 @login_required
 def reports():
@@ -552,8 +561,11 @@ def extragroceries():
     list = []
     for l in extra_groceries:
       space = l.grocerydescription.split(' ')
+      print(space)
       for s in space:
         list.append(s)
+      for a in list:
+        print(a)
   
     
     return render_template('extragroceries.html', extra=extra, list=list, monthNow=monthNow)
@@ -571,6 +583,7 @@ def extragroceries():
     db.session.commit()
 
     return redirect(url_for('extragroceries'))
+
 
 @app.route('/logout')
 def logout():

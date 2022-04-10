@@ -132,6 +132,13 @@ class Extragroceries(db.Model):
     username = db.Column(db.String, db.ForeignKey('user.username'))
     costgroceries = db.Column(db.Float)
 
+class Subscriptions(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    subscription_name = db.Column(db.String(120))
+    subscription_term = db.Column(db.String(10))
+    subscription_start_date = db.Column(db.DateTime, index=True)
+    subscription_cost = db.Column(db.Float)
+
 
 @login.user_loader 
 def load_user(id): 

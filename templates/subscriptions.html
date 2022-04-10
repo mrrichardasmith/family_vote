@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="page">
+    <form class="form" action="" method="post" novalidate>
+        {{ subs.hidden_tag() }}
+        <h1>Subscriptions</h1>
+        <table>
+            <tr>
+                <th>{{ subs.subscription_name.label }}</th>
+                <td>{{ subs.subscription_name }}</td>
+            </tr>
+            {% for subfield in subs.subscription_term %}
+            <tr>
+                <th>{{ subfield.label }}</th>
+                <td>{{ subfield }}</td>
+            </tr>
+            {% endfor %}
+            <tr>
+                <th>{{ subs.subscription_start_date.label }}</th>
+                <td>{{ subs.subscription_start_date }}</td>
+            </tr>
+            <tr>
+                <th>{{ subs.subscription_cost.label }}</th>
+                <td>{{ subs.subscription_cost}}</td>
+            </tr>
+        </table>
+        <p>{{ subs.submit() }}</p>
+    </form>
+</div>
+{% endblock %}

@@ -96,3 +96,10 @@ class ExtragroceriesForm(FlaskForm):
     extra_groceries_description = TextAreaField('Extra Items', validators=[DataRequired()])
     extra_groceries = DecimalField('Cost')
     submit = SubmitField('Declare Extra')
+
+class SubscriptionsForm(FlaskForm):
+    subscription_name = StringField('Subscription', validators=[DataRequired()])
+    subscription_term = RadioField('Monthly / Yearly', choices=['Monthly', 'Yearly'], validators=[DataRequired()])
+    subscription_start_date = DateTimeField('Subscription Start', format='%d-%m-%y', validators=[DataRequired()])
+    subscription_cost = DecimalField('Cost', validators=[DataRequired()])
+    submit = SubmitField('Subscribed')
