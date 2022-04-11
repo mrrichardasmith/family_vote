@@ -7,6 +7,7 @@ from flask_login import current_user, login_user, logout_user, login_required
 from app import app, db
 from datetime import datetime, timedelta 
 from helper import month_from_number
+from matplotlib import pyplot as plt
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -549,8 +550,39 @@ def transport():
   todayDate = datetime.now()
   current_month = month_from_number(todayDate.month)
   if request.method == 'GET':
+    total_train = 0
+    total_bus = 0
+    total_uber = 0
+    total_taxi = 0
+    total_plane = 0
+    method_totals = []
+    get_transp = Transport.query.filter(Transport.username == current_user.username and Transport.date.month==todayDate.month).all()
+    
 
-    return render_template('transport.html', transp=transp, current_month=current_month)
+    if get_transp != None:
+      for method in get_transp:
+        if method.method_of_travel == 'Train':
+          total_train += method.cost_of_travel
+        elif method.method_of_travel == 'Bus':
+          total_bus += method.cost_of_travel
+        elif method.method_of_travel == 'Uber':
+          total_uber += method.cost_of_travel
+        elif method.method_of_travel == 'Taxi':
+          total_taxi += method.cost_of_travel
+        elif method.method_of_travel == 'Plane':
+          total_plane += method.cost_of_travel
+
+    method_totals.append(total_train)
+    method_totals.append(total_bus) 
+    method_totals.append(total_uber) 
+    method_totals.append(total_taxi)
+    method_totals.append(total_plane)
+    print(method_totals)
+
+    transport_methods = ['Train', 'Bus', 'Uber', 'Taxi', 'Plane']
+    
+    
+    return render_template('transport.html', transp=transp, current_month=current_month, transport_methods=transport_methods, method_totals=method_totals)
 
   if request.method == 'POST':
 

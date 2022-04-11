@@ -142,6 +142,7 @@ class Subscriptions(db.Model):
 
 class Transport(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    date = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     destination = db.Column(db.String(120))
     method_of_travel = db.Column(db.String(10))
     cost_of_travel = db.Column(db.Float)
