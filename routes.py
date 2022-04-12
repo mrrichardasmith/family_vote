@@ -231,7 +231,25 @@ def accounts():
       for extra in extra_groceries:
         extra_groceries_total += extra.costgroceries
 
-    print(extra_groceries_total)
+    transport = Transport.query.filter(Transport.username == current_user.username
+                                       and Transport.month == todayDate.month 
+                                       and Transport.year == todayDate.year).all()
+
+    total_transport = 0
+    if transport != None:
+      for t in transport:
+        total_transport += t.cost_of_travel
+    
+    subscriptions = Subscriptions.query.filter(Subscriptions.username == current_user.username
+                                               and Subscriptions.month == todayDate.month
+                                               and Subscriptions.year == todayDate.year).all()
+
+    total_subscriptions = 0
+    if subscriptions != None:
+      for s in subscriptions:
+        total_subscriptions += s.subscription_cost
+    
+    print(total_subscriptions)
 
 
     if active != None and active.rent != None:
@@ -246,8 +264,8 @@ def accounts():
       total += active.electric
     if active != None and active.internet != None:
       total += active.internet
-    if active != None and active.subscriptions != None:
-      total += active.subscriptions
+    if total_subscriptions > 0:
+      total += total_subscriptions
     if active != None and active.investments != None:
       total += active.investments
     if active != None and active.insurance != None:
@@ -260,8 +278,8 @@ def accounts():
       total += active.family_entertainment
     if active != None and active.takeaway != None:
       total += active.takeaway
-    if active != None and active.transport != None:
-      total += active.transport
+    if total_transport > 0:
+      total += total_transport
     if active != None and active.fitness != None:
       total += active.fitness
     if active != None and active.bakery != None:
@@ -276,7 +294,7 @@ def accounts():
       remaining = remaining + active.windfall 
       
 
-    print(remaining)
+
     remaining_formatted = '{:.2f}'.format(remaining)
     print(remaining_formatted)
 
@@ -287,7 +305,9 @@ def accounts():
                            active=active, 
                            remaining=remaining, 
                            workfood_total=workfood_total,
-                           extra_groceries_total=extra_groceries_total)
+                           extra_groceries_total=extra_groceries_total,
+                           total_transport=total_transport,
+                           total_subscriptions=total_subscriptions)
 
   if request.method == 'POST':
     
@@ -556,7 +576,9 @@ def transport():
     total_taxi = 0
     total_plane = 0
     method_totals = []
-    get_transp = Transport.query.filter(Transport.username == current_user.username and Transport.date.month==todayDate.month).all()
+
+    get_transp = Transport.query.filter(Transport.username == current_user.username 
+                                        and Transport.date.month==todayDate.month).all()
     
 
     if get_transp != None:
