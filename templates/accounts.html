@@ -221,23 +221,23 @@
         {% if active.bakery == None %}
         <tr>
             <th>{{ account.bakery.label }}</th>
-            <td>£{{ account.bakery }}</td>
+            <td>{{ account.bakery }}</td>
         </tr>
         {% else %}
         <tr>
             <th>Bakery</th>
-            <td>£{{ active.bakery }}</td>
+            <td>{{ active.bakery }}</td>
         </tr>
         {% endif %}
         {% if active.shopping == None %}
         <tr>
             <th>{{ account.shopping.label }}</th>
-            <td>£{{ account.shopping }}</td>
+            <td>{{ account.shopping }}</td>
         </tr>
         {% else %}
         <tr>
             <th>More Stuff</th>
-            <td>£{{ active.shopping }}</td>
+            <td>{{ active.shopping }}</td>
         </tr>
         {% endif %}
         {% if workfood_total == 0 %}
