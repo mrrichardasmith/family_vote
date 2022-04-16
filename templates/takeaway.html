@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="page">
+    <div class="form">
+      <h1 class="mainTextColor">Takeaway Night</h1>
+      <form class="login-form" action="" method="post" novalidate>
+        {{ takeaway.hidden_tag() }}
+      <tabel>
+        <tr>
+        {% for subfield in takeaway.takeaway_choice %}
+            <th>{{ subfield.label }}</th>
+            <td>{{ subfield }}</td>
+        {% endfor %}
+        </tr>
+        <tr>
+            <th>{{ takeaway.takeaway_other.label }}</th>
+            <td>{{ takeaway.takeaway_other }}</td>
+        </tr>
+        <tr>
+            <th>{{ takeaway.takeaway_cost.label }}</th>
+            <td>{{ takeaway.takeaway_cost }}</td>
+        </tr>
+      </tabel>
+      <p>{{ takeaway.submit() }}</p>
+      <p><a class="noline" href="{{ url_for('accounts') }}">Full Accounts Page</a></p>
+    </form>
+    </div>
+</div>
+
+
+{% endblock %}

@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="page">
+    <form class="form" action="" method="post" novalidate>
+        {{ FamilyentForm.hidden_tag() }}
+        <h1 class="mainTextColor">Family Entertainment</h1>
+        <table>
+            <tr>
+                <th>{{ FamilyentForm.entertainment_title.label }}</th>
+                <td>{{ FamilyentForm.entertainment_title }}</td>
+            </tr>
+            <tr>
+                <th>{{ FamilyentForm.entertainment_description.label }}</th>
+                <td><p><textarea id="1" name="entertainment_description" rows="8" cols="40"></textarea></td>
+            </tr>
+            <tr>
+                <th>{{ FamilyentForm.entertainment_cost.label }}</th>
+                <td>{{ FamilyentForm.entertainment_cost }}</td>
+            </tr>
+        </table>
+        <p>{{ FamilyentForm.submit() }}</p>
+        <p><a class="noline" href="{{ url_for('accounts') }}">Full Accounts Page</a></p>
+    </form>
+</div>
+
+{% endblock %}
+
+

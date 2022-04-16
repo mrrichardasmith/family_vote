@@ -148,7 +148,27 @@ class Transport(db.Model):
     cost_of_travel = db.Column(db.Float)
     username = db.Column(db.String, db.ForeignKey('user.username'))
 
+class Familyentertainment(db.Model):
+    id= db.Column(db.Integer, primary_key=True)
+    date = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+    day = db.Column(db.Integer)
+    month = db.Column(db.Integer)
+    year = db.Column(db.Integer)
+    entertainment_title = db.Column(db.String(120))
+    entertainmnet_description = db.Column(db.String(500))
+    entertainment_cost = db.Column(db.Float)
+    username = db.Column(db.String, db.ForeignKey('user.username'))
 
+class Takeaway(db.Model):
+    id= db.Column(db.Integer, primary_key=True)
+    date = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+    day = db.Column(db.Integer)
+    month = db.Column(db.Integer)
+    year = db.Column(db.Integer)
+    takeaway_choice = db.Column(db.String(20))
+    takeaway_other = db.Column(db.String(20))
+    takeaway_cost = db.Column(db.Float)
+    username = db.Column(db.String, db.ForeignKey('user.username'))
 
 @login.user_loader 
 def load_user(id): 

@@ -1,4 +1,5 @@
 from asyncio import transports
+from wsgiref.validate import validator
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField, SubmitField, SelectField, DateTimeField, RadioField, TextAreaField, DecimalField
 from wtforms.validators import ValidationError, DataRequired, EqualTo, Email
@@ -104,8 +105,21 @@ class SubscriptionsForm(FlaskForm):
     subscription_cost = DecimalField('Cost', validators=[DataRequired()])
     submit = SubmitField('Subscribed')
 
+class FamilyentertainmentForm(FlaskForm):
+    entertainment_title = StringField('Entertainment Title', validators=[DataRequired()])
+    entertainment_description = TextAreaField('Describe Adventure', validators=[DataRequired()])
+    entertainment_cost = DecimalField('Cost', validators=[DataRequired()])
+    submit = SubmitField('Entertained')
+
 class TransportForm(FlaskForm):
     destination = StringField('Destination', validators=[DataRequired()])
     method_of_travel = RadioField('Method of Travel', choices=['Train', 'Bus', 'Uber', 'Taxi', 'Plane'], validators=[DataRequired()])
     cost_of_travel = DecimalField('Cost of Travel', validators=[DataRequired()])
     submit = SubmitField('On the Move')
+
+class TakeawayForm(FlaskForm):
+    takeaway_choice = RadioField('Takeaway', choices=['Chineese', 'Indian', 'Kebab', 'Burgers', 'Pizza', 'Other'], validators=[DataRequired()])    
+    takeaway_other = StringField('Other Takeaway')
+    takeaway_cost = DecimalField('Takeaway Cost', validators=[DataRequired()])
+    submit = SubmitField('Take Out')
+

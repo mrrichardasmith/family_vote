@@ -1,14 +1,11 @@
-from decimal import Decimal
 from flask import request, render_template, flash, redirect, url_for
-from models import User, Likesdislikes, Thinking, Day_school, People, Admin, Life_hacks, Account, Workfood, Extragroceries, Subscriptions, Transport
-from forms import RegistrationForm, LoginForm, LikesDislikesForm, ThinkingForm, DaySchoolForm, GoodBadUglyForm, AdminForm, LifeHacksForm, AccountForm, WorkfoodForm, ExtragroceriesForm, SubscriptionsForm, TransportForm
+from models import User, Likesdislikes, Thinking, Day_school, People, Admin, Life_hacks, Account, Workfood, Extragroceries, Subscriptions, Transport, Familyentertainment, Takeaway
+from forms import RegistrationForm, LoginForm, LikesDislikesForm, ThinkingForm, DaySchoolForm, GoodBadUglyForm, AdminForm, LifeHacksForm, AccountForm, WorkfoodForm, ExtragroceriesForm, SubscriptionsForm, TransportForm, FamilyentertainmentForm, TakeawayForm
 from werkzeug.urls import url_parse
 from flask_login import current_user, login_user, logout_user, login_required
 from app import app, db
 from datetime import datetime, timedelta 
 from helper import month_from_number
-from matplotlib import pyplot as plt
-
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -59,8 +56,10 @@ def admin(username):
   if request.method == 'GET':
     admin = User.query.filter(User.username == username).first()
     registration = Admin.query.first()
-    print(registration.registration)
-    print(admin.username, admin.admin)
+    if registration != None:
+      print(registration.registration)
+      print(admin.username, admin.admin)
+    
     
     if admin.admin == 'admin':
       
@@ -69,7 +68,7 @@ def admin(username):
     else:
       print('Supressed Registration Page')
       confirm_admin = False
-      return render_template('admin.html', confirm_admin=confirm_admin, admin=NULL)
+      return render_template('admin.html', confirm_admin=confirm_admin, admin=admin)
 
   if request.method == 'POST' and admin_form.validate():
     
@@ -195,7 +194,6 @@ def lifehacks():
     db.session.commit()
     return redirect(url_for('lifehacks'))
     
-   
 @app.route('/accounts', methods=['GET', 'POST'])
 @login_required
 def accounts():
@@ -220,12 +218,12 @@ def accounts():
     if current_food != None:
       for sum in current_food:
         workfood_total += sum.sum_food
-      print('Hello here is the work food total ' + str(workfood_total))
+     
 
     extra_groceries = Extragroceries.query.filter(Extragroceries.username == current_user.username
                                                   and Extragroceries.month == todayDate.month 
                                                   and Extragroceries.year == todayDate.year).all()
-    print(current_user.username)
+    
     extra_groceries_total = 0
     if extra_groceries != None:
       for extra in extra_groceries:
@@ -249,8 +247,25 @@ def accounts():
       for s in subscriptions:
         total_subscriptions += s.subscription_cost
     
-    print(total_subscriptions)
+    family_entertainment = Familyentertainment.query.filter(Familyentertainment.username == current_user.username
+                                                            and Subscriptions.month == todayDate.month
+                                                            and Subscriptions.year == todayDate.year).all()
 
+    total_entertainment = 0
+    if family_entertainment != None:
+      for family in family_entertainment:
+        total_entertainment += family.entertainment_cost
+    
+
+    takeaways = Takeaway.query.filter(Takeaway.username == current_user.username
+                                      and Subscriptions.month == todayDate.month
+                                      and Subscriptions.year == todayDate.year).all()
+    
+    total_takeaway = 0
+    if takeaways != None:
+      for take in takeaways:
+        total_takeaway += take.takeaway_cost
+    print(total_takeaway)
 
     if active != None and active.rent != None:
       total += active.rent 
@@ -274,8 +289,8 @@ def accounts():
       total += active.counciltax
     if active != None and active.streaming != None:
       total += active.streaming
-    if active != None and active.family_entertainment != None:
-      total += active.family_entertainment
+    if total_entertainment > 0:
+      total += total_entertainment
     if active != None and active.takeaway != None:
       total += active.takeaway
     if total_transport > 0:
@@ -307,7 +322,9 @@ def accounts():
                            workfood_total=workfood_total,
                            extra_groceries_total=extra_groceries_total,
                            total_transport=total_transport,
-                           total_subscriptions=total_subscriptions)
+                           total_subscriptions=total_subscriptions,
+                           total_entertainment=total_entertainment,
+                           total_takeaway=total_takeaway)
 
   if request.method == 'POST':
     
@@ -322,14 +339,10 @@ def accounts():
                             water=account.water.data,
                             electric=account.electric.data, 
                             internet=account.internet.data,
-                            subscriptions=account.subscriptions.data,
                             investments=account.investments.data,
                             insurance=account.insurance.data, 
                             counciltax=account.counciltax.data, 
                             streaming=account.streaming.data, 
-                            family_entertainment=account.family_entertainment.data, 
-                            takeaway=account.takeaway.data, 
-                            transport=account.transport.data, 
                             fitness=account.fitness.data, 
                             bakery=account.bakery.data, 
                             shopping=account.shopping.data,  
@@ -479,7 +492,6 @@ def workfood():
 
     return redirect(url_for('workfood')) 
 
-
 @app.route('/likesdislikes', methods=['GET', 'POST'])
 @login_required
 def likesdislikes():
@@ -509,7 +521,9 @@ def subscriptions():
   subs = SubscriptionsForm()
   if request.method == 'GET':
 
-    return render_template('subscriptions.html', subs=subs)
+    current_subscriptions = Subscriptions.query.filter(Subscriptions.username == current_user.username).all()
+
+    return render_template('subscriptions.html', subs=subs, current_subscriptions=current_subscriptions)
 
   if request.method == 'POST':
     new_subscriptions = Subscriptions(subscription_name=subs.subscription_name.data,
@@ -522,7 +536,6 @@ def subscriptions():
     db.session.commit()
 
     return redirect(url_for('accounts'))
-
 
 @app.route('/extra_groceries', methods=['GET', 'POST'])
 @login_required
@@ -617,6 +630,50 @@ def transport():
     db.session.add(new_transport)
     db.session.commit()
 
+    return redirect(url_for('accounts'))
+
+@app.route('/familyentertainment', methods=['GET', 'POST'])
+@login_required
+def familyentertainment():
+  FamilyentForm = FamilyentertainmentForm()
+  todayDate = datetime.now()
+  if request.method == 'GET':
+
+    return render_template('familyentertainment.html', FamilyentForm = FamilyentForm)
+  
+  if request.method == 'POST':
+    new_entertainment = Familyentertainment(day=todayDate.day, 
+                                            month=todayDate.month, 
+                                            year=todayDate.year, 
+                                            entertainment_title=FamilyentForm.entertainment_title.data,
+                                            entertainmnet_description=FamilyentForm.entertainment_description.data,
+                                            entertainment_cost=FamilyentForm.entertainment_cost.data,
+                                            username = current_user.username)
+    db.session.add(new_entertainment)
+    db.session.commit()
+    return redirect(url_for('accounts'))
+
+@app.route('/takeaway', methods=['GET', 'POST'])
+@login_required
+def takeaway():
+  todayDate = datetime.now()
+  takeaway = TakeawayForm()
+  if request.method == 'GET':
+
+    return render_template('takeaway.html', takeaway=takeaway)
+
+  if request.method == 'POST':
+
+    new_takeaway = Takeaway(username=current_user.username,
+                            day=todayDate.day,
+                            month=todayDate.month,
+                            year=todayDate.year,
+                            takeaway_choice=takeaway.takeaway_choice.data,
+                            takeaway_other=takeaway.takeaway_other.data,
+                            takeaway_cost=takeaway.takeaway_cost.data)
+
+    db.session.add(new_takeaway)
+    db.session.commit()
     return redirect(url_for('accounts'))
 
 @app.route('/reports')

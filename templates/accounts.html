@@ -160,38 +160,30 @@
             <td><img class="iconPic2" src="{{ url_for('static', filename='pictures/unlockedPadlock.png') }}"></td>
         </tr>
         {% endif %}
-        {% if active.streaming == None %}
+        {% if total_entertainment == 0 %}
         <tr>
-            <th>{{ account.streaming.label }}</th>
-            <td>{{ account.streaming }}</td>
-        </tr>
-        {% else %}
-        <tr>
-            <th>Streaming</th>
-            <td>{{ active.streaming }}</td>
-        </tr>
-        {% endif %}
-        {% if active.family_entertainment == None %}
-        <tr>
-            <th>{{ account.family_entertainment.label }}</th>
-            <td>{{ account.family_entertainment }}</td>
+            <th>Family Entertainment</th>
+            <td>0</td>
+            <td><a class="noline" href="{{ url_for('familyentertainment') }}"><img class="iconPic2" src="{{ url_for('static', filename='pictures/plus.png') }}"></a></td>
         </tr>
         {% else %}
         <tr>
             <th>Family Entertainment</th>
-            <td>{{ active.family_entertainment }}</td>
+            <td>{{ total_entertainment }}</td>
+            <td><a class="noline" href="{{ url_for('familyentertainment') }}"><img class="iconPic2" src="{{ url_for('static', filename='pictures/plus.png') }}"></a></td>
         </tr>
         {% endif %}
-        {% if active.takeaway == None %}
+        {% if total_takeaway == 0 %}
         <tr>
-            <th>{{ account.takeaway.label }}</th>
-            <td>{{ account.takeaway }}</td>
+            <th>Takeaway</th>
+            <td>0</td>
+            <td><a class="noline" href="{{ url_for('takeaway') }}"><img class="iconPic2" src="{{ url_for('static', filename='pictures/plus.png') }}"></a></td>
         </tr>
         {% else %}
         <tr>
             <th>Takeaway</th>
-            <td>{{ active.takeaway }}</td>
-            
+            <td>{{ total_takeaway }}</td>
+            <td><a class="noline" href="{{ url_for('takeaway') }}"><img class="iconPic2" src="{{ url_for('static', filename='pictures/plus.png') }}"></a></td>  
         </tr>
         {% endif %}
         {% if total_transport == 0 %}
