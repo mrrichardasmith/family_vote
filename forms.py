@@ -1,4 +1,3 @@
-from asyncio import transports
 from wsgiref.validate import validator
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField, SubmitField, SelectField, DateTimeField, RadioField, TextAreaField, DecimalField
@@ -66,24 +65,23 @@ class AccountForm(FlaskForm):
     salary_deposit = DecimalField('Monthly Salary Deposit', validators=[DataRequired()])
     windfall = DecimalField('Extra funds')
     rent = DecimalField('Rent')
+    rent_lock = BooleanField('Lock Rent')
     housekeeping = DecimalField('Houskeeping')
-    extra_groceries = DecimalField('Extra Groceries')
     water = DecimalField('Water')
+    water_lock = BooleanField('Lock Water')
     electric = DecimalField('Electric')
+    electric_lock = BooleanField('Lock Electric')
     internet = DecimalField('Internet')
-    subscriptions = DecimalField('Subscripions')
+    internet_lock = BooleanField('Lock Cost')
     investments = DecimalField('Investments')
     insurance = DecimalField('Insurance')
     counciltax = DecimalField('Council Tax')
+    counciltax_lock = BooleanField('Lock Council Tax')
     streaming = DecimalField('Streaming')
-    family_entertainment = DecimalField('Family Entertainment')
-    takeaway = DecimalField('Takeaway')
-    transport = DecimalField('Transport')
     fitness = DecimalField('Fitness')
     bakery = DecimalField('Bakery')
     shopping = DecimalField('Shopping')
-    workfood = DecimalField('Work Food')
-    submit = SubmitField('Rack the Tab')
+    submit = SubmitField('Update')
 
 class WorkfoodForm(FlaskForm):
     work_breakfast = DecimalField('Breakfast Before Work')

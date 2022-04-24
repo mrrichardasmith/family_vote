@@ -225,3 +225,13 @@ th, td {
   max-width: 50%;
   margin: auto;
 }
+
+input.larger {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+
+input.larger[type="checkbox"]:checked  {
+  background-color: green;
+}

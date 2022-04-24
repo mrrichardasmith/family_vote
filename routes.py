@@ -203,7 +203,9 @@ def accounts():
   active = Account.query.filter(Account.username == current_user.username
                                 and Account.month == todayDate.month 
                                 and Account.year == todayDate.year).first()
+
   
+
   if  request.method == 'GET':
 
     total = 0
@@ -291,8 +293,8 @@ def accounts():
       total += active.streaming
     if total_entertainment > 0:
       total += total_entertainment
-    if active != None and active.takeaway != None:
-      total += active.takeaway
+    if total_takeaway > 0:
+      total += total_takeaway
     if total_transport > 0:
       total += total_transport
     if active != None and active.fitness != None:
@@ -326,22 +328,26 @@ def accounts():
                            total_entertainment=total_entertainment,
                            total_takeaway=total_takeaway)
 
-  if request.method == 'POST':
-    
+  if request.method == 'POST': 
+    print(account.counciltax_lock.data)
     if active == None:
       new_account = Account(month=todayDate.month, 
                             year=todayDate.year, 
                             salary_deposit=account.salary_deposit.data, 
                             windfall=account.windfall.data, 
-                            rent=account.rent.data,  
-                            housekeeping=account.housekeeping.data, 
-                            extra_groceries=account.extra_groceries.data, 
+                            rent=account.rent.data,
+                            rent_lock=account.rent_lock.data,  
+                            housekeeping=account.housekeeping.data,  
                             water=account.water.data,
-                            electric=account.electric.data, 
+                            water_lock = account.water_lock.data,
+                            electric=account.electric.data,
+                            electric_lock=account.electric_lock.data, 
                             internet=account.internet.data,
+                            internet_lock=account.internet_lock.data,
                             investments=account.investments.data,
                             insurance=account.insurance.data, 
-                            counciltax=account.counciltax.data, 
+                            counciltax=account.counciltax.data,
+                            counciltax_lock=account.counciltax_lock.data, 
                             streaming=account.streaming.data, 
                             fitness=account.fitness.data, 
                             bakery=account.bakery.data, 
@@ -356,25 +362,31 @@ def accounts():
        active.windfall = account.windfall.data
 
     if active != None and active.rent == None:
-      active.rent=account.rent.data
+       active.rent = account.rent.data
+
+    if active != None and active.rent_lock != None:
+      active.rent_lock=account.rent_lock.data
         
     if active != None and active.housekeeping == None:
       active.housekeeping=account.housekeeping.data
 
-    if active != None and active.extra_groceries == None:
-      active.extra_groceries=account.extra_groceries.data
-
     if active != None and active.water == None:
       active.water=account.water.data
+
+    if active != None and active.water_lock != None:
+      active.water_lock=account.water_lock.data
 
     if active != None and active.electric == None:
       active.electric=account.electric.data
 
+    if active != None and active.electric_lock != None:
+      active.electric_lock=account.electric_lock.data
+
     if active != None and active.internet == None:
       active.internet=account.internet.data
 
-    if active != None and active.subscriptions == None:
-      active.subscriptions=account.subscriptions.data
+    if active != None and active.internet_lock != None:
+      active.internet_lock=account.internet_lock.data 
 
     if active != None and active.investments == None:
       active.investments=account.investments.data
@@ -385,17 +397,11 @@ def accounts():
     if active != None and active.counciltax == None:
       active.counciltax = account.counciltax.data
 
+    if active != None and active.counciltax_lock != None:
+      active.counciltax_lock=account.counciltax_lock.data
+
     if active != None and active.streaming == None:
       active.streaming = account.streaming.data
-
-    if active != None and active.family_entertainment == None:
-      active.family_entertainment = account.family_entertainment.data
-
-    if active != None and active.takeaway == None:
-      active.takeaway = account.takeaway.data
-
-    if active != None and active.transport == None:
-      active.transport = account.transport.data
 
     if active != None and active.fitness == None:
       active.fitness = account.fitness.data
@@ -405,9 +411,6 @@ def accounts():
     
     if active != None and active.shopping == None:
       active.shopping = account.shopping.data
-
-    if active != None and active.workfood == None:
-      active.workfood = account.workfood.data
 
     db.session.commit()  
     return redirect(url_for('accounts'))
