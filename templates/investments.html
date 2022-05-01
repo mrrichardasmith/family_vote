@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="page">
+    <form class="form" action="" method="post" novalidate>
+        {{ inv.hidden_tag() }}
+        <h1 class="mainTextColor">Investments</h1>
+        <table>
+            <tr>
+                <th>{{ inv.investment_name.label }}</th>
+                <td>{{ inv.investment_name }}</td>
+            </tr>
+            <tr>
+                <th>{{ inv.investment_description.label }}</th>
+                <td>{{ inv.investment_description }}</td>
+            </tr>
+            <tr>
+                <th>{{ inv.investment_cost.label }}</th>
+                <td>{{ inv.investment_cost}}</td>
+            </tr>
+        </table>
+        <p>{{ inv.submit() }}</p>
+        <p><a class="noline" href="{{ url_for('accounts') }}">Full Accounts Page</a></p>
+        <table>
+            <h2 class="mainTextColor">Current Investments</h2>
+            {% for i in current_investments %}
+            <tr>
+                <th>{{ i.investment_name }}</th>
+                <td>{{ i.investment_description }}</td>
+                <td>{{ i.investment_cost }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </form>
+</div>
+
+{% endblock %}

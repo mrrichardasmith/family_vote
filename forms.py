@@ -121,3 +121,14 @@ class TakeawayForm(FlaskForm):
     takeaway_cost = DecimalField('Takeaway Cost', validators=[DataRequired()])
     submit = SubmitField('Take Out')
 
+class InvestmentsForm(FlaskForm):
+    investment_name = StringField('Investment Name', validators=[DataRequired()])
+    investment_description = TextAreaField('Investment Description', validators=[DataRequired()])
+    investment_cost = DecimalField('Investment Cost', validators=[DataRequired()])
+    submit = SubmitField('Invest in the Future')
+
+class InsuranceForm(FlaskForm):
+    insurance_name = StringField('Insurance Name', validators=[DataRequired()])
+    insurance_description = TextAreaField('Insurance Description', validators=[DataRequired()])
+    insurance_cost = DecimalField('Insurance Cost', validators=[DataRequired()])
+    submit = SubmitField('Protect the Future')

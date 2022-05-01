@@ -1,6 +1,7 @@
+from wsgiref import validate
 from flask import request, render_template, flash, redirect, url_for
-from models import User, Likesdislikes, Thinking, Day_school, People, Admin, Life_hacks, Account, Workfood, Extragroceries, Subscriptions, Transport, Familyentertainment, Takeaway
-from forms import RegistrationForm, LoginForm, LikesDislikesForm, ThinkingForm, DaySchoolForm, GoodBadUglyForm, AdminForm, LifeHacksForm, AccountForm, WorkfoodForm, ExtragroceriesForm, SubscriptionsForm, TransportForm, FamilyentertainmentForm, TakeawayForm
+from models import User, Likesdislikes, Thinking, Day_school, People, Admin, Life_hacks, Account, Workfood, Extragroceries, Subscriptions, Transport, Familyentertainment, Takeaway, Insurance, Investments
+from forms import RegistrationForm, LoginForm, LikesDislikesForm, ThinkingForm, DaySchoolForm, GoodBadUglyForm, AdminForm, LifeHacksForm, AccountForm, WorkfoodForm, ExtragroceriesForm, SubscriptionsForm, TransportForm, FamilyentertainmentForm, TakeawayForm, InvestmentsForm, InsuranceForm
 from werkzeug.urls import url_parse
 from flask_login import current_user, login_user, logout_user, login_required
 from app import app, db
@@ -206,7 +207,8 @@ def accounts():
                                 and Account.year == todayDate.year).first()
 
   if  request.method == 'GET':
-
+    print(todayDate.month)
+    
     total = 0
     remaining = 0
     current_month = month_from_number(todayDate.month)
@@ -247,7 +249,22 @@ def accounts():
     if subscriptions != None:
       for s in subscriptions:
         total_subscriptions += s.subscription_cost
+
+    investments = Investments.query.filter(Investments.username == current_user.username and Investments.month == todayDate.month and Investments.year == todayDate.year).all()
     
+    total_investments = 0
+    if investments != None:
+      for i in investments:
+        total_investments += i.investment_cost
+
+    insurance = Insurance.query.filter(Insurance.username == current_user.username and Insurance.month == todayDate.month and Insurance.year == todayDate.year).all()
+
+    total_insurance = 0
+    if insurance != None:
+      for i in insurance:
+        total_insurance += i.insurance_cost
+    
+
     family_entertainment = Familyentertainment.query.filter(Familyentertainment.username == current_user.username
                                                             and Subscriptions.month == todayDate.month
                                                             and Subscriptions.year == todayDate.year).all()
@@ -266,7 +283,6 @@ def accounts():
     if takeaways != None:
       for take in takeaways:
         total_takeaway += take.takeaway_cost
-    print(total_takeaway)
 
     if active != None and active.rent != None:
       total += active.rent 
@@ -282,10 +298,10 @@ def accounts():
       total += active.internet
     if total_subscriptions > 0:
       total += total_subscriptions
-    if active != None and active.investments != None:
-      total += active.investments
-    if active != None and active.insurance != None:
-      total += active.insurance
+    if total_investments > 0:
+      total += total_investments
+    if total_insurance > 0:
+      total += total_insurance
     if active != None and active.counciltax != None:
       total += active.counciltax
     if active != None and active.streaming != None:
@@ -324,6 +340,8 @@ def accounts():
                            extra_groceries_total=extra_groceries_total,
                            total_transport=total_transport,
                            total_subscriptions=total_subscriptions,
+                           total_investments=total_investments,
+                           total_insurance=total_insurance,
                            total_entertainment=total_entertainment,
                            total_takeaway=total_takeaway)
 
@@ -475,7 +493,7 @@ def workfood():
                             sum_snacks_share=sum_snacks_share,
                             grand_total=grand_total)
 
-  if request.method == 'POST':
+  if request.method == 'POST' and foodform.validate():
     sum_food = 0
 
     if foodform.work_breakfast.data != None:
@@ -520,7 +538,7 @@ def likesdislikes():
     
     return render_template('likesdislikes.html', likesdislikes=likesdislikes, form=form)
   
-  if request.method == 'POST':
+  if request.method == 'POST' and form.validate():
     print('Likes & Dislikes POST')
     new_likesdislikes = Likesdislikes(likes_dislikes=form.likes_dislikes.data, 
                                       country=form.country.data, 
@@ -541,7 +559,7 @@ def subscriptions():
 
     return render_template('subscriptions.html', subs=subs, current_subscriptions=current_subscriptions)
 
-  if request.method == 'POST':
+  if request.method == 'POST' and subs.validate():
     new_subscriptions = Subscriptions(subscription_name=subs.subscription_name.data,
                                       subscription_term=subs.subscription_term.data,
                                       subscription_start_date=subs.subscription_start_date.data,
@@ -552,6 +570,54 @@ def subscriptions():
     db.session.commit()
 
     return redirect(url_for('accounts'))
+
+@app.route('/investments', methods=['GET', 'POST'])
+def investments():
+  todayDate = datetime.now()
+  inv = InvestmentsForm()
+  if request.method == 'GET':
+
+    current_investments = Investments.query.filter(Investments.username == current_user.username, Investments.month == todayDate.month, Investments.year == todayDate.year).all()
+    
+    return render_template('investments.html', inv=inv, current_investments=current_investments)
+
+  if request.method == 'POST' and inv.validate():
+  
+    new_investments = Investments(day=todayDate.day,
+                                  month=todayDate.month,
+                                  year=todayDate.year,
+                                  investment_name=inv.investment_name.data,
+                                  investment_description=inv.investment_description.data,
+                                  investment_cost=inv.investment_cost.data,
+                                  username=current_user.username)
+    db.session.add(new_investments)
+    db.session.commit()
+    return redirect(url_for('investments'))
+
+@app.route('/insurance', methods=['GET', 'POST'])
+def insurance():
+  todayDate = datetime.now()
+  ins = InsuranceForm()
+    
+  if request.method == 'GET':
+    current_insurance = Insurance.query.filter(Insurance.username == current_user.username and Insurance.month == todayDate.month).all()  
+    
+    return render_template('insurance.html', ins=ins, current_insurance=current_insurance)
+  
+  if request.method == 'POST' and ins.validate():
+
+    new_insurance = Insurance(day=todayDate.day,
+                              month=todayDate.month,
+                              year=todayDate.year,
+                              insurance_name=ins.insurance_name.data,
+                              insurance_description=ins.insurance_description.data,
+                              insurance_cost=ins.insurance_cost.data,
+                              username=current_user.username)
+
+    db.session.add(new_insurance)
+    db.session.commit()
+    return redirect(url_for('insurance'))
+
 
 @app.route('/extra_groceries', methods=['GET', 'POST'])
 @login_required
@@ -578,7 +644,7 @@ def extragroceries():
     
     return render_template('extragroceries.html', extra=extra, list=list, monthNow=monthNow)
 
-  if request.method == 'POST':
+  if request.method == 'POST' and extra.validate():
     print('We have extra groceries')
     new_groceries = Extragroceries(day=todayDate.day,
                                    month=todayDate.month, 
@@ -635,7 +701,7 @@ def transport():
     
     return render_template('transport.html', transp=transp, current_month=current_month, transport_methods=transport_methods, method_totals=method_totals)
 
-  if request.method == 'POST':
+  if request.method == 'POST' and transp.validate():
 
     new_transport = Transport(destination=transp.destination.data,
                               method_of_travel=transp.method_of_travel.data,
@@ -657,7 +723,7 @@ def familyentertainment():
 
     return render_template('familyentertainment.html', FamilyentForm = FamilyentForm)
   
-  if request.method == 'POST':
+  if request.method == 'POST' and FamilyentForm.validate():
     new_entertainment = Familyentertainment(day=todayDate.day, 
                                             month=todayDate.month, 
                                             year=todayDate.year, 
@@ -678,7 +744,7 @@ def takeaway():
 
     return render_template('takeaway.html', takeaway=takeaway)
 
-  if request.method == 'POST':
+  if request.method == 'POST' and takeaway.validate():
 
     new_takeaway = Takeaway(username=current_user.username,
                             day=todayDate.day,

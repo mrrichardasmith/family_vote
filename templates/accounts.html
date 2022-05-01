@@ -155,26 +155,30 @@
             <td><a class="noline" href="{{ url_for('subscriptions') }}"><img class="iconPic2" src="{{ url_for('static', filename='pictures/plus.png') }}"></a></td>
         </tr>
         {% endif %}
-        {% if active.investments == None %}
+        {% if total_investments == 0 %}
         <tr>
             <th>Investments</th>
             <td>{{ account.investments }}</td>
+            <td><a class="noline" href="{{ url_for('investments') }}"><img class="iconPic2" src="{{ url_for('static', filename='pictures/plus.png') }}"></a></td>
         </tr>
         {% else %}
         <tr>
             <th>Investments</th>
-            <td>{{ active.investments }}</td>
+            <td>{{ total_investments }}</td>
+            <td><a class="noline" href="{{ url_for('investments') }}"><img class="iconPic2" src="{{ url_for('static', filename='pictures/plus.png') }}"></a></td>
         </tr>
         {% endif %}
-        {% if active.insurance == None %}
+        {% if total_insurance == 0 %}
         <tr>
             <th>Insurance</th>
             <td>{{ account.insurance }}</td>
+            <td><a class="noline" href="{{ url_for('insurance') }}"><img class="iconPic2" src="{{ url_for('static', filename='pictures/plus.png') }}"></a></td>
         </tr>
         {% else %}
         <tr>
             <th>Insurance</th>
-            <td>{{ active.insurance }}</td>
+            <td>{{ total_insurance }}</td>
+            <td><a class="noline" href="{{ url_for('insurance') }}"><img class="iconPic2" src="{{ url_for('static', filename='pictures/plus.png') }}"></a></td>
         </tr>
         {% endif %}
         {% if active.counciltax == None %}

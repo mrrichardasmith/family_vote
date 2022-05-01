@@ -176,6 +176,31 @@ class Takeaway(db.Model):
     takeaway_cost = db.Column(db.Float)
     username = db.Column(db.String, db.ForeignKey('user.username'))
 
+class Investments(db.Model):
+    id= db.Column(db.Integer, primary_key=True)
+    date = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+    day = db.Column(db.Integer)
+    month = db.Column(db.Integer)
+    year = db.Column(db.Integer)
+    investment_name = db.Column(db.String(20))
+    investment_description = db.Column(db.String(20))
+    investment_cost = db.Column(db.Float)
+    username = db.Column(db.String, db.ForeignKey('user.username'))
+
+
+class Insurance(db.Model):
+    id= db.Column(db.Integer, primary_key=True)
+    date = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+    day = db.Column(db.Integer)
+    month = db.Column(db.Integer)
+    year = db.Column(db.Integer)
+    insurance_name = db.Column(db.String(20))
+    insurance_description = db.Column(db.String(20))
+    insurance_cost = db.Column(db.Float)
+    username = db.Column(db.String, db.ForeignKey('user.username'))
+
+
+
 @login.user_loader 
 def load_user(id): 
   return User.query.get(int(id))
