@@ -91,9 +91,10 @@ def index():
   #function route currently not scalable because its calling for all the data in the tables which will grow over time.
   likesdislikes = Likesdislikes.query.filter(Likesdislikes.timestamp > new_date).all()
   #pull one record using the ID
-  likesdislikes_id = Likesdislikes.query.get(1)
+  likesdislikes_id = Likesdislikes.query.get(2)
+
   #print one property referenced by a foreign key in another class.
-  #print(likesdislikes_id.username)
+  print(likesdislikes_id.reason)
   #filtering starts with the model name then .query.filter then the modelname again and the property with logic and all()
   #In this case we filter by the likes only
   likesdislikes_like = Likesdislikes.query.filter(Likesdislikes.likes_dislikes == 'Likes').all()
@@ -203,8 +204,6 @@ def accounts():
   active = Account.query.filter(Account.username == current_user.username
                                 and Account.month == todayDate.month 
                                 and Account.year == todayDate.year).first()
-
-  
 
   if  request.method == 'GET':
 
@@ -329,7 +328,7 @@ def accounts():
                            total_takeaway=total_takeaway)
 
   if request.method == 'POST': 
-    print(account.counciltax_lock.data)
+    
     if active == None:
       new_account = Account(month=todayDate.month, 
                             year=todayDate.year, 
@@ -347,7 +346,7 @@ def accounts():
                             investments=account.investments.data,
                             insurance=account.insurance.data, 
                             counciltax=account.counciltax.data,
-                            counciltax_lock=account.counciltax_lock.data, 
+                            counciltax_lock=account.counciltax_lock.data,
                             streaming=account.streaming.data, 
                             fitness=account.fitness.data, 
                             bakery=account.bakery.data, 
@@ -397,9 +396,23 @@ def accounts():
     if active != None and active.counciltax == None:
       active.counciltax = account.counciltax.data
 
-    if active != None and active.counciltax_lock != None:
+    if active != None and active.counciltax != None and active.counciltax_lock != None:
       active.counciltax_lock=account.counciltax_lock.data
 
+#First line looks to see if the Database is empty to avoid the None error of an empty object
+#In the case the database is empty we start by assigning the same value to the previous as the current lock setting
+#Above we also validate that a value is passed to the counciltax input before setting the lock setting
+#Then we watch the settings change when the current setting changes the first time we do nothing
+#Instead we wait until the form value becomes the same as the previous setting and then we know its time to change
+#the previous setting to the alternate boolean.
+    if active != None and active.counciltax != None and active.counciltax_lock_previous == None:
+      active.counciltax_lock_previous=account.counciltax_lock.data
+    elif active != None and active.counciltax != None and active.counciltax_lock_previous != None:
+      if account.counciltax_lock.data == active.counciltax_lock_previous:
+        active.counciltax_lock_previous = not active.counciltax_lock_previous
+        
+      
+      
     if active != None and active.streaming == None:
       active.streaming = account.streaming.data
 
@@ -758,6 +771,7 @@ def testupdate(id, yourday):
     db.session.commit()
 
   return 'This is a test update'
+
 
 
 

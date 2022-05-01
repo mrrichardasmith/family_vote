@@ -97,6 +97,7 @@ class Account(db.Model):
     electric = db.Column(db.Float)
     electric_lock = db.Column(db.Boolean)
     counciltax = db.Column(db.Float)
+    counciltax_lock_previous = db.Column(db.Boolean)
     counciltax_lock = db.Column(db.Boolean)
     internet = db.Column(db.Float)
     internet_lock = db.Column(db.Boolean) 
