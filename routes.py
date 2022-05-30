@@ -1,6 +1,7 @@
+from asyncio.windows_events import NULL
 from wsgiref import validate
 from flask import request, render_template, flash, redirect, url_for
-from models import User, Likesdislikes, Thinking, Day_school, People, Admin, Life_hacks, Account, Workfood, Extragroceries, Subscriptions, Transport, Familyentertainment, Takeaway, Insurance, Investments
+from models import User, Likesdislikes, Thinking, Day_school, People, Admin, Life_hacks, Account, Workfood, Extragroceries, Subscriptions, Transport, Familyentertainment, Takeaway, Insurance, Investments, Rollover
 from forms import RegistrationForm, LoginForm, LikesDislikesForm, ThinkingForm, DaySchoolForm, GoodBadUglyForm, AdminForm, LifeHacksForm, AccountForm, WorkfoodForm, ExtragroceriesForm, SubscriptionsForm, TransportForm, FamilyentertainmentForm, TakeawayForm, InvestmentsForm, InsuranceForm
 from werkzeug.urls import url_parse
 from flask_login import current_user, login_user, logout_user, login_required
@@ -88,14 +89,12 @@ def index():
   #We could separate the day, Month, year and time before saving it to separate columns in the database to make it easier to query
   #Until we put in more suphisticated filtering it solves for pulling in the whole table
   new_date = datetime.now() - timedelta(days = 7)
-  print(new_date)
+  
   #function route currently not scalable because its calling for all the data in the tables which will grow over time.
   likesdislikes = Likesdislikes.query.filter(Likesdislikes.timestamp > new_date).all()
   #pull one record using the ID
   likesdislikes_id = Likesdislikes.query.get(2)
 
-  #print one property referenced by a foreign key in another class.
-  print(likesdislikes_id.reason)
   #filtering starts with the model name then .query.filter then the modelname again and the property with logic and all()
   #In this case we filter by the likes only
   likesdislikes_like = Likesdislikes.query.filter(Likesdislikes.likes_dislikes == 'Likes').all()
@@ -202,12 +201,17 @@ def accounts():
 
   account = AccountForm()
   todayDate = datetime.now()
+  
+  
   active = Account.query.filter(Account.username == current_user.username
                                 and Account.month == todayDate.month 
                                 and Account.year == todayDate.year).first()
 
+  rollover = Rollover.query.filter(Rollover.username == current_user.username 
+                                and Account.year == todayDate.year).first()
+
+  
   if  request.method == 'GET':
-    print(todayDate.month)
     
     total = 0
     remaining = 0
@@ -343,10 +347,14 @@ def accounts():
                            total_investments=total_investments,
                            total_insurance=total_insurance,
                            total_entertainment=total_entertainment,
-                           total_takeaway=total_takeaway)
+                           total_takeaway=total_takeaway
+                           )
 
   if request.method == 'POST': 
-    
+    #This section only happens if the query to the database produces None which is only when the database is empty.
+    #This creates the database date time stamps on the line so that it can be updated within the month but recreated
+    #when the month rolls over
+    #Section Start
     if active == None:
       new_account = Account(month=todayDate.month, 
                             year=todayDate.year, 
@@ -365,13 +373,29 @@ def accounts():
                             insurance=account.insurance.data, 
                             counciltax=account.counciltax.data,
                             counciltax_lock=account.counciltax_lock.data,
+                            counciltax_lock_previous=False,
                             streaming=account.streaming.data, 
                             fitness=account.fitness.data, 
                             bakery=account.bakery.data, 
                             shopping=account.shopping.data,  
                             username=current_user.username )
-      db.session.add(new_account)  
+      db.session.add(new_account)
 
+    if rollover == None:
+      rollover = Rollover(day=todayDate.day,
+                          month=todayDate.month,
+                          year=todayDate.year,
+                          rent_fixed = 0,
+                          water_fixed = 0,
+                          electric_fixed = 0,
+                          counciltax_fixed = 0,
+                          internet_fixed = 0,
+                          username=current_user.username)
+      db.session.add(rollover)
+    #Section finish
+
+    # This if checks that the database query is not None to prevent an error from an empty database
+    # then checks the salary_deposit to see if it is None and if it is saves the form data to the parameter.
     if active != None and active.salary_deposit == None:
        active.salary_deposit = account.salary_deposit.data
 
@@ -415,7 +439,8 @@ def accounts():
       active.counciltax = account.counciltax.data
 
     if active != None and active.counciltax != None and active.counciltax_lock != None:
-      active.counciltax_lock=account.counciltax_lock.data
+      active.counciltax_lock = account.counciltax_lock.data
+
 
 #First line looks to see if the Database is empty to avoid the None error of an empty object
 #In the case the database is empty we start by assigning the same value to the previous as the current lock setting
@@ -427,10 +452,26 @@ def accounts():
       active.counciltax_lock_previous=account.counciltax_lock.data
     elif active != None and active.counciltax != None and active.counciltax_lock_previous != None:
       if account.counciltax_lock.data == active.counciltax_lock_previous:
-        active.counciltax_lock_previous = not active.counciltax_lock_previous
-        
-      
-      
+        active.counciltax_lock_previous = not active.counciltax_lock_previous  
+#In this block I am looking at the previous state which if False compared to form generated lock request
+#then we can save the counciltax value in the form to the rollover table, if the form value is empty because
+#it has aleady been enetered then the active query will show a value and that can be used to save to the rollover table.
+#If however the lock is coming off we can zero out the couciltax_fixed entry in the rollover table and open the input in
+#the html back to allow a new value to be entered.
+    if active != None and active.counciltax_lock_previous == False and account.counciltax_lock.data == True:
+      print('False to previous True to Counciltax_lock')
+      if account.counciltax.data:
+        rollover.counciltax_fixed = account.counciltax.data
+      elif active.counciltax:
+        rollover.counciltax_fixed = active.counciltax
+    elif active != None and active.counciltax_lock_previous == True and account.counciltax_lock.data == False and active.counciltax != None:
+      print('The lock is coming off')
+      rollover.counciltax_fixed = 0
+      #This was difficult, if the form/account.counciltax.data is empty it will set the field to Null which triggers
+      #the input field refreshed. If there is data in the field then it consumes this into the account table.
+      active.counciltax = account.counciltax.data
+    
+
     if active != None and active.streaming == None:
       active.streaming = account.streaming.data
 
@@ -525,6 +566,7 @@ def workfood():
 
 
     return redirect(url_for('workfood')) 
+ 
 
 @app.route('/likesdislikes', methods=['GET', 'POST'])
 @login_required
@@ -539,7 +581,7 @@ def likesdislikes():
     return render_template('likesdislikes.html', likesdislikes=likesdislikes, form=form)
   
   if request.method == 'POST' and form.validate():
-    print('Likes & Dislikes POST')
+    
     new_likesdislikes = Likesdislikes(likes_dislikes=form.likes_dislikes.data, 
                                       country=form.country.data, 
                                       reason=form.reason.data, 
@@ -694,7 +736,7 @@ def transport():
     method_totals.append(total_uber) 
     method_totals.append(total_taxi)
     method_totals.append(total_plane)
-    print(method_totals)
+    
 
     transport_methods = ['Train', 'Bus', 'Uber', 'Taxi', 'Plane']
     
@@ -786,7 +828,7 @@ def likesdislikesreport():
 def peoplereport():
   if request.method == 'GET':
     new_date = datetime.now() - timedelta(days = 30)
-    print(new_date)
+    
     people = People.query.filter(People.date > new_date).all()
     # The first record from a list of records that match the logic specified in this case just the first record.
     people_date = People.query.first()
@@ -799,7 +841,7 @@ def peoplereport():
 def thoughtreport():
   if request.method == 'GET':
     new_date = datetime.now() - timedelta(days = 30)
-    print(new_date)
+    
     thoughts = Thinking.query.filter(Thinking.timestamp > new_date).all()
     return render_template('thoughtsreport.html', thoughts=thoughts)
 

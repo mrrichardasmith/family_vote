@@ -89,17 +89,21 @@ class Account(db.Model):
     salary_deposit = db.Column(db.Float)
     windfall = db.Column(db.Float)
     rent = db.Column(db.Float)
+    rent_lock_previous = db.Column(db.Boolean)
     rent_lock = db.Column(db.Boolean)
     housekeeping = db.Column(db.Float)
     extra_groceries = db.Column(db.Float)
     water = db.Column(db.Float)
+    water_lock_previous = db.Column(db.Boolean)
     water_lock = db.Column(db.Boolean)
     electric = db.Column(db.Float)
+    electric_lock_previous = db.Column(db.Boolean)
     electric_lock = db.Column(db.Boolean)
     counciltax = db.Column(db.Float)
     counciltax_lock_previous = db.Column(db.Boolean)
     counciltax_lock = db.Column(db.Boolean)
     internet = db.Column(db.Float)
+    internet_lock_previous = db.Column(db.Boolean) 
     internet_lock = db.Column(db.Boolean) 
     subscriptions = db.Column(db.Float)
     investments = db.Column(db.Float)
@@ -199,8 +203,34 @@ class Insurance(db.Model):
     insurance_cost = db.Column(db.Float)
     username = db.Column(db.String, db.ForeignKey('user.username'))
 
+class Rollover(db.Model):
+    id= db.Column(db.Integer, primary_key=True)
+    date = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+    day = db.Column(db.Integer)
+    month = db.Column(db.Integer)
+    year = db.Column(db.Integer)
+    rent_fixed = db.Column(db.Float)
+    water_fixed = db.Column(db.Float)
+    electric_fixed = db.Column(db.Float)
+    counciltax_fixed = db.Column(db.Float)
+    internet_fixed = db.Column(db.Float)
+    username = db.Column(db.String, db.ForeignKey('user.username'))
+
+
 
 
 @login.user_loader 
 def load_user(id): 
   return User.query.get(int(id))
+
+
+class Testing(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    thinking_about = db.Column(db.String(140))
+    thoughts = db.Column(db.String(140))
+    timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+    username = db.Column(db.String, db.ForeignKey('user.username'))
+    
+
+    def __repr__(self):
+        return '<Testing {}>'.format(self.username)
