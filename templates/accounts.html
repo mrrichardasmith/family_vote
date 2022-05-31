@@ -48,7 +48,7 @@
             <td>{{ account.rent }}</td>
             <td><input class="larger" type="checkbox" id={{ account.id }} name="rent_lock" value=False></td>
         </tr>
-        {% elif active.rent_lock == True %}
+        {% elif rollover.rent_lock == True %}
         <tr>
             <th>Rent</th>
             <td>{{ active.rent }}</td>
@@ -187,10 +187,10 @@
             <td>{{ account.counciltax }}</td>
             <td><input class="larger" type="checkbox" id="" name="counciltax_lock" value=False></td>
         </tr>
-        {% elif active.counciltax_lock == True %}
+        {% elif rollover.counciltax_lock == True %}
         <tr>
             <th>Council Tax</th>
-            <td>{{ active.counciltax }}</td>
+            <td>{{ rollover.counciltax_fixed }}</td>
             <td><input class="larger" type="checkbox" id="" name="counciltax_lock" value=True checked></td>
         </tr>
         {% else %}

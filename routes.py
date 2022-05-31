@@ -338,7 +338,8 @@ def accounts():
                            user=current_user,
                            current_month=current_month, 
                            account=account, 
-                           active=active, 
+                           active=active,
+                           rollover=rollover, 
                            remaining=remaining, 
                            workfood_total=workfood_total,
                            extra_groceries_total=extra_groceries_total,
@@ -360,20 +361,14 @@ def accounts():
                             year=todayDate.year, 
                             salary_deposit=account.salary_deposit.data, 
                             windfall=account.windfall.data, 
-                            rent=account.rent.data,
-                            rent_lock=account.rent_lock.data,  
+                            rent=account.rent.data,  
                             housekeeping=account.housekeeping.data,  
                             water=account.water.data,
-                            water_lock = account.water_lock.data,
-                            electric=account.electric.data,
-                            electric_lock=account.electric_lock.data, 
+                            electric=account.electric.data, 
                             internet=account.internet.data,
-                            internet_lock=account.internet_lock.data,
                             investments=account.investments.data,
                             insurance=account.insurance.data, 
                             counciltax=account.counciltax.data,
-                            counciltax_lock=account.counciltax_lock.data,
-                            counciltax_lock_previous=False,
                             streaming=account.streaming.data, 
                             fitness=account.fitness.data, 
                             bakery=account.bakery.data, 
@@ -386,10 +381,20 @@ def accounts():
                           month=todayDate.month,
                           year=todayDate.year,
                           rent_fixed = 0,
+                          rent_lock_previous = False,
+                          rent_lock = False,
                           water_fixed = 0,
+                          water_lock_previous = False,
+                          water_lock = False,
                           electric_fixed = 0,
+                          electric_lock_previous = False,
+                          electric_lock = False,
                           counciltax_fixed = 0,
+                          counciltax_lock_previous = False,
+                          counciltax_lock = False,
                           internet_fixed = 0,
+                          internet_lock_previous = False,
+                          internet_lock = False,
                           username=current_user.username)
       db.session.add(rollover)
     #Section finish
@@ -402,11 +407,32 @@ def accounts():
     if active != None and active.windfall == None:
        active.windfall = account.windfall.data
 
+    #Rent Section Start
     if active != None and active.rent == None:
        active.rent = account.rent.data
 
-    if active != None and active.rent_lock != None:
-      active.rent_lock=account.rent_lock.data
+    if rollover != None and active.rent!= None and rollover.rent_lock != None:
+      rollover.rent_lock=account.rent_lock.data
+
+    if active != None and active.rent != None and rollover.rent_lock_previous == None:
+      rollover.rent_lock_previous=account.rent_lock.data
+    elif active != None and active.rent != None and rollover.rent_lock_previous != None:
+      if account.rent_lock.data == rollover.rent_lock_previous:
+        rollover.rent_lock_previous = not rollover.rent_lock_previous
+
+    if active != None and rollover.rent_lock_previous == False and account.rent_lock.data == True:
+      print('False to previous True to Rent_lock')
+      if account.rent.data:
+        rollover.rent_fixed = account.rent.data
+      elif active.rent:
+        rollover.rent_fixed = active.rent
+    elif active != None and rollover.rent_lock_previous == True and account.rent_lock.data == False and active.rent != None:
+      print('The lock is coming off')
+      rollover.rent_fixed = 0
+      #This was difficult, if the form/account.counciltax.data is empty it will set the field to Null which triggers
+      #the input field refreshed. If there is data in the field then it consumes this into the account table.
+      active.rent = account.rent.data
+    #Rent section ends 
         
     if active != None and active.housekeeping == None:
       active.housekeeping=account.housekeeping.data
@@ -414,20 +440,20 @@ def accounts():
     if active != None and active.water == None:
       active.water=account.water.data
 
-    if active != None and active.water_lock != None:
-      active.water_lock=account.water_lock.data
+    if rollover != None and rollover.water_lock != None:
+      rollover.water_lock=account.water_lock.data
 
     if active != None and active.electric == None:
       active.electric=account.electric.data
 
-    if active != None and active.electric_lock != None:
-      active.electric_lock=account.electric_lock.data
+    if rollover != None and rollover.electric_lock != None:
+      rollover.electric_lock=account.electric_lock.data
 
     if active != None and active.internet == None:
       active.internet=account.internet.data
 
-    if active != None and active.internet_lock != None:
-      active.internet_lock=account.internet_lock.data 
+    if rollover != None and rollover.internet_lock != None:
+      rollover.internet_lock=account.internet_lock.data 
 
     if active != None and active.investments == None:
       active.investments=account.investments.data
@@ -438,33 +464,31 @@ def accounts():
     if active != None and active.counciltax == None:
       active.counciltax = account.counciltax.data
 
-    if active != None and active.counciltax != None and active.counciltax_lock != None:
-      active.counciltax_lock = account.counciltax_lock.data
-
-
+    if active != None and active.counciltax != None and rollover.counciltax_lock != None:
+      rollover.counciltax_lock = account.counciltax_lock.data
 #First line looks to see if the Database is empty to avoid the None error of an empty object
 #In the case the database is empty we start by assigning the same value to the previous as the current lock setting
 #Above we also validate that a value is passed to the counciltax input before setting the lock setting
 #Then we watch the settings change when the current setting changes the first time we do nothing
 #Instead we wait until the form value becomes the same as the previous setting and then we know its time to change
 #the previous setting to the alternate boolean.
-    if active != None and active.counciltax != None and active.counciltax_lock_previous == None:
-      active.counciltax_lock_previous=account.counciltax_lock.data
-    elif active != None and active.counciltax != None and active.counciltax_lock_previous != None:
-      if account.counciltax_lock.data == active.counciltax_lock_previous:
-        active.counciltax_lock_previous = not active.counciltax_lock_previous  
+    if active != None and active.counciltax != None and rollover.counciltax_lock_previous == None:
+      rollover.counciltax_lock_previous=account.counciltax_lock.data
+    elif active != None and active.counciltax != None and rollover.counciltax_lock_previous != None:
+      if account.counciltax_lock.data == rollover.counciltax_lock_previous:
+        rollover.counciltax_lock_previous = not rollover.counciltax_lock_previous  
 #In this block I am looking at the previous state which if False compared to form generated lock request
 #then we can save the counciltax value in the form to the rollover table, if the form value is empty because
 #it has aleady been enetered then the active query will show a value and that can be used to save to the rollover table.
 #If however the lock is coming off we can zero out the couciltax_fixed entry in the rollover table and open the input in
 #the html back to allow a new value to be entered.
-    if active != None and active.counciltax_lock_previous == False and account.counciltax_lock.data == True:
+    if active != None and rollover.counciltax_lock_previous == False and account.counciltax_lock.data == True:
       print('False to previous True to Counciltax_lock')
       if account.counciltax.data:
         rollover.counciltax_fixed = account.counciltax.data
       elif active.counciltax:
         rollover.counciltax_fixed = active.counciltax
-    elif active != None and active.counciltax_lock_previous == True and account.counciltax_lock.data == False and active.counciltax != None:
+    elif active != None and rollover.counciltax_lock_previous == True and account.counciltax_lock.data == False and active.counciltax != None:
       print('The lock is coming off')
       rollover.counciltax_fixed = 0
       #This was difficult, if the form/account.counciltax.data is empty it will set the field to Null which triggers
@@ -534,7 +558,7 @@ def workfood():
                             sum_snacks_share=sum_snacks_share,
                             grand_total=grand_total)
 
-  if request.method == 'POST' and foodform.validate():
+  if request.method == 'POST':
     sum_food = 0
 
     if foodform.work_breakfast.data != None:
@@ -562,8 +586,6 @@ def workfood():
 
     db.session.add(new_workfood)
     db.session.commit()
-
-
 
     return redirect(url_for('workfood')) 
  
