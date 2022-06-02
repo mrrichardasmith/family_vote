@@ -134,6 +134,8 @@ class Extragroceries(db.Model):
 
 class Subscriptions(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    month = db.Column(db.Integer)
+    year = db.Column(db.Integer)
     subscription_name = db.Column(db.String(120))
     subscription_term = db.Column(db.String(10))
     subscription_start_date = db.Column(db.DateTime, index=True)
@@ -143,6 +145,8 @@ class Subscriptions(db.Model):
 class Transport(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     date = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+    month = db.Column(db.Integer)
+    year = db.Column(db.Integer)
     destination = db.Column(db.String(120))
     method_of_travel = db.Column(db.String(10))
     cost_of_travel = db.Column(db.Float)

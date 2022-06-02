@@ -201,11 +201,17 @@ def accounts():
 
   account = AccountForm()
   todayDate = datetime.now()
+  todayMonth = int(todayDate.month)
+  todayYear = int(todayDate.year)
+  current_month_text = month_from_number(todayMonth)
   
+  print(f"{todayDate:%d %B, %Y}")
   
-  active = Account.query.filter(Account.username == current_user.username
-                                and Account.month == todayDate.month 
-                                and Account.year == todayDate.year).first()
+  active = Account.query.filter(Account.month == todayMonth 
+                            and Account.year == todayYear 
+                            and Account.username == current_user.username).first()
+
+  print(active)
 
   rollover = Rollover.query.filter(Rollover.username == current_user.username 
                                 and Account.year == todayDate.year).first()
@@ -215,7 +221,7 @@ def accounts():
     
     total = 0
     remaining = 0
-    current_month = month_from_number(todayDate.month)
+    current_month_text = month_from_number(todayDate.month)
 
     current_food = Workfood.query.filter(Workfood.username == current_user.username
                                          and Workfood.month == todayDate.month
@@ -227,27 +233,27 @@ def accounts():
         workfood_total += sum.sum_food
      
 
-    extra_groceries = Extragroceries.query.filter(Extragroceries.username == current_user.username
-                                                  and Extragroceries.month == todayDate.month 
-                                                  and Extragroceries.year == todayDate.year).all()
+    extra_groceries = Extragroceries.query.filter(Extragroceries.month == todayMonth 
+                                                  and Extragroceries.year == todayYear
+                                                  and Extragroceries.username == current_user.username).all()
     
     extra_groceries_total = 0
     if extra_groceries != None:
       for extra in extra_groceries:
         extra_groceries_total += extra.costgroceries
 
-    transport = Transport.query.filter(Transport.username == current_user.username
-                                       and Transport.month == todayDate.month 
-                                       and Transport.year == todayDate.year).all()
+    transport = Transport.query.filter(Transport.month == todayMonth
+                                       and Transport.year == todayYear
+                                       and Transport.username == current_user.username).all()
 
     total_transport = 0
     if transport != None:
       for t in transport:
         total_transport += t.cost_of_travel
     
-    subscriptions = Subscriptions.query.filter(Subscriptions.username == current_user.username
-                                               and Subscriptions.month == todayDate.month
-                                               and Subscriptions.year == todayDate.year).all()
+    subscriptions = Subscriptions.query.filter(Subscriptions.month == todayMonth
+                                           and Subscriptions.year == todayYear
+                                           and Subscriptions.username == current_user.username).all()
 
     total_subscriptions = 0
     if subscriptions != None:
@@ -279,55 +285,61 @@ def accounts():
         total_entertainment += family.entertainment_cost
     
 
-    takeaways = Takeaway.query.filter(Takeaway.username == current_user.username
-                                      and Subscriptions.month == todayDate.month
-                                      and Subscriptions.year == todayDate.year).all()
+    takeaways = Takeaway.query.filter(Subscriptions.month == todayMonth
+                                  and Subscriptions.year == todayYear
+                                  and Takeaway.username == current_user.username).all()
     
     total_takeaway = 0
     if takeaways != None:
       for take in takeaways:
         total_takeaway += take.takeaway_cost
 
-    if active != None and active.rent != None:
-      total += active.rent 
-    if active != None and active.housekeeping != None:
-      total += active.housekeeping
-    if extra_groceries_total > 0:
-      total += extra_groceries_total
-    if active != None and active.water != None:
-      total += active.water
-    if active != None and active.electric != None:
-      total += active.electric
-    if active != None and active.internet != None:
-      total += active.internet
-    if total_subscriptions > 0:
-      total += total_subscriptions
-    if total_investments > 0:
-      total += total_investments
-    if total_insurance > 0:
-      total += total_insurance
-    if active != None and active.counciltax != None:
-      total += active.counciltax
-    if active != None and active.streaming != None:
-      total += active.streaming
-    if total_entertainment > 0:
-      total += total_entertainment
-    if total_takeaway > 0:
-      total += total_takeaway
-    if total_transport > 0:
-      total += total_transport
-    if active != None and active.fitness != None:
-      total += active.fitness
-    if active != None and active.bakery != None:
-      total += active.bakery  
-    if active != None and active.shopping != None:
-      total += active.shopping  
-    if workfood_total > 0:
-      total += workfood_total
-    if active != None and active.salary_deposit != None:
-      remaining = active.salary_deposit - total
-    if active != None and active.windfall != None:
-      remaining = remaining + active.windfall 
+    
+
+    expenses = ['salary_deposit', 'windfall', 'rent', 'housekeeping', 'water', 'electric', 'internet', 'counciltax', 'streaming', 'fitness', 'bakery', 'shopping']   
+
+
+    if active != None:
+      if active.rent != None:
+        total += active.rent 
+      if active.housekeeping != None:
+        total += active.housekeeping
+      if extra_groceries_total > 0:
+        total += extra_groceries_total
+      if active.water != None:
+        total += active.water
+      if active.electric != None:
+        total += active.electric
+      if active.internet != None:
+        total += active.internet
+      if total_subscriptions > 0:
+        total += total_subscriptions
+      if total_investments > 0:
+        total += total_investments
+      if total_insurance > 0:
+        total += total_insurance
+      if active.counciltax != None:
+        total += active.counciltax
+      if active.streaming != None:
+        total += active.streaming
+      if total_entertainment > 0:
+        total += total_entertainment
+      if total_takeaway > 0:
+        total += total_takeaway
+      if total_transport > 0:
+        total += total_transport
+      if active.fitness != None:
+        total += active.fitness
+      if active.bakery != None:
+        total += active.bakery  
+      if active != None and active.shopping != None:
+        total += active.shopping  
+      if workfood_total > 0:
+        total += workfood_total
+      if active.salary_deposit != None:
+        remaining = active.salary_deposit - total
+      if active.windfall != None:
+        remaining = remaining + active.windfall 
       
 
 
@@ -336,7 +348,7 @@ def accounts():
 
     return render_template('accounts.html', 
                            user=current_user,
-                           current_month=current_month, 
+                           current_month_text=current_month_text, 
                            account=account, 
                            active=active,
                            rollover=rollover, 
@@ -401,115 +413,117 @@ def accounts():
 
     # This if checks that the database query is not None to prevent an error from an empty database
     # then checks the salary_deposit to see if it is None and if it is saves the form data to the parameter.
-    if active != None and active.salary_deposit == None:
-       active.salary_deposit = account.salary_deposit.data
 
-    if active != None and active.windfall == None:
-       active.windfall = account.windfall.data
+  if active != None and rollover != None:
+      if active.salary_deposit == None:
+        active.salary_deposit = account.salary_deposit.data
+
+      if active.windfall == None:
+        active.windfall = account.windfall.data
 
     #Rent Section Start
-    if active != None and active.rent == None:
-       active.rent = account.rent.data
+      if active.rent == None:
+        active.rent = account.rent.data
 
-    if rollover != None and active.rent!= None and rollover.rent_lock != None:
-      rollover.rent_lock=account.rent_lock.data
+      if active.rent != None and rollover.rent_lock != None:
+        rollover.rent_lock=account.rent_lock.data
 
-    if active != None and active.rent != None and rollover.rent_lock_previous == None:
-      rollover.rent_lock_previous=account.rent_lock.data
-    elif active != None and active.rent != None and rollover.rent_lock_previous != None:
-      if account.rent_lock.data == rollover.rent_lock_previous:
-        rollover.rent_lock_previous = not rollover.rent_lock_previous
+      if active.rent != None and rollover.rent_lock_previous == None:
+        rollover.rent_lock_previous=account.rent_lock.data
+      elif active.rent != None and rollover.rent_lock_previous != None:
+        if account.rent_lock.data == rollover.rent_lock_previous:
+          rollover.rent_lock_previous = not rollover.rent_lock_previous
 
-    if active != None and rollover.rent_lock_previous == False and account.rent_lock.data == True:
-      print('False to previous True to Rent_lock')
+      if rollover.rent_lock_previous == False and account.rent_lock.data == True:
+        print('False to previous True to Rent_lock')
       if account.rent.data:
         rollover.rent_fixed = account.rent.data
       elif active.rent:
         rollover.rent_fixed = active.rent
-    elif active != None and rollover.rent_lock_previous == True and account.rent_lock.data == False and active.rent != None:
-      print('The lock is coming off')
-      rollover.rent_fixed = 0
+      elif rollover.rent_lock_previous == True and account.rent_lock.data == False and active.rent != None:
+        print('The lock is coming off')
+        rollover.rent_fixed = 0
       #This was difficult, if the form/account.counciltax.data is empty it will set the field to Null which triggers
       #the input field refreshed. If there is data in the field then it consumes this into the account table.
-      active.rent = account.rent.data
+        active.rent = account.rent.data
     #Rent section ends 
         
-    if active != None and active.housekeeping == None:
-      active.housekeeping=account.housekeeping.data
+      if active.housekeeping == None:
+        active.housekeeping=account.housekeeping.data
 
-    if active != None and active.water == None:
-      active.water=account.water.data
+      if active.water == None:
+        active.water=account.water.data
 
-    if rollover != None and rollover.water_lock != None:
-      rollover.water_lock=account.water_lock.data
+      if rollover.water_lock != None:
+        rollover.water_lock=account.water_lock.data
 
-    if active != None and active.electric == None:
-      active.electric=account.electric.data
+      if active.electric == None:
+        active.electric=account.electric.data
 
-    if rollover != None and rollover.electric_lock != None:
-      rollover.electric_lock=account.electric_lock.data
+      if rollover.electric_lock != None:
+        rollover.electric_lock=account.electric_lock.data
 
-    if active != None and active.internet == None:
-      active.internet=account.internet.data
+      if active.internet == None:
+        active.internet=account.internet.data
 
-    if rollover != None and rollover.internet_lock != None:
-      rollover.internet_lock=account.internet_lock.data 
+      if rollover.internet_lock != None:
+        rollover.internet_lock=account.internet_lock.data 
 
-    if active != None and active.investments == None:
-      active.investments=account.investments.data
+      if active.investments == None:
+        active.investments=account.investments.data
     
-    if active != None and active.insurance == None:
-      active.insurance=account.insurance.data
+      if active.insurance == None:
+        active.insurance=account.insurance.data
 
-    if active != None and active.counciltax == None:
-      active.counciltax = account.counciltax.data
+      if active.counciltax == None:
+        active.counciltax = account.counciltax.data
 
-    if active != None and active.counciltax != None and rollover.counciltax_lock != None:
-      rollover.counciltax_lock = account.counciltax_lock.data
+      if active.counciltax != None and rollover.counciltax_lock != None:
+        rollover.counciltax_lock = account.counciltax_lock.data
 #First line looks to see if the Database is empty to avoid the None error of an empty object
 #In the case the database is empty we start by assigning the same value to the previous as the current lock setting
 #Above we also validate that a value is passed to the counciltax input before setting the lock setting
 #Then we watch the settings change when the current setting changes the first time we do nothing
 #Instead we wait until the form value becomes the same as the previous setting and then we know its time to change
 #the previous setting to the alternate boolean.
-    if active != None and active.counciltax != None and rollover.counciltax_lock_previous == None:
-      rollover.counciltax_lock_previous=account.counciltax_lock.data
-    elif active != None and active.counciltax != None and rollover.counciltax_lock_previous != None:
-      if account.counciltax_lock.data == rollover.counciltax_lock_previous:
-        rollover.counciltax_lock_previous = not rollover.counciltax_lock_previous  
+      if active.counciltax != None and rollover.counciltax_lock_previous == None:
+        rollover.counciltax_lock_previous=account.counciltax_lock.data
+      elif active.counciltax != None and rollover.counciltax_lock_previous != None:
+        if account.counciltax_lock.data == rollover.counciltax_lock_previous:
+          rollover.counciltax_lock_previous = not rollover.counciltax_lock_previous  
 #In this block I am looking at the previous state which if False compared to form generated lock request
 #then we can save the counciltax value in the form to the rollover table, if the form value is empty because
 #it has aleady been enetered then the active query will show a value and that can be used to save to the rollover table.
 #If however the lock is coming off we can zero out the couciltax_fixed entry in the rollover table and open the input in
 #the html back to allow a new value to be entered.
-    if active != None and rollover.counciltax_lock_previous == False and account.counciltax_lock.data == True:
-      print('False to previous True to Counciltax_lock')
-      if account.counciltax.data:
-        rollover.counciltax_fixed = account.counciltax.data
-      elif active.counciltax:
-        rollover.counciltax_fixed = active.counciltax
-    elif active != None and rollover.counciltax_lock_previous == True and account.counciltax_lock.data == False and active.counciltax != None:
-      print('The lock is coming off')
-      rollover.counciltax_fixed = 0
+      if rollover.counciltax_lock_previous == False and account.counciltax_lock.data == True:
+        print('False to previous True to Counciltax_lock')
+        if account.counciltax.data:
+          rollover.counciltax_fixed = account.counciltax.data
+        elif active.counciltax:
+          rollover.counciltax_fixed = active.counciltax
+      elif rollover.counciltax_lock_previous == True and account.counciltax_lock.data == False and active.counciltax != None:
+        print('The lock is coming off')
+        rollover.counciltax_fixed = 0
       #This was difficult, if the form/account.counciltax.data is empty it will set the field to Null which triggers
       #the input field refreshed. If there is data in the field then it consumes this into the account table.
-      active.counciltax = account.counciltax.data
+        active.counciltax = account.counciltax.data
     
 
-    if active != None and active.streaming == None:
-      active.streaming = account.streaming.data
+      if active.streaming == None:
+        active.streaming = account.streaming.data
 
-    if active != None and active.fitness == None:
-      active.fitness = account.fitness.data
+      if active.fitness == None:
+        active.fitness = account.fitness.data
 
-    if active != None and active.bakery == None:
-      active.bakery = account.bakery.data
+      if active.bakery == None:
+        active.bakery = account.bakery.data
     
-    if active != None and active.shopping == None:
-      active.shopping = account.shopping.data
+      if active.shopping == None:
+        active.shopping = account.shopping.data
 
-    db.session.commit()  
-    return redirect(url_for('accounts'))
+      db.session.commit()  
+  return redirect(url_for('accounts'))
 
 @app.route('/workfood', methods=['GET', 'POST'])
 @login_required
@@ -616,15 +630,22 @@ def likesdislikes():
     
 @app.route('/subscriptions', methods=['GET', 'POST'])
 def subscriptions():
+  todayDate = datetime.now()
+  todayMonth = int(todayDate.month)
+  todayYear = int(todayDate.year)
   subs = SubscriptionsForm()
   if request.method == 'GET':
 
-    current_subscriptions = Subscriptions.query.filter(Subscriptions.username == current_user.username).all()
+    current_subscriptions = Subscriptions.query.filter(Subscriptions.month == todayMonth
+                                                   and Subscriptions.year == todayYear
+                                                   and Subscriptions.username == current_user.username).all()
 
     return render_template('subscriptions.html', subs=subs, current_subscriptions=current_subscriptions)
 
   if request.method == 'POST' and subs.validate():
-    new_subscriptions = Subscriptions(subscription_name=subs.subscription_name.data,
+    new_subscriptions = Subscriptions(month = todayDate.month,
+                                      year = todayDate.year,
+                                      subscription_name=subs.subscription_name.data,
                                       subscription_term=subs.subscription_term.data,
                                       subscription_start_date=subs.subscription_start_date.data,
                                       subscription_cost=subs.subscription_cost.data,
@@ -687,14 +708,16 @@ def insurance():
 @login_required
 def extragroceries():
   todayDate = datetime.now()
+  todayMonth = int(todayDate.month)
+  todayYear = int(todayDate.year)
   extra = ExtragroceriesForm()
   monthNow = month_from_number(todayDate.month)
 
   if request.method == 'GET':
     
-    extra_groceries = Extragroceries.query.filter(Extragroceries.username == current_user.username
-                                                  and Extragroceries.month == todayDate.month 
-                                                  and Extragroceries.year == todayDate.year).all()
+    extra_groceries = Extragroceries.query.filter(Extragroceries.month == todayMonth
+                                              and Extragroceries.year == todayYear
+                                              and Extragroceries.username == current_user.username).all()
 
     list = []
     for l in extra_groceries:
@@ -725,9 +748,13 @@ def extragroceries():
 @app.route('/transport', methods=['GET', 'POST'])
 @login_required
 def transport():
+  
   transp = TransportForm()
   todayDate = datetime.now()
   current_month = month_from_number(todayDate.month)
+  todayMonth = int(todayDate.month)
+  todayYear = int(todayDate.year)
+
   if request.method == 'GET':
     total_train = 0
     total_bus = 0
@@ -736,8 +763,9 @@ def transport():
     total_plane = 0
     method_totals = []
 
-    get_transp = Transport.query.filter(Transport.username == current_user.username 
-                                        and Transport.date.month==todayDate.month).all()
+    get_transp = Transport.query.filter(Transport.month==todayMonth
+                                        and Transport.year==todayYear
+                                        and Transport.username == current_user.username).all()
     
 
     if get_transp != None:
@@ -767,7 +795,9 @@ def transport():
 
   if request.method == 'POST' and transp.validate():
 
-    new_transport = Transport(destination=transp.destination.data,
+    new_transport = Transport(month=todayDate.month, 
+                              year=todayDate.year,
+                              destination=transp.destination.data,
                               method_of_travel=transp.method_of_travel.data,
                               cost_of_travel=transp.cost_of_travel.data,
                               username=current_user.username

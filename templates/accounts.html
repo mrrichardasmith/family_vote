@@ -5,11 +5,11 @@
 <div class="page">
     
     <form class="form" action="" method="post" novalidate>
-    <h1 class="mainTextColor">Financial Status {{ current_month }}</h1>
+    <h1 class="mainTextColor">Financial Status {{ current_month_text }}</h1>
         {{ account.hidden_tag() }}
     <table>
         
-        {% if active.salary_deposit == None or active == None %}
+        {% if active == None or active.salary_deposit == None  %}
         <tr>
             <th>{{ account.salary_deposit.label }}</th>
             <td>{{ account.salary_deposit }}</td>
@@ -23,7 +23,7 @@
         {% if active == None %}
         <tr>
             <th>Month</th>
-            <td>{{ account.start }}</td>
+            <td>{{ active.month }}</td>
         </tr>
         {% else %}
         <tr>
@@ -51,7 +51,7 @@
         {% elif rollover.rent_lock == True %}
         <tr>
             <th>Rent</th>
-            <td>{{ active.rent }}</td>
+            <td>{{ rollover.rent_fixed }}</td>
             <td><input class="larger" type="checkbox" id="" name="rent_lock" value=True checked></td>
         </tr>
         {% else %}
@@ -61,7 +61,7 @@
             <td><input class="larger" type="checkbox" id="" name="rent_lock" value=False></td>
         </tr>
         {% endif %}
-        {% if active.housekeeping == None %}
+        {% if active == None or active.housekeeping == None %}
         <tr>
             <th>{{ account.housekeeping.label }}</th>
             <td>{{ account.housekeeping }}</td>
@@ -85,7 +85,7 @@
             <td><a class="noline" href="{{ url_for('extragroceries') }}"><img class="iconPic2" src="{{ url_for('static', filename='pictures/plus.png') }}"></a></td>
         </tr>
         {% endif %}
-        {% if active.water == None %}
+        {% if active == None or active.water == None %}
         <tr>
             <th>{{ account.water.label }}</th>
             <td>{{ account.water }}</td>
@@ -104,7 +104,7 @@
             <td><input class="larger" type="checkbox" id="" name="water_lock" value=False></td>
         </tr>
         {% endif %}
-        {% if active.electric == None %}
+        {% if active == None or active.electric == None %}
         <tr>
             <th>Electric / Gas</th>
             <td>{{ account.electric }}</td>
@@ -123,7 +123,7 @@
             <td><input class="larger" type="checkbox" id="" name="electric_lock" value=False></td>
         </tr>
         {% endif %}
-        {% if active.internet == None %}
+        {% if active == None or active.internet == None %}
         <tr>
             <th>Internet</th>
             <td>{{ account.internet }}</td>
