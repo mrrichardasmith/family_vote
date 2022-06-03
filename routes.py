@@ -213,8 +213,8 @@ def accounts():
 
   print(active)
 
-  rollover = Rollover.query.filter(Rollover.username == current_user.username 
-                                and Account.year == todayDate.year).first()
+  rollover = Rollover.query.filter(Rollover.year == todayDate.year
+                               and Rollover.username == current_user.username).first()
 
   
   if  request.method == 'GET':
@@ -223,9 +223,9 @@ def accounts():
     remaining = 0
     current_month_text = month_from_number(todayDate.month)
 
-    current_food = Workfood.query.filter(Workfood.username == current_user.username
-                                         and Workfood.month == todayDate.month
-                                         and Workfood.year == todayDate.year).all()
+    current_food = Workfood.query.filter(Workfood.month == todayMonth
+                                     and Workfood.year == todayYear
+                                     and Workfood.username == current_user.username).all()
 
     workfood_total = 0
     if current_food != None:
@@ -260,14 +260,18 @@ def accounts():
       for s in subscriptions:
         total_subscriptions += s.subscription_cost
 
-    investments = Investments.query.filter(Investments.username == current_user.username and Investments.month == todayDate.month and Investments.year == todayDate.year).all()
+    investments = Investments.query.filter(Investments.month == todayMonth 
+                                       and Investments.year == todayYear
+                                       and Investments.username == current_user.username).all()
     
     total_investments = 0
     if investments != None:
       for i in investments:
         total_investments += i.investment_cost
 
-    insurance = Insurance.query.filter(Insurance.username == current_user.username and Insurance.month == todayDate.month and Insurance.year == todayDate.year).all()
+    insurance = Insurance.query.filter(Insurance.month == todayDate.month 
+                                   and Insurance.year == todayDate.year
+                                   and Insurance.username == current_user.username).all()
 
     total_insurance = 0
     if insurance != None:
@@ -275,9 +279,11 @@ def accounts():
         total_insurance += i.insurance_cost
     
 
-    family_entertainment = Familyentertainment.query.filter(Familyentertainment.username == current_user.username
-                                                            and Subscriptions.month == todayDate.month
-                                                            and Subscriptions.year == todayDate.year).all()
+    family_entertainment = Familyentertainment.query.filter(Familyentertainment.month == todayMonth
+                                                        and Familyentertainment.year == todayYear
+                                                        and Familyentertainment.username == current_user.username).all()
+    print('family object next')
+    print(family_entertainment)
 
     total_entertainment = 0
     if family_entertainment != None:
@@ -285,8 +291,8 @@ def accounts():
         total_entertainment += family.entertainment_cost
     
 
-    takeaways = Takeaway.query.filter(Subscriptions.month == todayMonth
-                                  and Subscriptions.year == todayYear
+    takeaways = Takeaway.query.filter(Takeaway.month == todayMonth
+                                  and Takeaway.year == todayYear
                                   and Takeaway.username == current_user.username).all()
     
     total_takeaway = 0
@@ -368,6 +374,8 @@ def accounts():
     #This creates the database date time stamps on the line so that it can be updated within the month but recreated
     #when the month rolls over
     #Section Start
+    print('post happened here followed by active object print')
+    print(active)
     if active == None:
       new_account = Account(month=todayDate.month, 
                             year=todayDate.year, 
@@ -529,7 +537,9 @@ def accounts():
 @login_required
 def workfood():
   foodform = WorkfoodForm()
-  todayDate = datetime.now()  
+  todayDate = datetime.now()
+  todayMonth = int(todayDate.month)
+  todayYear = int(todayDate.year)  
   
   if request.method == 'GET':
     sum_breakfast = 0
@@ -538,9 +548,9 @@ def workfood():
     sum_snacks_me = 0
     sum_snacks_share = 0
 
-    current_food = Workfood.query.filter(Workfood.username == current_user.username
-                                         and Workfood.month == todayDate.month
-                                         and Workfood.year == todayDate.year).all()
+    current_food = Workfood.query.filter(Workfood.month == todayMonth
+                                         and Workfood.year == todayYear
+                                         and Workfood.username == current_user.username).all()
 
     grand_total = 0
     if current_food != None:
@@ -817,7 +827,7 @@ def familyentertainment():
 
     return render_template('familyentertainment.html', FamilyentForm = FamilyentForm)
   
-  if request.method == 'POST' and FamilyentForm.validate():
+  if request.method == 'POST' and FamilyentForm:
     new_entertainment = Familyentertainment(day=todayDate.day, 
                                             month=todayDate.month, 
                                             year=todayDate.year, 

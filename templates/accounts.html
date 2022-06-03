@@ -239,7 +239,7 @@
             <td><a class="noline" href="{{ url_for('transport') }}"><img class="iconPic2" src="{{ url_for('static', filename='pictures/plus.png') }}"></a></td>
         </tr>
         {% endif %}
-        {% if active.fitness == None %}
+        {% if active == None or active.fitness == None %}
         <tr>
             <th>{{ account.fitness.label }}</th>
             <td>{{ account.fitness }}</td>
@@ -250,7 +250,7 @@
             <td>{{ active.fitness }}</td>
         </tr>
         {% endif %}
-        {% if active.bakery == None %}
+        {% if active == None or active.bakery == None %}
         <tr>
             <th>{{ account.bakery.label }}</th>
             <td>{{ account.bakery }}</td>
@@ -261,7 +261,7 @@
             <td>{{ active.bakery }}</td>
         </tr>
         {% endif %}
-        {% if active.shopping == None %}
+        {% if active == None or active.shopping == None %}
         <tr>
             <th>{{ account.shopping.label }}</th>
             <td>{{ account.shopping }}</td>
