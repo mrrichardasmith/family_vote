@@ -1,5 +1,3 @@
-from asyncio.windows_events import NULL
-from wsgiref import validate
 from flask import request, render_template, flash, redirect, url_for
 from models import User, Likesdislikes, Thinking, Day_school, People, Admin, Life_hacks, Account, Workfood, Extragroceries, Subscriptions, Transport, Familyentertainment, Takeaway, Insurance, Investments, Rollover
 from forms import RegistrationForm, LoginForm, LikesDislikesForm, ThinkingForm, DaySchoolForm, GoodBadUglyForm, AdminForm, LifeHacksForm, AccountForm, WorkfoodForm, ExtragroceriesForm, SubscriptionsForm, TransportForm, FamilyentertainmentForm, TakeawayForm, InvestmentsForm, InsuranceForm
@@ -7,7 +5,7 @@ from werkzeug.urls import url_parse
 from flask_login import current_user, login_user, logout_user, login_required
 from app import app, db
 from datetime import datetime, timedelta 
-from helper import month_from_number
+from helper import check_query_one, month_from_number, check_query_instance
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -201,49 +199,52 @@ def accounts():
 
   account = AccountForm()
   todayDate = datetime.now()
-  todayMonth = int(todayDate.month)
-  todayYear = int(todayDate.year)
-  current_month_text = month_from_number(todayMonth)
+  current_month_text = month_from_number(todayDate.month)
   
   print(f"{todayDate:%d %B, %Y}")
   
-  active = Account.query.filter(Account.month == todayMonth 
-                            and Account.year == todayYear 
+  active = Account.query.filter(Account.month == todayDate.month
+                            and Account.year == todayDate.year 
                             and Account.username == current_user.username).first()
-
-  print(active)
-
+  
+  #print(check_query_one(active))
+  
+  
   rollover = Rollover.query.filter(Rollover.year == todayDate.year
                                and Rollover.username == current_user.username).first()
 
-  
   if  request.method == 'GET':
     
     total = 0
     remaining = 0
     current_month_text = month_from_number(todayDate.month)
 
-    current_food = Workfood.query.filter(Workfood.month == todayMonth
-                                     and Workfood.year == todayYear
+    current_food = Workfood.query.filter(Workfood.month == todayDate.month
+                                     and Workfood.year == todayDate.year
                                      and Workfood.username == current_user.username).all()
 
     workfood_total = 0
     if current_food != None:
       for sum in current_food:
         workfood_total += sum.sum_food
-     
-
-    extra_groceries = Extragroceries.query.filter(Extragroceries.month == todayMonth 
-                                                  and Extragroceries.year == todayYear
-                                                  and Extragroceries.username == current_user.username).all()
     
+
+    print("This is the Work Food Total " + str(workfood_total))
+    
+    
+
+    extra_groceries = Extragroceries.query.filter(Extragroceries.month == todayDate.month
+                                                  and Extragroceries.year == todayDate.year
+                                                  and Extragroceries.username == current_user.username).all()
+
+
     extra_groceries_total = 0
     if extra_groceries != None:
       for extra in extra_groceries:
         extra_groceries_total += extra.costgroceries
 
-    transport = Transport.query.filter(Transport.month == todayMonth
-                                       and Transport.year == todayYear
+    transport = Transport.query.filter(Transport.month == todayDate.month
+                                       and Transport.year == todayDate.year
                                        and Transport.username == current_user.username).all()
 
     total_transport = 0
@@ -251,8 +252,8 @@ def accounts():
       for t in transport:
         total_transport += t.cost_of_travel
     
-    subscriptions = Subscriptions.query.filter(Subscriptions.month == todayMonth
-                                           and Subscriptions.year == todayYear
+    subscriptions = Subscriptions.query.filter(Subscriptions.month == todayDate.month
+                                           and Subscriptions.year == todayDate.year
                                            and Subscriptions.username == current_user.username).all()
 
     total_subscriptions = 0
@@ -260,8 +261,8 @@ def accounts():
       for s in subscriptions:
         total_subscriptions += s.subscription_cost
 
-    investments = Investments.query.filter(Investments.month == todayMonth 
-                                       and Investments.year == todayYear
+    investments = Investments.query.filter(Investments.month == todayDate.month
+                                       and Investments.year == todayDate.year
                                        and Investments.username == current_user.username).all()
     
     total_investments = 0
@@ -279,20 +280,20 @@ def accounts():
         total_insurance += i.insurance_cost
     
 
-    family_entertainment = Familyentertainment.query.filter(Familyentertainment.month == todayMonth
-                                                        and Familyentertainment.year == todayYear
+    family_entertainment = Familyentertainment.query.filter(Familyentertainment.month == todayDate.month
+                                                        and Familyentertainment.year == todayDate.year
                                                         and Familyentertainment.username == current_user.username).all()
-    print('family object next')
-    print(family_entertainment)
+    
 
     total_entertainment = 0
     if family_entertainment != None:
       for family in family_entertainment:
         total_entertainment += family.entertainment_cost
     
+    
 
-    takeaways = Takeaway.query.filter(Takeaway.month == todayMonth
-                                  and Takeaway.year == todayYear
+    takeaways = Takeaway.query.filter(Takeaway.month == todayDate.month
+                                  and Takeaway.year == todayDate.year
                                   and Takeaway.username == current_user.username).all()
     
     total_takeaway = 0
@@ -300,54 +301,50 @@ def accounts():
       for take in takeaways:
         total_takeaway += take.takeaway_cost
 
-    
-
-    expenses = ['salary_deposit', 'windfall', 'rent', 'housekeeping', 'water', 'electric', 'internet', 'counciltax', 'streaming', 'fitness', 'bakery', 'shopping']   
-
 
     if active != None:
       if active.rent != None:
         total += active.rent 
       if active.housekeeping != None:
         total += active.housekeeping
-      if extra_groceries_total > 0:
-        total += extra_groceries_total
       if active.water != None:
         total += active.water
       if active.electric != None:
         total += active.electric
       if active.internet != None:
         total += active.internet
-      if total_subscriptions > 0:
-        total += total_subscriptions
-      if total_investments > 0:
-        total += total_investments
-      if total_insurance > 0:
-        total += total_insurance
       if active.counciltax != None:
         total += active.counciltax
       if active.streaming != None:
         total += active.streaming
-      if total_entertainment > 0:
-        total += total_entertainment
-      if total_takeaway > 0:
-        total += total_takeaway
-      if total_transport > 0:
-        total += total_transport
       if active.fitness != None:
         total += active.fitness
       if active.bakery != None:
         total += active.bakery  
-      if active != None and active.shopping != None:
-        total += active.shopping  
-      if workfood_total > 0:
-        total += workfood_total
+      if active.shopping != None:
+        total += active.shopping
+      if active.windfall != None:
+        remaining = remaining + active.windfall  
       if active.salary_deposit != None:
         remaining = active.salary_deposit - total
-      if active.windfall != None:
-        remaining = remaining + active.windfall 
+     
       
-
+    if extra_groceries_total > 0:
+        total += extra_groceries_total 
+    if workfood_total > 0:
+        total += workfood_total
+    if total_takeaway > 0:
+        total += total_takeaway
+    if total_transport > 0:
+        total += total_transport
+    if total_subscriptions > 0:
+        total += total_subscriptions
+    if total_investments > 0:
+        total += total_investments
+    if total_insurance > 0:
+        total += total_insurance
+    if total_entertainment > 0:
+        total += total_entertainment  
 
     remaining_formatted = '{:.2f}'.format(remaining)
     print(remaining_formatted)
@@ -392,7 +389,8 @@ def accounts():
                             streaming=account.streaming.data, 
                             fitness=account.fitness.data, 
                             bakery=account.bakery.data, 
-                            shopping=account.shopping.data,  
+                            shopping=account.shopping.data,
+                            workfood=workfood_total,  
                             username=current_user.username )
       db.session.add(new_account)
 
