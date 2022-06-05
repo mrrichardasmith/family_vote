@@ -1,5 +1,5 @@
 from flask import request, render_template, flash, redirect, url_for
-from models import User, Likesdislikes, Thinking, Day_school, People, Admin, Life_hacks, Account, Workfood, Extragroceries, Subscriptions, Transport, Familyentertainment, Takeaway, Insurance, Investments, Rollover
+from models import Credits, User, Likesdislikes, Thinking, Day_school, People, Admin, Life_hacks, Account, Workfood, Extragroceries, Subscriptions, Transport, Familyentertainment, Takeaway, Insurance, Investments, Rollover
 from forms import RegistrationForm, LoginForm, LikesDislikesForm, ThinkingForm, DaySchoolForm, GoodBadUglyForm, AdminForm, LifeHacksForm, AccountForm, WorkfoodForm, ExtragroceriesForm, SubscriptionsForm, TransportForm, FamilyentertainmentForm, TakeawayForm, InvestmentsForm, InsuranceForm
 from werkzeug.urls import url_parse
 from flask_login import current_user, login_user, logout_user, login_required
@@ -196,20 +196,24 @@ def lifehacks():
 @app.route('/accounts', methods=['GET', 'POST'])
 @login_required
 def accounts():
-
+  workfood_total = 0
   account = AccountForm()
   todayDate = datetime.now()
   current_month_text = month_from_number(todayDate.month)
   
   print(f"{todayDate:%d %B, %Y}")
   
-  active = Account.query.filter(Account.month == 5
+  active = Account.query.filter(Account.month == todayDate.month
                             and Account.year == todayDate.year 
                             and Account.username == current_user.username).first()
   
-  print(check_if_float_onerow(active))
+
+  credits = Credits.query.filter(Credits.month == todayDate.month
+                             and Credits.year == todayDate.year
+                             and Credits.username == current_user.username).first()
   
-  
+  print(check_query_one(credits))
+
   rollover = Rollover.query.filter(Rollover.year == todayDate.year
                                and Rollover.username == current_user.username).first()
 
@@ -223,14 +227,10 @@ def accounts():
                                      and Workfood.year == todayDate.year
                                      and Workfood.username == current_user.username).all()
 
-    workfood_total = 0
+    
     if current_food != None:
       for sum in current_food:
         workfood_total += sum.sum_food
-    
-
-    print("This is the Work Food Total " + str(workfood_total))
-    
     
 
     extra_groceries = Extragroceries.query.filter(Extragroceries.month == todayDate.month
@@ -354,6 +354,7 @@ def accounts():
                            current_month_text=current_month_text, 
                            account=account, 
                            active=active,
+                           credits=credits,
                            rollover=rollover, 
                            remaining=remaining, 
                            workfood_total=workfood_total,
@@ -363,8 +364,7 @@ def accounts():
                            total_investments=total_investments,
                            total_insurance=total_insurance,
                            total_entertainment=total_entertainment,
-                           total_takeaway=total_takeaway
-                           )
+                           total_takeaway=total_takeaway)
 
   if request.method == 'POST': 
     #This section only happens if the query to the database produces None which is only when the database is empty.
@@ -375,9 +375,7 @@ def accounts():
     print(active)
     if active == None:
       new_account = Account(month=todayDate.month, 
-                            year=todayDate.year, 
-                            salary_deposit=account.salary_deposit.data, 
-                            windfall=account.windfall.data, 
+                            year=todayDate.year,   
                             rent=account.rent.data,  
                             housekeeping=account.housekeeping.data,  
                             water=account.water.data,
@@ -391,8 +389,16 @@ def accounts():
                             bakery=account.bakery.data, 
                             shopping=account.shopping.data,
                             workfood=workfood_total,  
-                            username=current_user.username )
+                            username=current_user.username)
+      print(vars(new_account))
       db.session.add(new_account)
+
+    if credits == None:
+      credits = Credits(month=todayDate.month,
+                        year=todayDate.year,
+                        salary_deposit=account.salary_deposit.data,
+                        windfall=account.windfall.data)
+      db.session.add(credits)                  
 
     if rollover == None:
       rollover = Rollover(day=todayDate.day,
@@ -420,12 +426,12 @@ def accounts():
     # This if checks that the database query is not None to prevent an error from an empty database
     # then checks the salary_deposit to see if it is None and if it is saves the form data to the parameter.
 
-  if active != None and rollover != None:
-      if active.salary_deposit == None:
-        active.salary_deposit = account.salary_deposit.data
+  if active != None and rollover != None and credits != None:
+      if credits.salary_deposit == None:
+        credits.salary_deposit = account.salary_deposit.data
 
-      if active.windfall == None:
-        active.windfall = account.windfall.data
+      if credits.windfall == None:
+        credits.windfall = account.windfall.data
 
     #Rent Section Start
       if active.rent == None:
@@ -528,7 +534,7 @@ def accounts():
       if active.shopping == None:
         active.shopping = account.shopping.data
 
-      db.session.commit()  
+  db.session.commit()  
   return redirect(url_for('accounts'))
 
 @app.route('/workfood', methods=['GET', 'POST'])

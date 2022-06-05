@@ -9,7 +9,7 @@
         {{ account.hidden_tag() }}
     <table>
         
-        {% if active == None or active.salary_deposit == None  %}
+        {% if credits == None or credits.salary_deposit == None  %}
         <tr>
             <th>{{ account.salary_deposit.label }}</th>
             <td>{{ account.salary_deposit }}</td>
@@ -17,7 +17,7 @@
         {% else %}
         <tr class="green">
             <th>{{ account.salary_deposit.label }}</th>
-            <td>{{ active.salary_deposit }}</td>
+            <td>{{ credits.salary_deposit }}</td>
         </tr>
         {% endif %}
         {% if active == None %}
@@ -31,7 +31,7 @@
             <td>{{ active.month }}</td>
         </tr>
         {% endif %}
-        {% if active.windfall == None %}
+        {% if credits.windfall == None %}
         <tr>
             <th>{{ account.windfall.label }}</th>
             <td>{{ account.windfall }}</td>
@@ -39,7 +39,7 @@
         {% else %}
         <tr class="green">
             <th>Windfall Funds</th>
-            <td>{{ active.windfall }}</td>
+            <td>{{ credits.windfall }}</td>
         </tr>
         {% endif %}
         {% if active.rent == None %}
