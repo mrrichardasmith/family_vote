@@ -5,7 +5,7 @@ from werkzeug.urls import url_parse
 from flask_login import current_user, login_user, logout_user, login_required
 from app import app, db
 from datetime import datetime, timedelta 
-from helper import check_query_one, month_from_number, check_query_instance
+from helper import check_query_one, month_from_number, check_query_instance, check_if_float_onerow
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -203,11 +203,11 @@ def accounts():
   
   print(f"{todayDate:%d %B, %Y}")
   
-  active = Account.query.filter(Account.month == todayDate.month
+  active = Account.query.filter(Account.month == 5
                             and Account.year == todayDate.year 
                             and Account.username == current_user.username).first()
   
-  #print(check_query_one(active))
+  print(check_if_float_onerow(active))
   
   
   rollover = Rollover.query.filter(Rollover.year == todayDate.year

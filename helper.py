@@ -1,3 +1,6 @@
+from ast import Num
+
+
 def month_from_number(number):
     switcher = {
     1: "January",
@@ -22,16 +25,31 @@ def query_params_array(query_var):
         params.append(v)
     return params
 
+#Takes one query object and the array of parameters created above then prints None values and returns positive values
+#as an array with value pairs to identify the None values.
 def check_query_one(instance):
     params = []
     params = query_params_array(instance)
     positive_values = []
+    none_values = []
     for p in params:
         if getattr(instance, p) == None:
-            print(p, getattr(instance, p)) 
+            none_values.append([p, getattr(instance, p)]) 
         else:
             positive_values.append(p)
-    return positive_values
+    return positive_values, none_values
+
+
+def check_if_float_onerow(instance):
+    params = []
+    params = query_params_array(instance)
+    float_values = []
+    total = 0
+    for p in params:
+        if type(getattr(instance, p)) == float:
+            print(p, getattr(instance, p))
+            total += getattr(instance, p)
+    print(total)
 
 def check_query_instance(instance):
     if instance == None:
@@ -41,6 +59,8 @@ def check_query_instance(instance):
             check_query_one(i)
     else:
         check_query_one(instance)  
+
+
 
 
 

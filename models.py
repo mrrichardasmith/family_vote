@@ -108,6 +108,14 @@ class Account(db.Model):
     workfood = db.Column(db.Float)
     username = db.Column(db.String, db.ForeignKey('user.username'))
 
+class Credits(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    month = db.Column(db.Integer)
+    year = db.Column(db.Integer)
+    salary_deposit = db.Column(db.Float)
+    windfall = db.Column(db.Float)
+
+
 class Workfood(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     date = db.Column(db.DateTime, index=True, default=datetime.utcnow)
