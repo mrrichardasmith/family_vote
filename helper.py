@@ -27,20 +27,17 @@ def query_params_array(query_var):
 
 #Takes one query object and the array of parameters created above then prints None values and returns positive values
 #as an array with value pairs to identify the None values.
-def check_query_one(instance):
+def check_query_none_onerow(instance):
     if instance == None:
         return instance, 'Empty Query Object'
     else:
         params = []
         params = query_params_array(instance)
-        positive_values = []
         none_values = []
         for p in params:
             if getattr(instance, p) == None:
-                none_values.append([p, getattr(instance, p)]) 
-            else:
-                positive_values.append(p)
-        return positive_values, none_values
+                none_values.append([p, getattr(instance, p)])
+        return none_values
 
 
 def check_if_float_onerow(instance):
@@ -49,13 +46,15 @@ def check_if_float_onerow(instance):
     else:
         params = []
         params = query_params_array(instance)
-        float_values = []
-        total = 0
+        float_values = {}
         for p in params:
             if type(getattr(instance, p)) == float:
-                print(p, getattr(instance, p))
-                total += getattr(instance, p)
-        print(total)
+                key = p
+                value = getattr(instance, p)
+                float_values.update({key:value})
+        return float_values
+
+        
 
 def check_query_instance(instance):
     if instance == None:

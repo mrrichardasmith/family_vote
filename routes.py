@@ -5,7 +5,7 @@ from werkzeug.urls import url_parse
 from flask_login import current_user, login_user, logout_user, login_required
 from app import app, db
 from datetime import datetime, timedelta 
-from helper import check_query_one, month_from_number, check_query_instance, check_if_float_onerow
+from helper import check_query_none_onerow, month_from_number, check_query_instance, check_if_float_onerow
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -207,12 +207,20 @@ def accounts():
                             and Account.year == todayDate.year 
                             and Account.username == current_user.username).first()
   
+  print(check_query_none_onerow(active))
+  print(check_if_float_onerow(active))
+  check = check_if_float_onerow(active)
+  total = 0
+  for c in check:
+    total += check[c]
+  print(total)
 
   credits = Credits.query.filter(Credits.month == todayDate.month
                              and Credits.year == todayDate.year
                              and Credits.username == current_user.username).first()
   
-  print(check_query_one(credits))
+  print(check_query_none_onerow(credits))
+  print(check_if_float_onerow(credits))
 
   rollover = Rollover.query.filter(Rollover.year == todayDate.year
                                and Rollover.username == current_user.username).first()
@@ -315,18 +323,16 @@ def accounts():
         total += active.internet
       if active.counciltax != None:
         total += active.counciltax
-      if active.streaming != None:
-        total += active.streaming
       if active.fitness != None:
         total += active.fitness
       if active.bakery != None:
         total += active.bakery  
       if active.shopping != None:
         total += active.shopping
-      if active.windfall != None:
-        remaining = remaining + active.windfall  
-      if active.salary_deposit != None:
-        remaining = active.salary_deposit - total
+      if credits.windfall != None:
+        remaining = remaining + credits.windfall  
+      if credits.salary_deposit != None:
+        remaining = credits.salary_deposit - total
      
       
     if extra_groceries_total > 0:
@@ -380,15 +386,11 @@ def accounts():
                             housekeeping=account.housekeeping.data,  
                             water=account.water.data,
                             electric=account.electric.data, 
-                            internet=account.internet.data,
-                            investments=account.investments.data,
-                            insurance=account.insurance.data, 
-                            counciltax=account.counciltax.data,
-                            streaming=account.streaming.data, 
+                            internet=account.internet.data, 
+                            counciltax=account.counciltax.data, 
                             fitness=account.fitness.data, 
                             bakery=account.bakery.data, 
-                            shopping=account.shopping.data,
-                            workfood=workfood_total,  
+                            shopping=account.shopping.data,  
                             username=current_user.username)
       print(vars(new_account))
       db.session.add(new_account)
@@ -463,11 +465,13 @@ def accounts():
       if active.housekeeping == None:
         active.housekeeping=account.housekeeping.data
 
+      #Water section starts here
       if active.water == None:
         active.water=account.water.data
 
       if rollover.water_lock != None:
         rollover.water_lock=account.water_lock.data
+      #Water section ends here
 
       if active.electric == None:
         active.electric=account.electric.data
@@ -480,12 +484,6 @@ def accounts():
 
       if rollover.internet_lock != None:
         rollover.internet_lock=account.internet_lock.data 
-
-      if active.investments == None:
-        active.investments=account.investments.data
-    
-      if active.insurance == None:
-        active.insurance=account.insurance.data
 
       if active.counciltax == None:
         active.counciltax = account.counciltax.data
@@ -520,10 +518,6 @@ def accounts():
       #This was difficult, if the form/account.counciltax.data is empty it will set the field to Null which triggers
       #the input field refreshed. If there is data in the field then it consumes this into the account table.
         active.counciltax = account.counciltax.data
-    
-
-      if active.streaming == None:
-        active.streaming = account.streaming.data
 
       if active.fitness == None:
         active.fitness = account.fitness.data
