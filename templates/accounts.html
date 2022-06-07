@@ -9,7 +9,7 @@
         {{ account.hidden_tag() }}
     <table>
         
-        {% if credits == None or credits.salary_deposit == None  %}
+        {% if credits == None or credits.salary_deposit == 0.0  %}
         <tr>
             <th>{{ account.salary_deposit.label }}</th>
             <td>{{ account.salary_deposit }}</td>
@@ -31,7 +31,7 @@
             <td>{{ active.month }}</td>
         </tr>
         {% endif %}
-        {% if credits.windfall == None %}
+        {% if credits.windfall == 0.0 %}
         <tr>
             <th>{{ account.windfall.label }}</th>
             <td>{{ account.windfall }}</td>
@@ -61,7 +61,7 @@
             <td><input class="larger" type="checkbox" id="" name="rent_lock" value=False></td>
         </tr>
         {% endif %}
-        {% if active == None or active.housekeeping == None %}
+        {% if active == None or active.housekeeping == 0.0 %}
         <tr>
             <th>{{ account.housekeeping.label }}</th>
             <td>{{ account.housekeeping }}</td>
@@ -85,7 +85,7 @@
             <td><a class="noline" href="{{ url_for('extragroceries') }}"><img class="iconPic2" src="{{ url_for('static', filename='pictures/plus.png') }}"></a></td>
         </tr>
         {% endif %}
-        {% if active == None or active.water == None %}
+        {% if active == None or active.water == 0.0 %}
         <tr>
             <th>{{ account.water.label }}</th>
             <td>{{ account.water }}</td>
@@ -104,7 +104,7 @@
             <td><input class="larger" type="checkbox" id="" name="water_lock" value=False></td>
         </tr>
         {% endif %}
-        {% if active == None or active.electric == None %}
+        {% if active == None or active.electric == 0.0 %}
         <tr>
             <th>Electric / Gas</th>
             <td>{{ account.electric }}</td>
@@ -123,7 +123,7 @@
             <td><input class="larger" type="checkbox" id="" name="electric_lock" value=False></td>
         </tr>
         {% endif %}
-        {% if active == None or active.internet == None %}
+        {% if active == None or active.internet == 0.0 %}
         <tr>
             <th>Internet</th>
             <td>{{ account.internet }}</td>
@@ -239,7 +239,7 @@
             <td><a class="noline" href="{{ url_for('transport') }}"><img class="iconPic2" src="{{ url_for('static', filename='pictures/plus.png') }}"></a></td>
         </tr>
         {% endif %}
-        {% if active == None or active.fitness == None %}
+        {% if active == None or active.fitness == 0.0 %}
         <tr>
             <th>{{ account.fitness.label }}</th>
             <td>{{ account.fitness }}</td>
@@ -250,7 +250,7 @@
             <td>{{ active.fitness }}</td>
         </tr>
         {% endif %}
-        {% if active == None or active.bakery == None %}
+        {% if active == None or active.bakery == 0.0 %}
         <tr>
             <th>{{ account.bakery.label }}</th>
             <td>{{ account.bakery }}</td>
@@ -261,7 +261,7 @@
             <td>{{ active.bakery }}</td>
         </tr>
         {% endif %}
-        {% if active == None or active.shopping == None %}
+        {% if active == None or active.shopping == 0.0 %}
         <tr>
             <th>{{ account.shopping.label }}</th>
             <td>{{ account.shopping }}</td>

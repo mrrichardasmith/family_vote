@@ -1,6 +1,3 @@
-from ast import Num
-
-
 def month_from_number(number):
     switcher = {
     1: "January",
@@ -57,9 +54,8 @@ def check_if_float_onerow(instance):
 def total_floats(object):
     total = 0
     for float in object:
-        total += float
-    return float
-
+        total += object[float]
+    return total
         
 
 def check_query_instance(instance):

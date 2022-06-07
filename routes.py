@@ -202,27 +202,69 @@ def accounts():
   current_month_text = month_from_number(todayDate.month)
   
   print(f"{todayDate:%d %B, %Y}")
-  
+
   active = Account.query.filter(Account.month == todayDate.month
                             and Account.year == todayDate.year 
                             and Account.username == current_user.username).first()
-  
-  print(check_query_none_onerow(active))
-  print(check_if_float_onerow(active))
-  check = check_if_float_onerow(active)
-  print(total_floats(check))
 
   credits = Credits.query.filter(Credits.month == todayDate.month
                              and Credits.year == todayDate.year
                              and Credits.username == current_user.username).first()
-  
-  print(check_query_none_onerow(credits))
-  print(check_if_float_onerow(credits))
 
   rollover = Rollover.query.filter(Rollover.year == todayDate.year
                                and Rollover.username == current_user.username).first()
 
   if  request.method == 'GET':
+
+    if active == None:
+        new_account = Account(month=todayDate.month, 
+                              year=todayDate.year,   
+                              rent = 0.0,  
+                              housekeeping = 0.0,  
+                              water = 0.0,
+                              electric = 0.0, 
+                              internet = 0.0, 
+                              counciltax = 0.0, 
+                              fitness = 0.0, 
+                              bakery = 0.0, 
+                              shopping = 0.0,  
+                              username=current_user.username)
+        print(vars(new_account))
+        db.session.add(new_account)
+    
+
+    if credits == None:
+        credits = Credits(month=todayDate.month,
+                          year=todayDate.year,
+                          salary_deposit = 0.0,
+                          windfall = 0.0)
+        db.session.add(credits)
+    
+
+    if rollover == None:
+        rollover = Rollover(day=todayDate.day,
+                            month=todayDate.month,
+                            year=todayDate.year,
+                            rent_fixed = 0,
+                            rent_lock_previous = False,
+                            rent_lock = False,
+                            water_fixed = 0,
+                            water_lock_previous = False,
+                            water_lock = False,
+                            electric_fixed = 0,
+                            electric_lock_previous = False,
+                            electric_lock = False,
+                            counciltax_fixed = 0,
+                            counciltax_lock_previous = False,
+                            counciltax_lock = False,
+                            internet_fixed = 0,
+                            internet_lock_previous = False,
+                            internet_lock = False,
+                            username=current_user.username)
+    db.session.add(rollover)
+    db.session.commit()
+
+  
     
     total = 0
     remaining = 0
@@ -306,31 +348,14 @@ def accounts():
       for take in takeaways:
         total_takeaway += take.takeaway_cost
 
-
-    if active != None:
-      if active.rent != None:
-        total += active.rent 
-      if active.housekeeping != None:
-        total += active.housekeeping
-      if active.water != None:
-        total += active.water
-      if active.electric != None:
-        total += active.electric
-      if active.internet != None:
-        total += active.internet
-      if active.counciltax != None:
-        total += active.counciltax
-      if active.fitness != None:
-        total += active.fitness
-      if active.bakery != None:
-        total += active.bakery  
-      if active.shopping != None:
-        total += active.shopping
-      if credits.windfall != None:
-        remaining = remaining + credits.windfall  
-      if credits.salary_deposit != None:
-        remaining = credits.salary_deposit - total
-     
+      #Uses helper function to extract float values from database query
+      #Uses helper function on the object of floates to total debits/credits in the provided query object
+      credit_check = check_if_float_onerow(credits)
+      credit_total = total_floats(credit_check)
+      debit_check = check_if_float_onerow(active)
+      debit_total = (total_floats(debit_check))
+      remaining = credit_total - debit_total
+      
       
     if extra_groceries_total > 0:
         total += extra_groceries_total 
@@ -370,163 +395,106 @@ def accounts():
                            total_takeaway=total_takeaway)
 
   if request.method == 'POST': 
-    #This section only happens if the query to the database produces None which is only when the database is empty.
-    #This creates the database date time stamps on the line so that it can be updated within the month but recreated
-    #when the month rolls over
-    #Section Start
-    print('post happened here followed by active object print')
-    print(active)
-    if active == None:
-      new_account = Account(month=todayDate.month, 
-                            year=todayDate.year,   
-                            rent=account.rent.data,  
-                            housekeeping=account.housekeeping.data,  
-                            water=account.water.data,
-                            electric=account.electric.data, 
-                            internet=account.internet.data, 
-                            counciltax=account.counciltax.data, 
-                            fitness=account.fitness.data, 
-                            bakery=account.bakery.data, 
-                            shopping=account.shopping.data,  
-                            username=current_user.username)
-      print(vars(new_account))
-      db.session.add(new_account)
-
-    if credits == None:
-      credits = Credits(month=todayDate.month,
-                        year=todayDate.year,
-                        salary_deposit=account.salary_deposit.data,
-                        windfall=account.windfall.data)
-      db.session.add(credits)                  
-
-    if rollover == None:
-      rollover = Rollover(day=todayDate.day,
-                          month=todayDate.month,
-                          year=todayDate.year,
-                          rent_fixed = 0,
-                          rent_lock_previous = False,
-                          rent_lock = False,
-                          water_fixed = 0,
-                          water_lock_previous = False,
-                          water_lock = False,
-                          electric_fixed = 0,
-                          electric_lock_previous = False,
-                          electric_lock = False,
-                          counciltax_fixed = 0,
-                          counciltax_lock_previous = False,
-                          counciltax_lock = False,
-                          internet_fixed = 0,
-                          internet_lock_previous = False,
-                          internet_lock = False,
-                          username=current_user.username)
-      db.session.add(rollover)
-    #Section finish
+    
 
     # This if checks that the database query is not None to prevent an error from an empty database
     # then checks the salary_deposit to see if it is None and if it is saves the form data to the parameter.
-
-  if active != None and rollover != None and credits != None:
-      if credits.salary_deposit == None:
+    
+    if credits.salary_deposit == 0.0 and account.salary_deposit:
         credits.salary_deposit = account.salary_deposit.data
 
-      if credits.windfall == None:
+    if credits.windfall == 0.0 and account.windfall.data:
         credits.windfall = account.windfall.data
 
-    #Rent Section Start
-      if active.rent == None:
-        active.rent = account.rent.data
+      #Rent Section Start
+    if active.rent == 0.0 and account.rent.data:
+      active.rent = account.rent.data
 
-      if active.rent != None and rollover.rent_lock != None:
-        rollover.rent_lock=account.rent_lock.data
+    
+    rollover.rent_lock=account.rent_lock.data
 
-      if active.rent != None and rollover.rent_lock_previous == None:
-        rollover.rent_lock_previous=account.rent_lock.data
-      elif active.rent != None and rollover.rent_lock_previous != None:
-        if account.rent_lock.data == rollover.rent_lock_previous:
-          rollover.rent_lock_previous = not rollover.rent_lock_previous
+    
+    if account.rent_lock.data == rollover.rent_lock_previous:
+        rollover.rent_lock_previous = not rollover.rent_lock_previous
 
-      if rollover.rent_lock_previous == False and account.rent_lock.data == True:
-        print('False to previous True to Rent_lock')
-      if account.rent.data:
+    if account.rent.data:
         rollover.rent_fixed = account.rent.data
-      elif active.rent:
+    elif active.rent:
         rollover.rent_fixed = active.rent
-      elif rollover.rent_lock_previous == True and account.rent_lock.data == False and active.rent != None:
+    elif rollover.rent_lock_previous == True and account.rent_lock.data == False and active.rent != None:
         print('The lock is coming off')
         rollover.rent_fixed = 0
-      #This was difficult, if the form/account.counciltax.data is empty it will set the field to Null which triggers
-      #the input field refreshed. If there is data in the field then it consumes this into the account table.
+        #This was difficult, if the form/account.counciltax.data is empty it will set the field to Null which triggers
+        #the input field refreshed. If there is data in the field then it consumes this into the account table.
         active.rent = account.rent.data
-    #Rent section ends 
-        
-      if active.housekeeping == None:
-        active.housekeeping=account.housekeeping.data
+      #Rent section ends 
+          
+    if active.housekeeping == 0.0 and account.housekeeping.data:
+        active.housekeeping = account.housekeeping.data
 
-      #Water section starts here
-      if active.water == None:
+        #Water section starts here
+    if active.water == 0.0 and account.water.data:
         active.water=account.water.data
 
-      if rollover.water_lock != None:
-        rollover.water_lock=account.water_lock.data
-      #Water section ends here
+    rollover.water_lock=account.water_lock.data
+        #Water section ends here
 
-      if active.electric == None:
-        active.electric=account.electric.data
+    if active.electric == 0.0 and account.electric.data:
+      active.electric=account.electric.data
+    
+    rollover.electric_lock=account.electric_lock.data
 
-      if rollover.electric_lock != None:
-        rollover.electric_lock=account.electric_lock.data
+    if active.internet == 0.0 and account.internet.data:
+      active.internet=account.internet.data
 
-      if active.internet == None:
-        active.internet=account.internet.data
+    if rollover.internet_lock != None:
+      rollover.internet_lock=account.internet_lock.data 
 
-      if rollover.internet_lock != None:
-        rollover.internet_lock=account.internet_lock.data 
+    if active.counciltax == None and account.counciltax.data:
+      active.counciltax = account.counciltax.data
 
-      if active.counciltax == None:
-        active.counciltax = account.counciltax.data
-
-      if active.counciltax != None and rollover.counciltax_lock != None:
-        rollover.counciltax_lock = account.counciltax_lock.data
-#First line looks to see if the Database is empty to avoid the None error of an empty object
-#In the case the database is empty we start by assigning the same value to the previous as the current lock setting
-#Above we also validate that a value is passed to the counciltax input before setting the lock setting
-#Then we watch the settings change when the current setting changes the first time we do nothing
-#Instead we wait until the form value becomes the same as the previous setting and then we know its time to change
-#the previous setting to the alternate boolean.
-      if active.counciltax != None and rollover.counciltax_lock_previous == None:
-        rollover.counciltax_lock_previous=account.counciltax_lock.data
-      elif active.counciltax != None and rollover.counciltax_lock_previous != None:
-        if account.counciltax_lock.data == rollover.counciltax_lock_previous:
-          rollover.counciltax_lock_previous = not rollover.counciltax_lock_previous  
-#In this block I am looking at the previous state which if False compared to form generated lock request
-#then we can save the counciltax value in the form to the rollover table, if the form value is empty because
-#it has aleady been enetered then the active query will show a value and that can be used to save to the rollover table.
-#If however the lock is coming off we can zero out the couciltax_fixed entry in the rollover table and open the input in
-#the html back to allow a new value to be entered.
+    if active.counciltax != None and rollover.counciltax_lock != None:
+      rollover.counciltax_lock = account.counciltax_lock.data
+  #First line looks to see if the Database is empty to avoid the None error of an empty object
+  #In the case the database is empty we start by assigning the same value to the previous as the current lock setting
+  #Above we also validate that a value is passed to the counciltax input before setting the lock setting
+  #Then we watch the settings change when the current setting changes the first time we do nothing
+  #Instead we wait until the form value becomes the same as the previous setting and then we know its time to change
+  #the previous setting to the alternate boolean.
+    if active.counciltax != None and rollover.counciltax_lock_previous == None:
+      rollover.counciltax_lock_previous=account.counciltax_lock.data
+    elif active.counciltax != None and rollover.counciltax_lock_previous != None:
+      if account.counciltax_lock.data == rollover.counciltax_lock_previous:
+            rollover.counciltax_lock_previous = not rollover.counciltax_lock_previous  
+  #In this block I am looking at the previous state which if False compared to form generated lock request
+  #then we can save the counciltax value in the form to the rollover table, if the form value is empty because
+  #it has aleady been enetered then the active query will show a value and that can be used to save to the rollover table.
+  #If however the lock is coming off we can zero out the couciltax_fixed entry in the rollover table and open the input in
+  #the html back to allow a new value to be entered.
       if rollover.counciltax_lock_previous == False and account.counciltax_lock.data == True:
         print('False to previous True to Counciltax_lock')
         if account.counciltax.data:
           rollover.counciltax_fixed = account.counciltax.data
         elif active.counciltax:
-          rollover.counciltax_fixed = active.counciltax
-      elif rollover.counciltax_lock_previous == True and account.counciltax_lock.data == False and active.counciltax != None:
-        print('The lock is coming off')
-        rollover.counciltax_fixed = 0
-      #This was difficult, if the form/account.counciltax.data is empty it will set the field to Null which triggers
-      #the input field refreshed. If there is data in the field then it consumes this into the account table.
-        active.counciltax = account.counciltax.data
+            rollover.counciltax_fixed = active.counciltax
+        elif rollover.counciltax_lock_previous == True and account.counciltax_lock.data == False and active.counciltax != None:
+          print('The lock is coming off')
+          rollover.counciltax_fixed = 0
+        #This was difficult, if the form/account.counciltax.data is empty it will set the field to Null which triggers
+        #the input field refreshed. If there is data in the field then it consumes this into the account table.
+          active.counciltax = account.counciltax.data
 
-      if active.fitness == None:
-        active.fitness = account.fitness.data
+    if active.fitness == 0.0 and account.fitness.data:
+      active.fitness = account.fitness.data
 
-      if active.bakery == None:
-        active.bakery = account.bakery.data
-    
-      if active.shopping == None:
-        active.shopping = account.shopping.data
+    if active.bakery == None and account.bakery.data:
+      active.bakery = account.bakery.data
+      
+    if active.shopping == account.shopping.data:
+      active.shopping = account.shopping.data
 
-  db.session.commit()  
-  return redirect(url_for('accounts'))
+    db.session.commit()  
+    return redirect(url_for('accounts'))
 
 @app.route('/workfood', methods=['GET', 'POST'])
 @login_required
