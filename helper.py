@@ -54,6 +54,12 @@ def check_if_float_onerow(instance):
                 float_values.update({key:value})
         return float_values
 
+def total_floats(object):
+    total = 0
+    for float in object:
+        total += float
+    return float
+
         
 
 def check_query_instance(instance):

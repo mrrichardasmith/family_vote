@@ -5,7 +5,7 @@ from werkzeug.urls import url_parse
 from flask_login import current_user, login_user, logout_user, login_required
 from app import app, db
 from datetime import datetime, timedelta 
-from helper import check_query_none_onerow, month_from_number, check_query_instance, check_if_float_onerow
+from helper import check_query_none_onerow, month_from_number, check_query_instance, check_if_float_onerow, total_floats
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -210,10 +210,7 @@ def accounts():
   print(check_query_none_onerow(active))
   print(check_if_float_onerow(active))
   check = check_if_float_onerow(active)
-  total = 0
-  for c in check:
-    total += check[c]
-  print(total)
+  print(total_floats(check))
 
   credits = Credits.query.filter(Credits.month == todayDate.month
                              and Credits.year == todayDate.year
