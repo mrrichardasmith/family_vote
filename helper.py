@@ -68,7 +68,11 @@ def check_query_instance(instance):
         check_query_one(instance)  
 
 
-
+def sum_combined_totals(combined_totals_arr):
+      total = 0
+      for t in combined_totals_arr:
+        total += int(t)
+      return(total)
 
 
 

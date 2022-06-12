@@ -42,7 +42,7 @@
             <td>{{ credits.windfall }}</td>
         </tr>
         {% endif %}
-        {% if active.rent == None %}
+        {% if active.rent == 0.0 %}
         <tr>
             <th>{{ account.rent.label }}</th>
             <td>{{ account.rent }}</td>
@@ -181,7 +181,7 @@
             <td><a class="noline" href="{{ url_for('insurance') }}"><img class="iconPic2" src="{{ url_for('static', filename='pictures/plus.png') }}"></a></td>
         </tr>
         {% endif %}
-        {% if active.counciltax == None %}
+        {% if active.counciltax == 0.0 %}
         <tr>
             <th>{{ account.counciltax.label }}</th>
             <td>{{ account.counciltax }}</td>
