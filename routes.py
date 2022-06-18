@@ -5,7 +5,7 @@ from werkzeug.urls import url_parse
 from flask_login import current_user, login_user, logout_user, login_required
 from app import app, db
 from datetime import datetime, timedelta 
-from helper import check_query_none_onerow, month_from_number, check_query_instance, check_if_float_onerow, total_floats, sum_combined_totals
+from helper import check_query_none_onerow, month_from_number, check_query_instance, check_if_float_onerow, total_floats, sum_combined_totals, sum_query_cost
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -280,101 +280,66 @@ def accounts():
                                                   and Extragroceries.year == todayDate.year
                                                   and Extragroceries.username == current_user.username).all()
 
-    extra_groceries_total = 0
-    if extra_groceries != None:
-      for extra in extra_groceries:
-        extra_groceries_total += extra.cost
+    extra_groceries_total = sum_query_cost(extra_groceries)    
 
-    print("Print Extra Groceries")
-    print(extra_groceries_total)
 
     transport = Transport.query.filter(Transport.month == todayDate.month
                                        and Transport.year == todayDate.year
                                        and Transport.username == current_user.username).all()
 
-    total_transport = 0
-    if transport != None:
-      for t in transport:
-        total_transport += t.cost
+    total_transport = sum_query_cost(transport)
+    
     
     subscriptions = Subscriptions.query.filter(Subscriptions.month == todayDate.month
                                            and Subscriptions.year == todayDate.year
                                            and Subscriptions.username == current_user.username).all()
 
-    total_subscriptions = 0
-    if subscriptions != None:
-      for s in subscriptions:
-        total_subscriptions += s.cost
+    total_subscriptions = sum_query_cost(subscriptions)
+    
 
     investments = Investments.query.filter(Investments.month == todayDate.month
                                        and Investments.year == todayDate.year
                                        and Investments.username == current_user.username).all()
     
-    total_investments = 0
-    if investments != None:
-      for i in investments:
-        total_investments += i.cost
+    total_investments = sum_query_cost(investments)
+    
 
     insurance = Insurance.query.filter(Insurance.month == todayDate.month 
                                    and Insurance.year == todayDate.year
                                    and Insurance.username == current_user.username).all()
 
-    total_insurance = 0
-    if insurance != None:
-      for i in insurance:
-        total_insurance += i.cost
+    total_insurance = sum_query_cost(insurance)
     
-    print("Print Insurance Total")
-    print(total_insurance)
 
     family_entertainment = Familyentertainment.query.filter(Familyentertainment.month == todayDate.month
                                                         and Familyentertainment.year == todayDate.year
                                                         and Familyentertainment.username == current_user.username).all()
     
-
-    total_entertainment = 0
-    if family_entertainment != None:
-      for family in family_entertainment:
-        total_entertainment += family.cost
-
-    print("Print Entertainment Total")
-    print(total_entertainment)
+    total_entertainment = sum_query_cost(family_entertainment)
+    
 
     takeaways = Takeaway.query.filter(Takeaway.month == todayDate.month
                                   and Takeaway.year == todayDate.year
                                   and Takeaway.username == current_user.username).all()
     
-    total_takeaway = 0
-    if takeaways != None:
-      for take in takeaways:
-        total_takeaway += take.takeaway_cost
-
-    print("Print Takeaway Total")
-    print(total_takeaway)
-
+    total_takeaway = sum_query_cost(takeaways)
+    
     current_food = Workfood.query.filter(Workfood.month == todayDate.month
                                      and Workfood.year == todayDate.year
                                      and Workfood.username == current_user.username).all()
 
-    workfood_total = 0
-    if current_food != None:
-      for sum in current_food:
-        workfood_total += sum.sum_food
-
-    print("Print Workfood Total")
-    print(workfood_total)
+    workfood_total = sum_query_cost(current_food)
+    
 
     #Uses helper function to extract float values from database query
     #Uses helper function on the object of floates to total debits/credits in the provided query object
       
     combined_totals = [extra_groceries_total, workfood_total, total_takeaway, total_transport, total_subscriptions, total_investments, total_entertainment] 
-    for c in combined_totals:
-      print(c)
-    print("Result of Combined Totals array")
-    combined_totals = sum_combined_totals(combined_totals)
+    
+    sum_multiline_items = sum_combined_totals(combined_totals)
     
       
-    remaining = (credit_total_single_values + combined_totals) - debit_total
+    remaining = (credit_total_single_values + sum_multiline_items) - debit_total
     remaining_formatted = '{:.2f}'.format(remaining)
     
     print(remaining_formatted)
@@ -387,7 +352,7 @@ def accounts():
                            active=active,
                            credits=credits,
                            rollover=rollover, 
-                           #remaining=remaining, 
+                           remaining=remaining, 
                            workfood_total=workfood_total,
                            extra_groceries_total=extra_groceries_total,
                            total_transport=total_transport,

@@ -74,6 +74,13 @@ def sum_combined_totals(combined_totals_arr):
         total += int(t)
       return(total)
 
-
+# Function takes one of the multi line account queries and totals the cost of each line returning the total.
+def sum_query_cost(account_query):
+      total_cost = 0
+      if account_query != None:
+        for lineitem in account_query:
+          total_cost += lineitem.cost
+      print("multiline total " + str(total_cost) + str(account_query))
+      return total_cost
 
 
