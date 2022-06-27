@@ -483,14 +483,13 @@ def workfood():
                                          and Workfood.year == todayYear
                                          and Workfood.username == current_user.username).all()
 
-    grand_total = 0
-    if current_food != None:
-      for sum in current_food:
-        grand_total += sum.sum_food
-      print(grand_total)
-  
+
+    workfood_total = sum_query_cost(current_food)
+    
+    
     
     for food in current_food:
+      print(type(food))
       if food.work_breakfast != None:
         sum_breakfast += food.work_breakfast
       if food.work_lunch != None:
@@ -511,11 +510,11 @@ def workfood():
                             sum_social=sum_social,
                             sum_snacks_me=sum_snacks_me,
                             sum_snacks_share=sum_snacks_share,
-                            grand_total=grand_total)
+                            workfood_total=workfood_total)
 
   if request.method == 'POST':
     sum_food = 0
-
+    #Put an loop in here that checks for the data float and adds those together.
     if foodform.work_breakfast.data != None:
       sum_food += foodform.work_breakfast.data
     if foodform.work_lunch.data != None:
@@ -527,7 +526,7 @@ def workfood():
     if foodform.work_snacks_share.data != None:
       sum_food += foodform.work_snacks_share.data
 
-    print(sum_food) 
+    print(sum_food)
     new_workfood = Workfood(day=todayDate.day,
                             month=todayDate.month, 
                             year=todayDate.year, 
@@ -537,7 +536,7 @@ def workfood():
                             work_snacks_me=foodform.work_snacks_me.data, 
                             work_snacks_share=foodform.work_snacks_share.data,
                             username=current_user.username,
-                            sum_food=sum_food)
+                            cost=sum_food)
 
     db.session.add(new_workfood)
     db.session.commit()
