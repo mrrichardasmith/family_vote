@@ -5,7 +5,7 @@ from werkzeug.urls import url_parse
 from flask_login import current_user, login_user, logout_user, login_required
 from app import app, db
 from datetime import datetime, timedelta 
-from helper import check_query_none_onerow, month_from_number, check_query_instance, check_if_float_onerow, total_floats, sum_combined_totals, sum_query_cost
+from helper import find_zero_balance, month_from_number, check_if_float_onerow, total_floats, sum_combined_totals, sum_query_cost
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -219,6 +219,7 @@ def accounts():
   print("Credit Total Single Values")
   print(credit_total_single_values)
   
+
   rollover = Rollover.query.filter(Rollover.year == todayDate.year
                                and Rollover.username == current_user.username).first()
 
@@ -281,7 +282,7 @@ def accounts():
                                                   and Extragroceries.username == current_user.username).all()
 
     extra_groceries_total = sum_query_cost(extra_groceries)    
-
+    
 
     transport = Transport.query.filter(Transport.month == todayDate.month
                                        and Transport.year == todayDate.year
@@ -316,6 +317,7 @@ def accounts():
                                                         and Familyentertainment.username == current_user.username).all()
     
     total_entertainment = sum_query_cost(family_entertainment)
+    
     
 
     takeaways = Takeaway.query.filter(Takeaway.month == todayDate.month
@@ -367,19 +369,20 @@ def accounts():
 
     # This if checks that the database query is not None to prevent an error from an empty database
     # then checks the salary_deposit to see if it is None and if it is saves the form data to the parameter.
-    
-    if credits.salary_deposit == 0.0 and account.salary_deposit:
+    zero = find_zero_balance(active)
+    print(zero)
+
+    if credits.salary_deposit == 0.0 and account.salary_deposit.data:
       credits.salary_deposit = account.salary_deposit.data
 
     if credits.windfall == 0.0 and account.windfall.data:
       credits.windfall = account.windfall.data
 
       #Rent Section Start
-    if active.rent == 0.0 and account.rent.data:
+    if account.rent.data:
       active.rent = account.rent.data
 
-    
-    rollover.rent_lock=account.rent_lock.data
+    rollover.rent_lock = account.rent_lock.data
 
     
     if account.rent_lock.data == rollover.rent_lock_previous:
@@ -397,28 +400,28 @@ def accounts():
         active.rent = account.rent.data
       #Rent section ends 
           
-    if active.housekeeping == 0.0 and account.housekeeping.data:
+    if account.housekeeping.data:
       active.housekeeping = account.housekeeping.data
 
         #Water section starts here
-    if active.water == 0.0 and account.water.data:
+    if account.water.data:
       active.water=account.water.data
 
     rollover.water_lock=account.water_lock.data
         #Water section ends here
 
-    if active.electric == 0.0 and account.electric.data:
+    if account.electric.data:
       active.electric=account.electric.data
     
     rollover.electric_lock=account.electric_lock.data
 
-    if active.internet == 0.0 and account.internet.data:
+    if account.internet.data:
       active.internet=account.internet.data
 
     if rollover.internet_lock != None:
       rollover.internet_lock=account.internet_lock.data 
 
-    if active.counciltax == 0.00 and account.counciltax.data:
+    if account.counciltax.data:
       active.counciltax = account.counciltax.data
 
     if active.counciltax != 0.00 and rollover.counciltax_lock != None:
@@ -452,13 +455,13 @@ def accounts():
         #the input field refreshed. If there is data in the field then it consumes this into the account table.
         active.counciltax = account.counciltax.data
 
-    if active.fitness == 0.0 and account.fitness.data:
+    if account.fitness.data:
       active.fitness = account.fitness.data
 
-    if active.bakery == 0.00 and account.bakery.data:
+    if account.bakery.data:
       active.bakery = account.bakery.data
       
-    if active.shopping == 0.0 and account.shopping.data:
+    if account.shopping.data:
       active.shopping = account.shopping.data
 
   db.session.commit()  

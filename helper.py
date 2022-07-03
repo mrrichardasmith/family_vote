@@ -85,7 +85,16 @@ def sum_query_cost(account_query):
         for lineitem in account_query:
             if lineitem.cost != None:
                 total_cost += lineitem.cost   
-      print("multiline total " + str(total_cost))
       return total_cost
 
+def find_zero_balance(query):
+    values = list(query.__dict__.values())
+    keys = list(query.__dict__.keys())
+    combined = zip(keys,values)
+    list_combined = list(combined)
+    zero_balance = [] 
 
+    for c in list_combined:
+      if c[-1] == 0.0:
+        zero_balance.append(c)
+    return zero_balance
