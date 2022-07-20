@@ -184,7 +184,6 @@ def lifehacks():
     return render_template('lifehacks.html', user=current_user, hack=hack)
 
   if request.method == 'POST' and hack.validate():
-    print('Family Hacks')
     new_hack = Life_hacks(hacktitle=hack.hack_title.data, 
                           hackdescription=hack.hack_description.data, 
                           username=current_user.username)
@@ -216,9 +215,7 @@ def accounts():
 
   credit_check = check_if_float_onerow(credits)
   credit_total_single_values = total_floats(credit_check)
-  print("Credit Total Single Values")
-  print(credit_total_single_values)
-  
+
 
   rollover = Rollover.query.filter(Rollover.year == todayDate.year
                                and Rollover.username == current_user.username).first()
@@ -304,6 +301,7 @@ def accounts():
     
     total_investments = sum_query_cost(investments)
     
+    
 
     insurance = Insurance.query.filter(Insurance.month == todayDate.month 
                                    and Insurance.year == todayDate.year
@@ -334,7 +332,7 @@ def accounts():
     
 
     #Uses helper function to extract float values from database query
-    #Uses helper function on the object of floates to total debits/credits in the provided query object
+    #Uses helper function on the object of floates to total debits/credits in the provided query object 
       
     combined_totals = [extra_groceries_total, workfood_total, total_takeaway, total_transport, total_subscriptions, total_investments, total_entertainment] 
     
@@ -343,8 +341,6 @@ def accounts():
       
     remaining = (credit_total_single_values + sum_multiline_items) - debit_total
     remaining_formatted = '{:.2f}'.format(remaining)
-    
-    print(remaining_formatted)
     
 
     return render_template('accounts.html', 
@@ -366,38 +362,46 @@ def accounts():
 
   if request.method == 'POST': 
     
-
-    # This if checks that the database query is not None to prevent an error from an empty database
-    # then checks the salary_deposit to see if it is None and if it is saves the form data to the parameter.
+    #reminder account is the form instance and therefore checks if an input was provided.
+    #active is the query object from querying account
+     
     zero = find_zero_balance(active)
     print(zero)
 
-    if credits.salary_deposit == 0.0 and account.salary_deposit.data:
+    if account.salary_deposit.data:
       credits.salary_deposit = account.salary_deposit.data
 
-    if credits.windfall == 0.0 and account.windfall.data:
+    if account.windfall.data:
       credits.windfall = account.windfall.data
 
-      #Rent Section Start
-    if account.rent.data:
+    #Rent Section Start
+    print("Rent section start")
+    #The problem is that everytime the form is submitted with the check box empty it sends false so you can trigger
+    #based on Form false.
+    #If the form has rent data then save it to the query object and confirm it back to the database
+    if account.rent.data == None or account.rent.data > 0:
       active.rent = account.rent.data
-
-    rollover.rent_lock = account.rent_lock.data
-
+    #If the form rent_lock doesn't equal the queried rent_lock
+    if account.rent_lock.data != rollover.rent_lock:
+    #Then sent the rollover rent_lock with the form rent_lock status
+      rollover.rent_lock = account.rent_lock.data 
+    #If the form rent_lock is checked and the rent from the active query is more than 0
+    if account.rent_lock.data == True and active.rent > 0:
+    #Store the rent that was stored in the active query in the rent_fixed query in response to the check.
+      rollover.rent_fixed = active.rent
+    #If the form rent_lock data is checked and the form rent has a value in it
+    elif account.rent_lock.data == True and account.rent > 0:
+    #Store rent form value in the rollover rent_lock field
+      rollover.rent_fixed = account.rent
+    #If the form rent_lock field is False
+    elif account.rent_lock.data == False:
+      print(account.rent_lock.data)
+    #set the rollover rent_fix back to 0
+      rollover.rent_fixed = 0.0
+      active.rent = 0.0
     
-    if account.rent_lock.data == rollover.rent_lock_previous:
-        rollover.rent_lock_previous = not rollover.rent_lock_previous
-
-    if account.rent.data:
-        rollover.rent_fixed = account.rent.data
-    elif active.rent:
-        rollover.rent_fixed = active.rent
-    elif rollover.rent_lock_previous == True and account.rent_lock.data == False and active.rent != None:
-        print('The lock is coming off')
-        rollover.rent_fixed = 0
-        #This was difficult, if the form/account.counciltax.data is empty it will set the field to Null which triggers
-        #the input field refreshed. If there is data in the field then it consumes this into the account table.
-        active.rent = account.rent.data
+    
+      #Looks like we may not need previous after all.
       #Rent section ends 
           
     if account.housekeeping.data:
@@ -424,7 +428,7 @@ def accounts():
     if account.counciltax.data:
       active.counciltax = account.counciltax.data
 
-    if active.counciltax != 0.00 and rollover.counciltax_lock != None:
+    if active.counciltax != 0.00 and rollover.counciltax_lock == True:
       rollover.counciltax_lock = account.counciltax_lock.data
   #First line looks to see if the Database is empty to avoid the None error of an empty object
   #In the case the database is empty we start by assigning the same value to the previous as the current lock setting
@@ -443,13 +447,11 @@ def accounts():
   #If however the lock is coming off we can zero out the couciltax_fixed entry in the rollover table and open the input in
   #the html back to allow a new value to be entered.
     if rollover.counciltax_lock_previous == False and account.counciltax_lock.data == True:
-      print('False to previous True to Counciltax_lock')
       if account.counciltax.data:
         rollover.counciltax_fixed = account.counciltax.data
       elif active.counciltax:
           rollover.counciltax_fixed = active.counciltax
       elif rollover.counciltax_lock_previous == True and account.counciltax_lock.data == False and active.counciltax != None:
-        print('The lock is coming off')
         rollover.counciltax_fixed = 0
         #This was difficult, if the form/account.counciltax.data is empty it will set the field to Null which triggers
         #the input field refreshed. If there is data in the field then it consumes this into the account table.
@@ -492,7 +494,6 @@ def workfood():
     
     
     for food in current_food:
-      print(type(food))
       if food.work_breakfast != None:
         sum_breakfast += food.work_breakfast
       if food.work_lunch != None:
@@ -529,7 +530,7 @@ def workfood():
     if foodform.work_snacks_share.data != None:
       sum_food += foodform.work_snacks_share.data
 
-    print(sum_food)
+
     new_workfood = Workfood(day=todayDate.day,
                             month=todayDate.month, 
                             year=todayDate.year, 
@@ -665,7 +666,6 @@ def extragroceries():
     list = []
     for l in extra_groceries:
       space = l.grocerydescription.split(' ')
-      print(space)
       for s in space:
         list.append(s)
       for a in list:
@@ -675,7 +675,6 @@ def extragroceries():
     return render_template('extragroceries.html', extra=extra, list=list, monthNow=monthNow)
 
   if request.method == 'POST' and extra.validate():
-    print('We have extra groceries')
     new_groceries = Extragroceries(day=todayDate.day,
                                    month=todayDate.month, 
                                    year=todayDate.year,
@@ -845,7 +844,6 @@ def thoughtreport():
 def lifehacksreport():
   if request.method == 'GET':
     new_date = datetime.now() - timedelta(days = 30)
-    print(new_date)
     hacks = Life_hacks.query.filter(Life_hacks.date > new_date).all()
     
     return render_template('lifehacks_report.html', hacks=hacks)
@@ -859,7 +857,6 @@ def logout():
 
 
 def testdelete(id):
-  print('Function Fired')
   delete = Day_school.query.filter(Day_school.id == id).first()
   db.session.delete(delete)
   db.session.commit()
