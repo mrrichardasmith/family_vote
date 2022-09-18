@@ -376,42 +376,74 @@ def accounts():
 
     #Rent Section Start
     print("Rent section start")
-    #The problem is that everytime the form is submitted with the check box empty it sends false so you can trigger
-    #based on Form false.
-    #If the form has rent data then save it to the query object and confirm it back to the database
-    if account.rent.data == None or account.rent.data > 0:
+    
+    #If the form has a number > 0 in the submit
+    if account.rent.data != None and account.rent.data > 0:
+      # then save it to the active object and commit it back to the database
       active.rent = account.rent.data
-    #If the form rent_lock doesn't equal the queried rent_lock
-    if account.rent_lock.data != rollover.rent_lock:
-    #Then sent the rollover rent_lock with the form rent_lock status
-      rollover.rent_lock = account.rent_lock.data 
-    #If the form rent_lock is checked and the rent from the active query is more than 0
-    if account.rent_lock.data == True and active.rent > 0:
-    #Store the rent that was stored in the active query in the rent_fixed query in response to the check.
-      rollover.rent_fixed = active.rent
-    #If the form rent_lock data is checked and the form rent has a value in it
-    elif account.rent_lock.data == True and account.rent > 0:
-    #Store rent form value in the rollover rent_lock field
-      rollover.rent_fixed = account.rent
-    #If the form rent_lock field is False
-    elif account.rent_lock.data == False:
-      print(account.rent_lock.data)
-    #set the rollover rent_fix back to 0
-      rollover.rent_fixed = 0.0
-      active.rent = 0.0
-    
-    
-      #Looks like we may not need previous after all.
+      print("rent data")
+      print(account.rent.data)
+    # If the queried rent lock starts out False but the form rent_lock is True 
+    if rollover.rent_lock == False and account.rent_lock.data == True:
+      # Then save the True back to the rollover table
+      rollover.rent_lock = account.rent_lock.data
+      # If there is already a rent stored in the active table
+      if active.rent > 0:
+        # Then also save it to the fixed rent table
+        rollover.rent_fixed = active.rent
+      # else if there is a rent in the current form submi
+      elif account.rent.data > 0:
+        # Then also save that to the fixed rent table
+        rollover.rent_fixed = active.rent
+    # If the queried rent lock starts out True but the form rent_lock is False
+    elif rollover.rent_lock == True and account.rent_lock.data == False:
+      # Then save the False back to the rent_lock to the rollover table
+      rollover.rent_lock = account.rent_lock.data
+      # Clear the value saved in the rent_fixed table 
+      rollover.rent_fixed = 0
+      # Clear the value in the active table so that it enables the submission of a new value
+      active.rent = 0
+      
       #Rent section ends 
           
+    # Houskeeping starts here     
     if account.housekeeping.data:
       active.housekeeping = account.housekeeping.data
 
-        #Water section starts here
-    if account.water.data:
-      active.water=account.water.data
+    
 
-    rollover.water_lock=account.water_lock.data
+    # Water section starts here
+    print("Water section start")
+    
+    #If the form has a number > 0 in the submit
+    if account.water.data != None and account.water.data > 0:
+      # then save it to the active object and commit it back to the database
+      active.water = account.water.data
+      print("water data")
+      print(account.water.data)
+    # If the queried water lock starts out False but the form water_lock is True 
+    if rollover.water_lock == False and account.water_lock.data == True:
+      # Then save the True back to the rollover table
+      print("water lock is")
+      print(account.water_lock.data)
+      rollover.water_lock = account.water_lock.data
+      # If there is already a rent stored in the active table
+      if active.water > 0:
+        # Then also save it to the fixed rent table
+        rollover.water_fixed = active.water
+      # else if there is a rent in the current form submi
+      elif account.water.data > 0:
+        # Then also save that to the fixed rent table
+        rollover.water_fixed = active.water
+    # If the queried rent lock starts out True but the form rent_lock is False
+    elif rollover.water_lock == True and account.water_lock.data == False:
+      # Then save the False back to the rent_lock to the rollover table
+      rollover.water_lock = account.water_lock.data
+      # Clear the value saved in the rent_fixed table 
+      rollover.water_fixed = 0
+      # Clear the value in the active table so that it enables the submission of a new value
+      active.water = 0
+    
         #Water section ends here
 
     if account.electric.data:
@@ -465,7 +497,7 @@ def accounts():
       
     if account.shopping.data:
       active.shopping = account.shopping.data
-
+  
   db.session.commit()  
   return redirect(url_for('accounts'))
 

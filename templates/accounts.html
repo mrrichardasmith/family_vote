@@ -91,10 +91,10 @@
             <td>{{ account.water }}</td>
             <td><input class="larger" type="checkbox" id="" name="water_lock" value=False></td>
         </tr>
-        {% elif active.water_lock == True and active.water != None %}
+        {% elif rollover.water_lock == True %}
         <tr>
             <th>{{ account.water.label }}</th>
-            <td>{{ active.water }}</td>
+            <td>{{ rollover.water_fixed }}</td>
             <td><input class="larger" type="checkbox" id="" name="water_lock" value=True checked></td>
         </tr>
         {% else %}
