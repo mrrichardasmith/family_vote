@@ -110,7 +110,7 @@
             <td>{{ account.electric }}</td>
             <td><input class="larger" type="checkbox" id="" name="electric_lock" value=False></td>
         </tr>
-        {% elif active.electric_lock == True and active.electric != None %}
+        {% elif rollover.electric_lock == True %}
         <tr>
             <th>Electric / Gas</th>
             <td>{{ active.electric }}</td>
@@ -129,10 +129,10 @@
             <td>{{ account.internet }}</td>
             <td><input class="larger" type="checkbox" id={{ active.id }} name="internet_lock" value=False></td>
         </tr>
-        {% elif active.internet_lock == True %}
+        {% elif rollover.internet_lock == True %}
         <tr>
             <th>Internet</th>
-            <td>{{ active.internet }}</td>
+            <td>{{ rollover.internet_fixed }}</td>
             <td><input class="larger" type="checkbox" id={{ active.id }} name="internet_lock" value=True checked></td>
         </tr>
         {% else %}

@@ -443,51 +443,106 @@ def accounts():
       rollover.water_fixed = 0
       # Clear the value in the active table so that it enables the submission of a new value
       active.water = 0
-    
         #Water section ends here
 
-    if account.electric.data:
-      active.electric=account.electric.data
+      # Electric section starts here
+    print("Electric section start")
     
-    rollover.electric_lock=account.electric_lock.data
+    #If the form has a number > 0 in the submit
+    if account.electric.data != None and account.electric.data > 0:
+      # then save it to the active object and commit it back to the database
+      active.electric = account.electric.data
+      print("electric data")
+      print(account.electric.data)
+    # If the queried water lock starts out False but the form Electric_lock is True 
+    if rollover.electric_lock == False and account.electric_lock.data == True:
+      # Then save the True back to the rollover table
+      print("electric lock is")
+      print(account.electric_lock.data)
+      rollover.electric_lock = account.electric_lock.data
+      # If there is already a Electric stored in the active table
+      if active.electric > 0:
+        # Then also save it to the fixed Electric table
+        rollover.electric_fixed = active.electric
+      # else if there is a Electric in the current form submi
+      elif account.electric.data > 0:
+        # Then also save that to the fixed rent table
+        rollover.electric_fixed = active.electric
+    # If the queried rent lock starts out True but the form Electric_lock is False
+    elif rollover.electric_lock == True and account.electric_lock.data == False:
+      # Then save the False back to the Electric_lock to the rollover table
+      rollover.electric_lock = account.electric_lock.data
+      # Clear the value saved in the Electric_fixed table 
+      rollover.electric_fixed = 0
+      # Clear the value in the active table so that it enables the submission of a new value
+      active.electric = 0
+        #Electric section ends here
 
-    if account.internet.data:
-      active.internet=account.internet.data
+    # Internet section starts here
+    print("Internet section start")
+    
+    #If the form has a number > 0 in the submit
+    if account.internet.data != None and account.internet.data > 0:
+      # then save it to the active object and commit it back to the database
+      active.internet = account.internet.data
+      print("internet data")
+      print(account.internet.data)
+    # If the queried water lock starts out False but the form internet_lock is True 
+    if rollover.internet_lock == False and account.internet_lock.data == True:
+      # Then save the True back to the rollover table
+      print("Internet lock is")
+      print(account.internet_lock.data)
+      rollover.internet_lock = account.internet_lock.data
+      # If there is already a internet stored in the active table
+      if active.internet > 0:
+        # Then also save it to the fixed internet table
+        rollover.internet_fixed = active.internet
+      # else if there is a rent in the current form submi
+      elif account.internet.data > 0:
+        # Then also save that to the fixed internet table
+        rollover.internet_fixed = active.internet
+    # If the queried internet lock starts out True but the form internet_lock is False
+    elif rollover.internet_lock == True and account.internet_lock.data == False:
+      # Then save the False back to the internet_lock to the rollover table
+      rollover.internet_lock = account.internet_lock.data
+      # Clear the value saved in the internet_fixed table 
+      rollover.internet_fixed = 0
+      # Clear the value in the active table so that it enables the submission of a new value
+      active.internet = 0
+        #Internet section ends here
 
-    if rollover.internet_lock != None:
-      rollover.internet_lock=account.internet_lock.data 
-
-    if account.counciltax.data:
+    # counciltax section starts here
+    print("counciltax section start")
+    
+    #If the form has a number > 0 in the submit
+    if account.counciltax.data != None and account.counciltax.data > 0:
+      # then save it to the active object and commit it back to the database
       active.counciltax = account.counciltax.data
-
-    if active.counciltax != 0.00 and rollover.counciltax_lock == True:
+      print("internet data")
+      print(account.counciltax.data)
+    # If the queried water lock starts out False but the form counciltax_lock is True 
+    if rollover.counciltax_lock == False and account.counciltax_lock.data == True:
+      # Then save the True back to the rollover table
+      print("counciltax lock is")
+      print(account.counciltax_lock.data)
       rollover.counciltax_lock = account.counciltax_lock.data
-  #First line looks to see if the Database is empty to avoid the None error of an empty object
-  #In the case the database is empty we start by assigning the same value to the previous as the current lock setting
-  #Above we also validate that a value is passed to the counciltax input before setting the lock setting
-  #Then we watch the settings change when the current setting changes the first time we do nothing
-  #Instead we wait until the form value becomes the same as the previous setting and then we know its time to change
-  #the previous setting to the alternate boolean.
-    if active.counciltax != None and rollover.counciltax_lock_previous == None:
-      rollover.counciltax_lock_previous=account.counciltax_lock.data
-    elif active.counciltax != None and rollover.counciltax_lock_previous != None:
-      if account.counciltax_lock.data == rollover.counciltax_lock_previous:
-            rollover.counciltax_lock_previous = not rollover.counciltax_lock_previous  
-  #In this block I am looking at the previous state which if False compared to form generated lock request
-  #then we can save the counciltax value in the form to the rollover table, if the form value is empty because
-  #it has aleady been enetered then the active query will show a value and that can be used to save to the rollover table.
-  #If however the lock is coming off we can zero out the couciltax_fixed entry in the rollover table and open the input in
-  #the html back to allow a new value to be entered.
-    if rollover.counciltax_lock_previous == False and account.counciltax_lock.data == True:
-      if account.counciltax.data:
-        rollover.counciltax_fixed = account.counciltax.data
-      elif active.counciltax:
-          rollover.counciltax_fixed = active.counciltax
-      elif rollover.counciltax_lock_previous == True and account.counciltax_lock.data == False and active.counciltax != None:
-        rollover.counciltax_fixed = 0
-        #This was difficult, if the form/account.counciltax.data is empty it will set the field to Null which triggers
-        #the input field refreshed. If there is data in the field then it consumes this into the account table.
-        active.counciltax = account.counciltax.data
+      # If there is already a counciltax stored in the active table
+      if active.counciltax > 0:
+        # Then also save it to the fixed counciltax table
+        rollover.counciltax_fixed = active.counciltax
+      # else if there is a counciltax in the current form submit
+      elif account.counciltax.data > 0:
+        # Then also save that to the fixed counciltax table
+        rollover.counciltax_fixed = active.counciltax
+    # If the queried counciltax lock starts out True but the form counciltax_lock is False
+    elif rollover.counciltax_lock == True and account.counciltax_lock.data == False:
+      # Then save the False back to the counciltax_lock to the rollover table
+      rollover.counciltax_lock = account.counciltax_lock.data
+      # Clear the value saved in the counciltax_fixed table 
+      rollover.counciltax_fixed = 0
+      # Clear the value in the active table so that it enables the submission of a new value
+      active.counciltax = 0
+        #counciltax section ends here
 
     if account.fitness.data:
       active.fitness = account.fitness.data
