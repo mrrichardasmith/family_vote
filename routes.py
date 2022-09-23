@@ -674,13 +674,19 @@ def subscriptions():
     return render_template('subscriptions.html', subs=subs, current_subscriptions=current_subscriptions)
 
   if request.method == 'POST':
+    print("Here is what we get from the date entry")
+    print(subs.subscription_start_date.data)
+    print("Here is what we get from the term entry")
+    print(subs.subscription_term.data)
+    
     new_subscriptions = Subscriptions(month = todayDate.month,
                                       year = todayDate.year,
                                       subscription_name=subs.subscription_name.data,
                                       subscription_term=subs.subscription_term.data,
                                       subscription_start_date=subs.subscription_start_date.data,
-                                      cost=subs.subscription_cost.data,
+                                      cost=subs.cost.data,
                                       username=current_user.username)
+  
 
     db.session.add(new_subscriptions)
     db.session.commit()
