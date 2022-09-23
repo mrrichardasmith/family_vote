@@ -42,7 +42,7 @@
             <td>{{ credits.windfall }}</td>
         </tr>
         {% endif %}
-        {% if active.rent == None %}
+        {% if active.rent == 0.0 %}
         <tr>
             <th>{{ account.rent.label }}</th>
             <td>{{ account.rent }}</td>
@@ -91,10 +91,10 @@
             <td>{{ account.water }}</td>
             <td><input class="larger" type="checkbox" id="" name="water_lock" value=False></td>
         </tr>
-        {% elif active.water_lock == True and active.water != None %}
+        {% elif rollover.water_lock == True %}
         <tr>
             <th>{{ account.water.label }}</th>
-            <td>{{ active.water }}</td>
+            <td>{{ rollover.water_fixed }}</td>
             <td><input class="larger" type="checkbox" id="" name="water_lock" value=True checked></td>
         </tr>
         {% else %}
@@ -110,7 +110,7 @@
             <td>{{ account.electric }}</td>
             <td><input class="larger" type="checkbox" id="" name="electric_lock" value=False></td>
         </tr>
-        {% elif active.electric_lock == True and active.electric != None %}
+        {% elif rollover.electric_lock == True %}
         <tr>
             <th>Electric / Gas</th>
             <td>{{ active.electric }}</td>
@@ -129,10 +129,10 @@
             <td>{{ account.internet }}</td>
             <td><input class="larger" type="checkbox" id={{ active.id }} name="internet_lock" value=False></td>
         </tr>
-        {% elif active.internet_lock == True %}
+        {% elif rollover.internet_lock == True %}
         <tr>
             <th>Internet</th>
-            <td>{{ active.internet }}</td>
+            <td>{{ rollover.internet_fixed }}</td>
             <td><input class="larger" type="checkbox" id={{ active.id }} name="internet_lock" value=True checked></td>
         </tr>
         {% else %}
@@ -181,7 +181,7 @@
             <td><a class="noline" href="{{ url_for('insurance') }}"><img class="iconPic2" src="{{ url_for('static', filename='pictures/plus.png') }}"></a></td>
         </tr>
         {% endif %}
-        {% if active.counciltax == None %}
+        {% if active.counciltax == 0.0 %}
         <tr>
             <th>{{ account.counciltax.label }}</th>
             <td>{{ account.counciltax }}</td>

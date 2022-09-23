@@ -5,7 +5,7 @@ from werkzeug.urls import url_parse
 from flask_login import current_user, login_user, logout_user, login_required
 from app import app, db
 from datetime import datetime, timedelta 
-from helper import check_query_none_onerow, month_from_number, check_query_instance, check_if_float_onerow, total_floats
+from helper import find_zero_balance, month_from_number, check_if_float_onerow, total_floats, sum_combined_totals, sum_query_cost
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -184,7 +184,6 @@ def lifehacks():
     return render_template('lifehacks.html', user=current_user, hack=hack)
 
   if request.method == 'POST' and hack.validate():
-    print('Family Hacks')
     new_hack = Life_hacks(hacktitle=hack.hack_title.data, 
                           hackdescription=hack.hack_description.data, 
                           username=current_user.username)
@@ -196,7 +195,7 @@ def lifehacks():
 @app.route('/accounts', methods=['GET', 'POST'])
 @login_required
 def accounts():
-  workfood_total = 0
+  
   account = AccountForm()
   todayDate = datetime.now()
   current_month_text = month_from_number(todayDate.month)
@@ -207,9 +206,16 @@ def accounts():
                             and Account.year == todayDate.year 
                             and Account.username == current_user.username).first()
 
+  debit_check = check_if_float_onerow(active)
+  debit_total = (total_floats(debit_check))
+  
   credits = Credits.query.filter(Credits.month == todayDate.month
                              and Credits.year == todayDate.year
                              and Credits.username == current_user.username).first()
+
+  credit_check = check_if_float_onerow(credits)
+  credit_total_single_values = total_floats(credit_check)
+
 
   rollover = Rollover.query.filter(Rollover.year == todayDate.year
                                and Rollover.username == current_user.username).first()
@@ -265,77 +271,50 @@ def accounts():
     db.session.commit()
 
   
-    
-    total = 0
-    remaining = 0
     current_month_text = month_from_number(todayDate.month)
 
-    current_food = Workfood.query.filter(Workfood.month == todayDate.month
-                                     and Workfood.year == todayDate.year
-                                     and Workfood.username == current_user.username).all()
-
-    
-    if current_food != None:
-      for sum in current_food:
-        workfood_total += sum.sum_food
-    
 
     extra_groceries = Extragroceries.query.filter(Extragroceries.month == todayDate.month
                                                   and Extragroceries.year == todayDate.year
                                                   and Extragroceries.username == current_user.username).all()
 
-
-    extra_groceries_total = 0
-    if extra_groceries != None:
-      for extra in extra_groceries:
-        extra_groceries_total += extra.costgroceries
+    extra_groceries_total = sum_query_cost(extra_groceries)    
+    
 
     transport = Transport.query.filter(Transport.month == todayDate.month
                                        and Transport.year == todayDate.year
                                        and Transport.username == current_user.username).all()
 
-    total_transport = 0
-    if transport != None:
-      for t in transport:
-        total_transport += t.cost_of_travel
+    total_transport = sum_query_cost(transport)
+    
     
     subscriptions = Subscriptions.query.filter(Subscriptions.month == todayDate.month
                                            and Subscriptions.year == todayDate.year
                                            and Subscriptions.username == current_user.username).all()
 
-    total_subscriptions = 0
-    if subscriptions != None:
-      for s in subscriptions:
-        total_subscriptions += s.subscription_cost
+    total_subscriptions = sum_query_cost(subscriptions)
+    
 
     investments = Investments.query.filter(Investments.month == todayDate.month
                                        and Investments.year == todayDate.year
                                        and Investments.username == current_user.username).all()
     
-    total_investments = 0
-    if investments != None:
-      for i in investments:
-        total_investments += i.investment_cost
+    total_investments = sum_query_cost(investments)
+    
+    
 
     insurance = Insurance.query.filter(Insurance.month == todayDate.month 
                                    and Insurance.year == todayDate.year
                                    and Insurance.username == current_user.username).all()
 
-    total_insurance = 0
-    if insurance != None:
-      for i in insurance:
-        total_insurance += i.insurance_cost
+    total_insurance = sum_query_cost(insurance)
     
 
     family_entertainment = Familyentertainment.query.filter(Familyentertainment.month == todayDate.month
                                                         and Familyentertainment.year == todayDate.year
                                                         and Familyentertainment.username == current_user.username).all()
     
-
-    total_entertainment = 0
-    if family_entertainment != None:
-      for family in family_entertainment:
-        total_entertainment += family.entertainment_cost
+    total_entertainment = sum_query_cost(family_entertainment)
     
     
 
@@ -343,39 +322,26 @@ def accounts():
                                   and Takeaway.year == todayDate.year
                                   and Takeaway.username == current_user.username).all()
     
-    total_takeaway = 0
-    if takeaways != None:
-      for take in takeaways:
-        total_takeaway += take.takeaway_cost
+    total_takeaway = sum_query_cost(takeaways)
+    
+    current_food = Workfood.query.filter(Workfood.month == todayDate.month
+                                     and Workfood.year == todayDate.year
+                                     and Workfood.username == current_user.username).all()
 
-      #Uses helper function to extract float values from database query
-      #Uses helper function on the object of floates to total debits/credits in the provided query object
-      credit_check = check_if_float_onerow(credits)
-      credit_total = total_floats(credit_check)
-      debit_check = check_if_float_onerow(active)
-      debit_total = (total_floats(debit_check))
-      remaining = credit_total - debit_total
-      
-      
-    if extra_groceries_total > 0:
-        total += extra_groceries_total 
-    if workfood_total > 0:
-        total += workfood_total
-    if total_takeaway > 0:
-        total += total_takeaway
-    if total_transport > 0:
-        total += total_transport
-    if total_subscriptions > 0:
-        total += total_subscriptions
-    if total_investments > 0:
-        total += total_investments
-    if total_insurance > 0:
-        total += total_insurance
-    if total_entertainment > 0:
-        total += total_entertainment  
+    workfood_total = sum_query_cost(current_food)
+    
 
+    #Uses helper function to extract float values from database query
+    #Uses helper function on the object of floates to total debits/credits in the provided query object 
+      
+    combined_totals = [extra_groceries_total, workfood_total, total_takeaway, total_transport, total_subscriptions, total_investments, total_entertainment] 
+    
+    sum_multiline_items = sum_combined_totals(combined_totals)
+    
+      
+    remaining = (credit_total_single_values + sum_multiline_items) - debit_total
     remaining_formatted = '{:.2f}'.format(remaining)
-    print(remaining_formatted)
+    
 
     return render_template('accounts.html', 
                            user=current_user,
@@ -396,105 +362,199 @@ def accounts():
 
   if request.method == 'POST': 
     
+    #reminder account is the form instance and therefore checks if an input was provided.
+    #active is the query object from querying account
+     
+    zero = find_zero_balance(active)
+    print(zero)
 
-    # This if checks that the database query is not None to prevent an error from an empty database
-    # then checks the salary_deposit to see if it is None and if it is saves the form data to the parameter.
+    if account.salary_deposit.data:
+      credits.salary_deposit = account.salary_deposit.data
+
+    if account.windfall.data:
+      credits.windfall = account.windfall.data
+
+    #Rent Section Start
+    print("Rent section start")
     
-    if credits.salary_deposit == 0.0 and account.salary_deposit:
-        credits.salary_deposit = account.salary_deposit.data
-
-    if credits.windfall == 0.0 and account.windfall.data:
-        credits.windfall = account.windfall.data
-
-      #Rent Section Start
-    if active.rent == 0.0 and account.rent.data:
+    #If the form has a number > 0 in the submit
+    if account.rent.data != None and account.rent.data > 0:
+      # then save it to the active object and commit it back to the database
       active.rent = account.rent.data
-
-    
-    rollover.rent_lock=account.rent_lock.data
-
-    
-    if account.rent_lock.data == rollover.rent_lock_previous:
-        rollover.rent_lock_previous = not rollover.rent_lock_previous
-
-    if account.rent.data:
-        rollover.rent_fixed = account.rent.data
-    elif active.rent:
+      print("rent data")
+      print(account.rent.data)
+    # If the queried rent lock starts out False but the form rent_lock is True 
+    if rollover.rent_lock == False and account.rent_lock.data == True:
+      # Then save the True back to the rollover table
+      rollover.rent_lock = account.rent_lock.data
+      # If there is already a rent stored in the active table
+      if active.rent > 0:
+        # Then also save it to the fixed rent table
         rollover.rent_fixed = active.rent
-    elif rollover.rent_lock_previous == True and account.rent_lock.data == False and active.rent != None:
-        print('The lock is coming off')
-        rollover.rent_fixed = 0
-        #This was difficult, if the form/account.counciltax.data is empty it will set the field to Null which triggers
-        #the input field refreshed. If there is data in the field then it consumes this into the account table.
-        active.rent = account.rent.data
+      # else if there is a rent in the current form submi
+      elif account.rent.data > 0:
+        # Then also save that to the fixed rent table
+        rollover.rent_fixed = active.rent
+    # If the queried rent lock starts out True but the form rent_lock is False
+    elif rollover.rent_lock == True and account.rent_lock.data == False:
+      # Then save the False back to the rent_lock to the rollover table
+      rollover.rent_lock = account.rent_lock.data
+      # Clear the value saved in the rent_fixed table 
+      rollover.rent_fixed = 0
+      # Clear the value in the active table so that it enables the submission of a new value
+      active.rent = 0
+      
       #Rent section ends 
           
-    if active.housekeeping == 0.0 and account.housekeeping.data:
-        active.housekeeping = account.housekeeping.data
+    # Houskeeping starts here     
+    if account.housekeeping.data:
+      active.housekeeping = account.housekeeping.data
 
-        #Water section starts here
-    if active.water == 0.0 and account.water.data:
-        active.water=account.water.data
+    
 
-    rollover.water_lock=account.water_lock.data
+    # Water section starts here
+    print("Water section start")
+    
+    #If the form has a number > 0 in the submit
+    if account.water.data != None and account.water.data > 0:
+      # then save it to the active object and commit it back to the database
+      active.water = account.water.data
+      print("water data")
+      print(account.water.data)
+    # If the queried water lock starts out False but the form water_lock is True 
+    if rollover.water_lock == False and account.water_lock.data == True:
+      # Then save the True back to the rollover table
+      print("water lock is")
+      print(account.water_lock.data)
+      rollover.water_lock = account.water_lock.data
+      # If there is already a rent stored in the active table
+      if active.water > 0:
+        # Then also save it to the fixed rent table
+        rollover.water_fixed = active.water
+      # else if there is a rent in the current form submi
+      elif account.water.data > 0:
+        # Then also save that to the fixed rent table
+        rollover.water_fixed = active.water
+    # If the queried rent lock starts out True but the form rent_lock is False
+    elif rollover.water_lock == True and account.water_lock.data == False:
+      # Then save the False back to the rent_lock to the rollover table
+      rollover.water_lock = account.water_lock.data
+      # Clear the value saved in the rent_fixed table 
+      rollover.water_fixed = 0
+      # Clear the value in the active table so that it enables the submission of a new value
+      active.water = 0
         #Water section ends here
 
-    if active.electric == 0.0 and account.electric.data:
-      active.electric=account.electric.data
+      # Electric section starts here
+    print("Electric section start")
     
-    rollover.electric_lock=account.electric_lock.data
+    #If the form has a number > 0 in the submit
+    if account.electric.data != None and account.electric.data > 0:
+      # then save it to the active object and commit it back to the database
+      active.electric = account.electric.data
+      print("electric data")
+      print(account.electric.data)
+    # If the queried water lock starts out False but the form Electric_lock is True 
+    if rollover.electric_lock == False and account.electric_lock.data == True:
+      # Then save the True back to the rollover table
+      print("electric lock is")
+      print(account.electric_lock.data)
+      rollover.electric_lock = account.electric_lock.data
+      # If there is already a Electric stored in the active table
+      if active.electric > 0:
+        # Then also save it to the fixed Electric table
+        rollover.electric_fixed = active.electric
+      # else if there is a Electric in the current form submi
+      elif account.electric.data > 0:
+        # Then also save that to the fixed rent table
+        rollover.electric_fixed = active.electric
+    # If the queried rent lock starts out True but the form Electric_lock is False
+    elif rollover.electric_lock == True and account.electric_lock.data == False:
+      # Then save the False back to the Electric_lock to the rollover table
+      rollover.electric_lock = account.electric_lock.data
+      # Clear the value saved in the Electric_fixed table 
+      rollover.electric_fixed = 0
+      # Clear the value in the active table so that it enables the submission of a new value
+      active.electric = 0
+        #Electric section ends here
 
-    if active.internet == 0.0 and account.internet.data:
-      active.internet=account.internet.data
+    # Internet section starts here
+    print("Internet section start")
+    
+    #If the form has a number > 0 in the submit
+    if account.internet.data != None and account.internet.data > 0:
+      # then save it to the active object and commit it back to the database
+      active.internet = account.internet.data
+      print("internet data")
+      print(account.internet.data)
+    # If the queried water lock starts out False but the form internet_lock is True 
+    if rollover.internet_lock == False and account.internet_lock.data == True:
+      # Then save the True back to the rollover table
+      print("Internet lock is")
+      print(account.internet_lock.data)
+      rollover.internet_lock = account.internet_lock.data
+      # If there is already a internet stored in the active table
+      if active.internet > 0:
+        # Then also save it to the fixed internet table
+        rollover.internet_fixed = active.internet
+      # else if there is a rent in the current form submi
+      elif account.internet.data > 0:
+        # Then also save that to the fixed internet table
+        rollover.internet_fixed = active.internet
+    # If the queried internet lock starts out True but the form internet_lock is False
+    elif rollover.internet_lock == True and account.internet_lock.data == False:
+      # Then save the False back to the internet_lock to the rollover table
+      rollover.internet_lock = account.internet_lock.data
+      # Clear the value saved in the internet_fixed table 
+      rollover.internet_fixed = 0
+      # Clear the value in the active table so that it enables the submission of a new value
+      active.internet = 0
+        #Internet section ends here
 
-    if rollover.internet_lock != None:
-      rollover.internet_lock=account.internet_lock.data 
-
-    if active.counciltax == None and account.counciltax.data:
+    # counciltax section starts here
+    print("counciltax section start")
+    
+    #If the form has a number > 0 in the submit
+    if account.counciltax.data != None and account.counciltax.data > 0:
+      # then save it to the active object and commit it back to the database
       active.counciltax = account.counciltax.data
-
-    if active.counciltax != None and rollover.counciltax_lock != None:
+      print("internet data")
+      print(account.counciltax.data)
+    # If the queried water lock starts out False but the form counciltax_lock is True 
+    if rollover.counciltax_lock == False and account.counciltax_lock.data == True:
+      # Then save the True back to the rollover table
+      print("counciltax lock is")
+      print(account.counciltax_lock.data)
       rollover.counciltax_lock = account.counciltax_lock.data
-  #First line looks to see if the Database is empty to avoid the None error of an empty object
-  #In the case the database is empty we start by assigning the same value to the previous as the current lock setting
-  #Above we also validate that a value is passed to the counciltax input before setting the lock setting
-  #Then we watch the settings change when the current setting changes the first time we do nothing
-  #Instead we wait until the form value becomes the same as the previous setting and then we know its time to change
-  #the previous setting to the alternate boolean.
-    if active.counciltax != None and rollover.counciltax_lock_previous == None:
-      rollover.counciltax_lock_previous=account.counciltax_lock.data
-    elif active.counciltax != None and rollover.counciltax_lock_previous != None:
-      if account.counciltax_lock.data == rollover.counciltax_lock_previous:
-            rollover.counciltax_lock_previous = not rollover.counciltax_lock_previous  
-  #In this block I am looking at the previous state which if False compared to form generated lock request
-  #then we can save the counciltax value in the form to the rollover table, if the form value is empty because
-  #it has aleady been enetered then the active query will show a value and that can be used to save to the rollover table.
-  #If however the lock is coming off we can zero out the couciltax_fixed entry in the rollover table and open the input in
-  #the html back to allow a new value to be entered.
-      if rollover.counciltax_lock_previous == False and account.counciltax_lock.data == True:
-        print('False to previous True to Counciltax_lock')
-        if account.counciltax.data:
-          rollover.counciltax_fixed = account.counciltax.data
-        elif active.counciltax:
-            rollover.counciltax_fixed = active.counciltax
-        elif rollover.counciltax_lock_previous == True and account.counciltax_lock.data == False and active.counciltax != None:
-          print('The lock is coming off')
-          rollover.counciltax_fixed = 0
-        #This was difficult, if the form/account.counciltax.data is empty it will set the field to Null which triggers
-        #the input field refreshed. If there is data in the field then it consumes this into the account table.
-          active.counciltax = account.counciltax.data
+      # If there is already a counciltax stored in the active table
+      if active.counciltax > 0:
+        # Then also save it to the fixed counciltax table
+        rollover.counciltax_fixed = active.counciltax
+      # else if there is a counciltax in the current form submit
+      elif account.counciltax.data > 0:
+        # Then also save that to the fixed counciltax table
+        rollover.counciltax_fixed = active.counciltax
+    # If the queried counciltax lock starts out True but the form counciltax_lock is False
+    elif rollover.counciltax_lock == True and account.counciltax_lock.data == False:
+      # Then save the False back to the counciltax_lock to the rollover table
+      rollover.counciltax_lock = account.counciltax_lock.data
+      # Clear the value saved in the counciltax_fixed table 
+      rollover.counciltax_fixed = 0
+      # Clear the value in the active table so that it enables the submission of a new value
+      active.counciltax = 0
+        #counciltax section ends here
 
-    if active.fitness == 0.0 and account.fitness.data:
+    if account.fitness.data:
       active.fitness = account.fitness.data
 
-    if active.bakery == None and account.bakery.data:
+    if account.bakery.data:
       active.bakery = account.bakery.data
       
-    if active.shopping == account.shopping.data:
+    if account.shopping.data:
       active.shopping = account.shopping.data
-
-    db.session.commit()  
-    return redirect(url_for('accounts'))
+  
+  db.session.commit()  
+  return redirect(url_for('accounts'))
 
 @app.route('/workfood', methods=['GET', 'POST'])
 @login_required
@@ -515,12 +575,10 @@ def workfood():
                                          and Workfood.year == todayYear
                                          and Workfood.username == current_user.username).all()
 
-    grand_total = 0
-    if current_food != None:
-      for sum in current_food:
-        grand_total += sum.sum_food
-      print(grand_total)
-  
+
+    workfood_total = sum_query_cost(current_food)
+    
+    
     
     for food in current_food:
       if food.work_breakfast != None:
@@ -543,11 +601,11 @@ def workfood():
                             sum_social=sum_social,
                             sum_snacks_me=sum_snacks_me,
                             sum_snacks_share=sum_snacks_share,
-                            grand_total=grand_total)
+                            workfood_total=workfood_total)
 
   if request.method == 'POST':
     sum_food = 0
-
+    #Put an loop in here that checks for the data float and adds those together.
     if foodform.work_breakfast.data != None:
       sum_food += foodform.work_breakfast.data
     if foodform.work_lunch.data != None:
@@ -559,7 +617,7 @@ def workfood():
     if foodform.work_snacks_share.data != None:
       sum_food += foodform.work_snacks_share.data
 
-    print(sum_food) 
+
     new_workfood = Workfood(day=todayDate.day,
                             month=todayDate.month, 
                             year=todayDate.year, 
@@ -569,7 +627,7 @@ def workfood():
                             work_snacks_me=foodform.work_snacks_me.data, 
                             work_snacks_share=foodform.work_snacks_share.data,
                             username=current_user.username,
-                            sum_food=sum_food)
+                            cost=sum_food)
 
     db.session.add(new_workfood)
     db.session.commit()
@@ -615,13 +673,13 @@ def subscriptions():
 
     return render_template('subscriptions.html', subs=subs, current_subscriptions=current_subscriptions)
 
-  if request.method == 'POST' and subs.validate():
+  if request.method == 'POST':
     new_subscriptions = Subscriptions(month = todayDate.month,
                                       year = todayDate.year,
                                       subscription_name=subs.subscription_name.data,
                                       subscription_term=subs.subscription_term.data,
                                       subscription_start_date=subs.subscription_start_date.data,
-                                      subscription_cost=subs.subscription_cost.data,
+                                      cost=subs.subscription_cost.data,
                                       username=current_user.username)
 
     db.session.add(new_subscriptions)
@@ -646,7 +704,7 @@ def investments():
                                   year=todayDate.year,
                                   investment_name=inv.investment_name.data,
                                   investment_description=inv.investment_description.data,
-                                  investment_cost=inv.investment_cost.data,
+                                  cost=inv.investment_cost.data,
                                   username=current_user.username)
     db.session.add(new_investments)
     db.session.commit()
@@ -669,7 +727,7 @@ def insurance():
                               year=todayDate.year,
                               insurance_name=ins.insurance_name.data,
                               insurance_description=ins.insurance_description.data,
-                              insurance_cost=ins.insurance_cost.data,
+                              cost=ins.insurance_cost.data,
                               username=current_user.username)
 
     db.session.add(new_insurance)
@@ -695,7 +753,6 @@ def extragroceries():
     list = []
     for l in extra_groceries:
       space = l.grocerydescription.split(' ')
-      print(space)
       for s in space:
         list.append(s)
       for a in list:
@@ -705,12 +762,11 @@ def extragroceries():
     return render_template('extragroceries.html', extra=extra, list=list, monthNow=monthNow)
 
   if request.method == 'POST' and extra.validate():
-    print('We have extra groceries')
     new_groceries = Extragroceries(day=todayDate.day,
                                    month=todayDate.month, 
                                    year=todayDate.year,
                                    grocerydescription=extra.extra_groceries_description.data,
-                                   costgroceries=extra.extra_groceries.data,
+                                   cost=extra.extra_groceries.data,
                                    username=current_user.username) 
 
     db.session.add(new_groceries)
@@ -744,15 +800,15 @@ def transport():
     if get_transp != None:
       for method in get_transp:
         if method.method_of_travel == 'Train':
-          total_train += method.cost_of_travel
+          total_train += method.cost
         elif method.method_of_travel == 'Bus':
-          total_bus += method.cost_of_travel
+          total_bus += method.cost
         elif method.method_of_travel == 'Uber':
-          total_uber += method.cost_of_travel
+          total_uber += method.cost
         elif method.method_of_travel == 'Taxi':
-          total_taxi += method.cost_of_travel
+          total_taxi += method.cost
         elif method.method_of_travel == 'Plane':
-          total_plane += method.cost_of_travel
+          total_plane += method.cost
 
     method_totals.append(total_train)
     method_totals.append(total_bus) 
@@ -772,7 +828,7 @@ def transport():
                               year=todayDate.year,
                               destination=transp.destination.data,
                               method_of_travel=transp.method_of_travel.data,
-                              cost_of_travel=transp.cost_of_travel.data,
+                              cost=transp.cost_of_travel.data,
                               username=current_user.username
                               )
 
@@ -796,7 +852,7 @@ def familyentertainment():
                                             year=todayDate.year, 
                                             entertainment_title=FamilyentForm.entertainment_title.data,
                                             entertainmnet_description=FamilyentForm.entertainment_description.data,
-                                            entertainment_cost=FamilyentForm.entertainment_cost.data,
+                                            cost=FamilyentForm.entertainment_cost.data,
                                             username = current_user.username)
     db.session.add(new_entertainment)
     db.session.commit()
@@ -819,7 +875,7 @@ def takeaway():
                             year=todayDate.year,
                             takeaway_choice=takeaway.takeaway_choice.data,
                             takeaway_other=takeaway.takeaway_other.data,
-                            takeaway_cost=takeaway.takeaway_cost.data)
+                            cost=takeaway.takeaway_cost.data)
 
     db.session.add(new_takeaway)
     db.session.commit()
@@ -875,7 +931,6 @@ def thoughtreport():
 def lifehacksreport():
   if request.method == 'GET':
     new_date = datetime.now() - timedelta(days = 30)
-    print(new_date)
     hacks = Life_hacks.query.filter(Life_hacks.date > new_date).all()
     
     return render_template('lifehacks_report.html', hacks=hacks)
@@ -889,7 +944,6 @@ def logout():
 
 
 def testdelete(id):
-  print('Function Fired')
   delete = Day_school.query.filter(Day_school.id == id).first()
   db.session.delete(delete)
   db.session.commit()

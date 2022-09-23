@@ -1,3 +1,6 @@
+from sqlalchemy import false
+
+
 def month_from_number(number):
     switcher = {
     1: "January",
@@ -53,8 +56,9 @@ def check_if_float_onerow(instance):
 
 def total_floats(object):
     total = 0
-    for float in object:
-        total += object[float]
+    if hasattr(object, '__iter__'):
+        for float in object:
+            total += object[float]
     return total
         
 
@@ -68,8 +72,29 @@ def check_query_instance(instance):
         check_query_one(instance)  
 
 
+def sum_combined_totals(combined_totals_arr):
+      total = 0
+      for t in combined_totals_arr:
+        total += int(t)
+      return(total)
 
+# Function takes one of the multi line account queries and totals the cost of each line returning the total.
+def sum_query_cost(account_query):
+      total_cost = 0
+      if account_query != None:
+        for lineitem in account_query:
+            if lineitem.cost != None:
+                total_cost += lineitem.cost   
+      return total_cost
 
+def find_zero_balance(query):
+    values = list(query.__dict__.values())
+    keys = list(query.__dict__.keys())
+    combined = zip(keys,values)
+    list_combined = list(combined)
+    zero_balance = [] 
 
-
-
+    for c in list_combined:
+      if c[-1] == 0.0:
+        zero_balance.append(c)
+    return zero_balance

@@ -117,7 +117,7 @@ class Workfood(db.Model):
     work_snacks_me = db.Column(db.Float)
     work_snacks_share = db.Column(db.Float)
     username = db.Column(db.String, db.ForeignKey('user.username'))
-    sum_food = db.Column(db.Float)
+    cost = db.Column(db.Float)
   
 class Extragroceries(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -127,7 +127,7 @@ class Extragroceries(db.Model):
     year = db.Column(db.Integer)
     grocerydescription = db.Column(db.String(500))
     username = db.Column(db.String, db.ForeignKey('user.username'))
-    costgroceries = db.Column(db.Float)
+    cost = db.Column(db.Float)
 
 class Subscriptions(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -136,7 +136,7 @@ class Subscriptions(db.Model):
     subscription_name = db.Column(db.String(120))
     subscription_term = db.Column(db.String(10))
     subscription_start_date = db.Column(db.DateTime, index=True)
-    subscription_cost = db.Column(db.Float)
+    cost = db.Column(db.Float)
     username = db.Column(db.String, db.ForeignKey('user.username'))
 
 class Transport(db.Model):
@@ -146,7 +146,7 @@ class Transport(db.Model):
     year = db.Column(db.Integer)
     destination = db.Column(db.String(120))
     method_of_travel = db.Column(db.String(10))
-    cost_of_travel = db.Column(db.Float)
+    cost = db.Column(db.Float)
     username = db.Column(db.String, db.ForeignKey('user.username'))
 
 class Familyentertainment(db.Model):
@@ -157,7 +157,7 @@ class Familyentertainment(db.Model):
     year = db.Column(db.Integer)
     entertainment_title = db.Column(db.String(120))
     entertainmnet_description = db.Column(db.String(500))
-    entertainment_cost = db.Column(db.Float)
+    cost = db.Column(db.Float)
     username = db.Column(db.String, db.ForeignKey('user.username'))
 
 class Takeaway(db.Model):
@@ -168,7 +168,7 @@ class Takeaway(db.Model):
     year = db.Column(db.Integer)
     takeaway_choice = db.Column(db.String(20))
     takeaway_other = db.Column(db.String(20))
-    takeaway_cost = db.Column(db.Float)
+    cost = db.Column(db.Float)
     username = db.Column(db.String, db.ForeignKey('user.username'))
 
 class Investments(db.Model):
@@ -179,7 +179,7 @@ class Investments(db.Model):
     year = db.Column(db.Integer)
     investment_name = db.Column(db.String(20))
     investment_description = db.Column(db.String(20))
-    investment_cost = db.Column(db.Float)
+    cost = db.Column(db.Float)
     username = db.Column(db.String, db.ForeignKey('user.username'))
 
 
@@ -191,7 +191,7 @@ class Insurance(db.Model):
     year = db.Column(db.Integer)
     insurance_name = db.Column(db.String(20))
     insurance_description = db.Column(db.String(20))
-    insurance_cost = db.Column(db.Float)
+    cost = db.Column(db.Float)
     username = db.Column(db.String, db.ForeignKey('user.username'))
 
 class Rollover(db.Model):
