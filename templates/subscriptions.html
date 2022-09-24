@@ -22,11 +22,7 @@
                 <td>{{ subs.subscription_start_date }}</td>
             </tr>
             <tr>
-<<<<<<< HEAD
-                <th>{{ subs.subscription_cost.label }}</th>
-=======
                 <th>{{ subs.cost.label }}</th>
->>>>>>> 624ea9eb1e38172cb6d80d9ed4a689f4e7ae6117
                 <td>{{ subs.cost}}</td>
             </tr>
         </table>
@@ -42,14 +38,8 @@
                 <th>Auto Renewal</th>
             {% for sub in current_subscriptions %}
             <tr>
-<<<<<<< HEAD
                 <td>{{ sub.subscription_name }}</td>
                 <td>{{ sub.cost }}</td>
-=======
-                <th>{{ sub.subscription_name }}</th>
-                <td>{{ sub.cost }}</td>
-                <td>{{ sub.subscription_start_date }}</td>
->>>>>>> 624ea9eb1e38172cb6d80d9ed4a689f4e7ae6117
                 <td>{{ sub.subscription_term }}</td>
                 <td>{{ sub.subscription_start_date }}</td>
                 <td>{{ subs.subscription_auto_renewal }}</td>

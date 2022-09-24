@@ -99,14 +99,9 @@ class ExtragroceriesForm(FlaskForm):
 class SubscriptionsForm(FlaskForm):
     subscription_name = StringField('Subscription', validators=[DataRequired()])
     subscription_term = RadioField('Monthly / Yearly', choices=['Monthly', 'Yearly'], validators=[DataRequired()])
-<<<<<<< HEAD
     subscription_start_date = DateTimeField('Subscription Start', format='%d-%m-%y', validators=[DataRequired()])
     subscription_auto_renewal = DateTimeField('Auto Renewal Date', format='%d-%m-%y', validators=[DataRequired()])
-    subscription_cost = DecimalField('Cost', validators=[DataRequired()])
-=======
-    subscription_start_date = DateField('Start Date', format='%Y-%m-%d', validators=[DataRequired()])
     cost = DecimalField('Cost', validators=[DataRequired()])
->>>>>>> 624ea9eb1e38172cb6d80d9ed4a689f4e7ae6117
     submit = SubmitField('Subscribed')
     
 class FamilyentertainmentForm(FlaskForm):
