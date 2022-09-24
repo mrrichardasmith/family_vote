@@ -135,7 +135,8 @@ class Subscriptions(db.Model):
     year = db.Column(db.Integer)
     subscription_name = db.Column(db.String(120))
     subscription_term = db.Column(db.String(10))
-    subscription_start_date = db.Column(db.DateTime, index=True)
+    subscription_start_date = db.Column(db.DateTime)
+    subscription_auto_renewal = db.Column(db.DateTime, index=True)
     cost = db.Column(db.Float)
     username = db.Column(db.String, db.ForeignKey('user.username'))
 

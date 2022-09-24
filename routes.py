@@ -679,6 +679,7 @@ def subscriptions():
                                       subscription_name=subs.subscription_name.data,
                                       subscription_term=subs.subscription_term.data,
                                       subscription_start_date=subs.subscription_start_date.data,
+                                      subscription_auto_renewal=subs.subscription_auto_renewal.data,
                                       cost=subs.subscription_cost.data,
                                       username=current_user.username)
 
