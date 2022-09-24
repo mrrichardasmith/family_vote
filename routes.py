@@ -4,9 +4,9 @@ from forms import RegistrationForm, LoginForm, LikesDislikesForm, ThinkingForm, 
 from werkzeug.urls import url_parse
 from flask_login import current_user, login_user, logout_user, login_required
 from app import app, db
-from datetime import datetime, timedelta 
+from datetime import datetime, timedelta, date
 from helper import find_zero_balance, month_from_number, check_if_float_onerow, total_floats, sum_combined_totals, sum_query_cost
-
+import calendar
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -675,32 +675,23 @@ def subscriptions():
     return render_template('subscriptions.html', subs=subs, current_subscriptions=current_subscriptions)
 
   if request.method == 'POST':
-    print("Here is what we get from the date entry")
-    print(subs.subscription_start_date.data)
-    print(type(subs.subscription_start_date.data))
-    formated_date = subs.subscription_start_date.data.strftime('%d-%m-%Y')
-    print(subs.subscription_start_date.data.strftime('%b'))
-    print(type(formated_date))
-    print("Here is what we get from the term entry")
-    print(subs.subscription_term.data)
-    
+    #if the term is monthly add a month to the start date and save it as the auto renewal
+    if subs.subscription_term.data == 'Monthly':
+      print("We need to add a month to the auto renewal date")
+      days_in_month = calendar.monthrange(subs.subscription_start_date.data.year, subs.subscription_start_date.data.month)[1]   
+      add_auto_renew = subs.subscription_start_date.data + timedelta(days=days_in_month)
+    #else it must be yearly so add a year to the start date and save that as the auto renewal
+    else:
+      add_auto_renew=subs.subscription_start_date.data.replace(year=subs.subscription_start_date.data.year + 1)
+
     new_subscriptions = Subscriptions(month = todayDate.month,
                                       year = todayDate.year,
                                       subscription_name=subs.subscription_name.data,
                                       subscription_term=subs.subscription_term.data,
                                       subscription_start_date=subs.subscription_start_date.data,
-<<<<<<< HEAD
-<<<<<<< HEAD
-                                      subscription_auto_renewal=subs.subscription_auto_renewal.data,
-                                      cost=subs.subscription_cost.data,
-=======
+                                      subscription_auto_renewal=add_auto_renew,
                                       cost=subs.cost.data,
->>>>>>> 624ea9eb1e38172cb6d80d9ed4a689f4e7ae6117
-=======
-                                      cost=subs.cost.data,
->>>>>>> 624ea9eb1e38172cb6d80d9ed4a689f4e7ae6117
                                       username=current_user.username)
-  
 
     db.session.add(new_subscriptions)
     db.session.commit()

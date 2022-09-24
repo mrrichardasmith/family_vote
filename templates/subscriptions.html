@@ -41,8 +41,8 @@
                 <td>{{ sub.subscription_name }}</td>
                 <td>{{ sub.cost }}</td>
                 <td>{{ sub.subscription_term }}</td>
-                <td>{{ sub.subscription_start_date }}</td>
-                <td>{{ subs.subscription_auto_renewal }}</td>
+                <td>{{ sub.subscription_start_date.strftime('%d-%m-%Y') }}</td>
+                <td>{{ sub.subscription_auto_renewal.strftime('%d-%m-%Y') }}</td>
             </tr>
 
             {% endfor %}
