@@ -1,6 +1,6 @@
 from wsgiref.validate import validator
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField, SelectField, DateTimeField, RadioField, TextAreaField, DecimalField
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, SelectField, DateField, RadioField, TextAreaField, DecimalField
 from wtforms.validators import ValidationError, DataRequired, EqualTo, Email
 from models import User
 
@@ -99,15 +99,20 @@ class ExtragroceriesForm(FlaskForm):
 class SubscriptionsForm(FlaskForm):
     subscription_name = StringField('Subscription', validators=[DataRequired()])
     subscription_term = RadioField('Monthly / Yearly', choices=['Monthly', 'Yearly'], validators=[DataRequired()])
+<<<<<<< HEAD
     subscription_start_date = DateTimeField('Subscription Start', format='%d-%m-%y', validators=[DataRequired()])
     subscription_auto_renewal = DateTimeField('Auto Renewal Date', format='%d-%m-%y', validators=[DataRequired()])
     subscription_cost = DecimalField('Cost', validators=[DataRequired()])
+=======
+    subscription_start_date = DateField('Start Date', format='%Y-%m-%d', validators=[DataRequired()])
+    cost = DecimalField('Cost', validators=[DataRequired()])
+>>>>>>> 624ea9eb1e38172cb6d80d9ed4a689f4e7ae6117
     submit = SubmitField('Subscribed')
-
+    
 class FamilyentertainmentForm(FlaskForm):
     entertainment_title = StringField('Entertainment Title', validators=[DataRequired()])
     entertainment_description = TextAreaField('Describe Adventure', validators=[DataRequired()])
-    entertainment_cost = DecimalField('Cost', validators=[DataRequired()])
+    entertainment_cost = DecimalField('Cost', format='%Y-%m-%d', validators=[DataRequired()])
     submit = SubmitField('Entertained')
 
 class TransportForm(FlaskForm):
@@ -117,7 +122,7 @@ class TransportForm(FlaskForm):
     submit = SubmitField('On the Move')
 
 class TakeawayForm(FlaskForm):
-    takeaway_choice = RadioField('Takeaway', choices=['Chineese', 'Indian', 'Kebab', 'Burgers', 'Pizza', 'Other'], validators=[DataRequired()])    
+    takeaway_choice = RadioField('Takeaway', choices=['Chinese', 'Indian', 'Kebab', 'Burgers', 'Pizza', 'Other'], validators=[DataRequired()])    
     takeaway_other = StringField('Other Takeaway')
     takeaway_cost = DecimalField('Takeaway Cost', validators=[DataRequired()])
     submit = SubmitField('Take Out')
