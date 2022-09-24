@@ -689,7 +689,16 @@ def subscriptions():
                                       subscription_name=subs.subscription_name.data,
                                       subscription_term=subs.subscription_term.data,
                                       subscription_start_date=subs.subscription_start_date.data,
+<<<<<<< HEAD
+<<<<<<< HEAD
+                                      subscription_auto_renewal=subs.subscription_auto_renewal.data,
+                                      cost=subs.subscription_cost.data,
+=======
                                       cost=subs.cost.data,
+>>>>>>> 624ea9eb1e38172cb6d80d9ed4a689f4e7ae6117
+=======
+                                      cost=subs.cost.data,
+>>>>>>> 624ea9eb1e38172cb6d80d9ed4a689f4e7ae6117
                                       username=current_user.username)
   
 

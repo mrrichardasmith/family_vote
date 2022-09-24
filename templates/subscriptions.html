@@ -30,13 +30,21 @@
         <p><a class="noline" href="{{ url_for('accounts') }}">Full Accounts Page</a></p>
         <table>
             <h2 class="mainTextColor">Current Subscriptions</h2>
+            <tr>
+                <th>Name</th>
+                <th>Cost</th>
+                <th>Term</th>
+                <th>Start</th>
+                <th>Auto Renewal</th>
             {% for sub in current_subscriptions %}
             <tr>
-                <th>{{ sub.subscription_name }}</th>
+                <td>{{ sub.subscription_name }}</td>
                 <td>{{ sub.cost }}</td>
-                <td>{{ sub.subscription_start_date }}</td>
                 <td>{{ sub.subscription_term }}</td>
+                <td>{{ sub.subscription_start_date }}</td>
+                <td>{{ subs.subscription_auto_renewal }}</td>
             </tr>
+
             {% endfor %}
         </table>
     </form>
