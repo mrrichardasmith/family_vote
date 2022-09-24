@@ -22,8 +22,8 @@
                 <td>{{ subs.subscription_start_date }}</td>
             </tr>
             <tr>
-                <th>{{ subs.subscription_cost.label }}</th>
-                <td>{{ subs.subscription_cost}}</td>
+                <th>{{ subs.cost.label }}</th>
+                <td>{{ subs.cost}}</td>
             </tr>
         </table>
         <p>{{ subs.submit() }}</p>
@@ -33,7 +33,8 @@
             {% for sub in current_subscriptions %}
             <tr>
                 <th>{{ sub.subscription_name }}</th>
-                <td>{{ sub.subscription_cost }}</td>
+                <td>{{ sub.cost }}</td>
+                <td>{{ sub.subscription_start_date }}</td>
                 <td>{{ sub.subscription_term }}</td>
             </tr>
             {% endfor %}

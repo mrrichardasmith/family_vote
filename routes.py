@@ -7,6 +7,7 @@ from app import app, db
 from datetime import datetime, timedelta 
 from helper import find_zero_balance, month_from_number, check_if_float_onerow, total_floats, sum_combined_totals, sum_query_cost
 
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
@@ -674,13 +675,23 @@ def subscriptions():
     return render_template('subscriptions.html', subs=subs, current_subscriptions=current_subscriptions)
 
   if request.method == 'POST':
+    print("Here is what we get from the date entry")
+    print(subs.subscription_start_date.data)
+    print(type(subs.subscription_start_date.data))
+    formated_date = subs.subscription_start_date.data.strftime('%d-%m-%Y')
+    print(subs.subscription_start_date.data.strftime('%b'))
+    print(type(formated_date))
+    print("Here is what we get from the term entry")
+    print(subs.subscription_term.data)
+    
     new_subscriptions = Subscriptions(month = todayDate.month,
                                       year = todayDate.year,
                                       subscription_name=subs.subscription_name.data,
                                       subscription_term=subs.subscription_term.data,
                                       subscription_start_date=subs.subscription_start_date.data,
-                                      cost=subs.subscription_cost.data,
+                                      cost=subs.cost.data,
                                       username=current_user.username)
+  
 
     db.session.add(new_subscriptions)
     db.session.commit()
