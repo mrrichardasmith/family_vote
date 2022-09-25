@@ -35,7 +35,7 @@
                 <th>Cost</th>
                 <th>Term</th>
                 <th>Start</th>
-                <th>Auto Renewal</th>
+                <th>Auto Renewal Date</th>
             {% for sub in current_subscriptions %}
             <tr>
                 <td>{{ sub.subscription_name }}</td>
@@ -47,6 +47,7 @@
 
             {% endfor %}
         </table>
+        <h4><a class="noline" href="{{ url_for('subscriptionmgmt') }}">Manage Subscriptions</a></h4>
     </form>
 </div>
 

@@ -675,7 +675,6 @@ def subscriptions():
     return render_template('subscriptions.html', subs=subs, current_subscriptions=current_subscriptions)
 
   if request.method == 'POST':
-    #New Comment to change file
     #if the term is monthly add a month to the start date and save it as the auto renewal
     if subs.subscription_term.data == 'Monthly':
       print("We need to add a month to the auto renewal date")
@@ -698,6 +697,20 @@ def subscriptions():
     db.session.commit()
 
     return redirect(url_for('accounts'))
+
+@app.route('/subscriptionmgmt', methods=['GET', 'POST'])
+def subscriptionmgmt():
+  todayDate = datetime.now()
+  todayMonth = int(todayDate.month)
+  todayYear = int(todayDate.year)
+
+  if request.method == 'GET':
+
+    current_subscriptions = Subscriptions.query.filter(Subscriptions.month == todayMonth
+                                                   and Subscriptions.year == todayYear
+                                                   and Subscriptions.username == current_user.username).all()
+
+    return render_template('subscriptionsmgmt.html', current_subscriptions=current_subscriptions)
 
 @app.route('/investments', methods=['GET', 'POST'])
 def investments():

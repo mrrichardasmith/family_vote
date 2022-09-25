@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="page">
+    <form class="form" action="" method="post" novalidate>
+        <table>
+            <h2 class="mainTextColor">Current Subscriptions</h2>
+            <tr>
+                <th>Name</th>
+                <th>Cost</th>
+                <th>Term</th>
+                <th>Start</th>
+                <th>Auto Renewal Date</th>
+            {% for sub in current_subscriptions %}
+            <tr>
+                <td>{{ sub.subscription_name }}</td>
+                <td>{{ sub.cost }}</td>
+                <td>{{ sub.subscription_term }}</td>
+                <td>{{ sub.subscription_start_date.strftime('%d-%m-%Y') }}</td>
+                <td>{{ sub.subscription_auto_renewal.strftime('%d-%m-%Y') }}</td>
+            </tr>
+
+            {% endfor %}
+        </table>
+        <h4><a class="noline" href="{{ url_for('subscriptions') }}">Add Subscriptions</a></h4>
+    </form>
+</div>
+
+{% endblock %}
