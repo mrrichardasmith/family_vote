@@ -675,6 +675,7 @@ def subscriptions():
     return render_template('subscriptions.html', subs=subs, current_subscriptions=current_subscriptions)
 
   if request.method == 'POST':
+    #New Comment to change file
     #if the term is monthly add a month to the start date and save it as the auto renewal
     if subs.subscription_term.data == 'Monthly':
       print("We need to add a month to the auto renewal date")
