@@ -696,7 +696,7 @@ def subscriptions():
     db.session.add(new_subscriptions)
     db.session.commit()
 
-    return redirect(url_for('accounts'))
+    return redirect(url_for('subscriptions'))
 
 @app.route('/subscriptionmgmt', methods=['GET', 'POST'])
 def subscriptionmgmt():
@@ -711,6 +711,15 @@ def subscriptionmgmt():
                                                    and Subscriptions.username == current_user.username).all()
 
     return render_template('subscriptionsmgmt.html', current_subscriptions=current_subscriptions)
+
+@app.route('/subscriptionmgmt/delete/<id>', methods=['GET', 'POST'])
+def subscriptionmgmt_delete(id):
+  if request.method == 'GET':
+    print("We selected delete")
+    delete_subscription = Subscriptions.query.get(id)
+    db.session.delete(delete_subscription)
+    db.session.commit()
+  return redirect(url_for('subscriptionmgmt'))
 
 @app.route('/investments', methods=['GET', 'POST'])
 def investments():
