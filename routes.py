@@ -279,8 +279,7 @@ def accounts():
                                                   and Extragroceries.year == todayDate.year
                                                   and Extragroceries.username == current_user.username).all()
 
-    extra_groceries_total = sum_query_cost(extra_groceries)    
-    
+    extra_groceries_total = sum_query_cost(extra_groceries) 
 
     transport = Transport.query.filter(Transport.month == todayDate.month
                                        and Transport.year == todayDate.year
@@ -289,12 +288,9 @@ def accounts():
     total_transport = sum_query_cost(transport)
     
     
-    subscriptions = Subscriptions.query.filter(Subscriptions.month == todayDate.month
-                                           and Subscriptions.year == todayDate.year
-                                           and Subscriptions.username == current_user.username).all()
+    subscriptions = Subscriptions.query.filter(Subscriptions.username == current_user.username).all()
 
     total_subscriptions = sum_query_cost(subscriptions)
-    
 
     investments = Investments.query.filter(Investments.month == todayDate.month
                                        and Investments.year == todayDate.year
@@ -335,15 +331,13 @@ def accounts():
     #Uses helper function to extract float values from database query
     #Uses helper function on the object of floates to total debits/credits in the provided query object 
       
-    combined_totals = [extra_groceries_total, workfood_total, total_takeaway, total_transport, total_subscriptions, total_investments, total_entertainment] 
-    
+    combined_totals = [extra_groceries_total, workfood_total, total_takeaway, total_transport, total_subscriptions, total_investments, total_insurance, total_entertainment] 
+
     sum_multiline_items = sum_combined_totals(combined_totals)
-    
-      
-    remaining = (credit_total_single_values + sum_multiline_items) - debit_total
+
+    remaining = credit_total_single_values - (sum_multiline_items + debit_total)
     remaining_formatted = '{:.2f}'.format(remaining)
     
-
     return render_template('accounts.html', 
                            user=current_user,
                            current_month_text=current_month_text, 
@@ -886,12 +880,12 @@ def familyentertainment():
                                             year=todayDate.year, 
                                             entertainment_title=FamilyentForm.entertainment_title.data,
                                             entertainmnet_description=FamilyentForm.entertainment_description.data,
-                                            cost=FamilyentForm.entertainment_cost.data,
+                                            cost=FamilyentForm.cost.data,
                                             username = current_user.username)
     db.session.add(new_entertainment)
     db.session.commit()
     return redirect(url_for('accounts'))
-
+ 
 @app.route('/takeaway', methods=['GET', 'POST'])
 @login_required
 def takeaway():

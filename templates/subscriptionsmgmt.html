@@ -12,7 +12,6 @@
                 <th>Term</th>
                 <th>Start</th>
                 <th>Auto Renewal Date</th>
-                <th>ID</th>
             {% for sub in current_subscriptions %}
             <tr>
                 <td>{{ sub.subscription_name }}</td>
@@ -20,7 +19,6 @@
                 <td>{{ sub.subscription_term }}</td>
                 <td>{{ sub.subscription_start_date.strftime('%d-%m-%Y') }}</td>
                 <td>{{ sub.subscription_auto_renewal.strftime('%d-%m-%Y') }}</td>
-                <td>{{ sub.id }}</td>
                 <td><a class="noline" href="{{ url_for('subscriptionmgmt_delete', id=sub.id) }}"><img class="iconPic2" src="{{ url_for('static', filename='pictures/delete.png') }}"></a></td>
             </tr>
 

@@ -106,7 +106,7 @@ class SubscriptionsForm(FlaskForm):
 class FamilyentertainmentForm(FlaskForm):
     entertainment_title = StringField('Entertainment Title', validators=[DataRequired()])
     entertainment_description = TextAreaField('Describe Adventure', validators=[DataRequired()])
-    entertainment_cost = DecimalField('Cost', format='%Y-%m-%d', validators=[DataRequired()])
+    cost = DecimalField('Cost', validators=[DataRequired()])
     submit = SubmitField('Entertained')
 
 class TransportForm(FlaskForm):
