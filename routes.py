@@ -293,18 +293,17 @@ def accounts():
     
     subscriptions = Subscriptions.query.filter(Subscriptions.username == current_user.username).all()
 
-    total_subscriptions = sum_query_cost(subscriptions)
-
-    for sub in subscriptions:
-      if sub.subscription_term == 'Yearly':
-        print(sub.subscription_name)
+    total_subscriptions = 0
 
     for sub in subscriptions:
       if sub.subscription_auto_renewal.month == todayMonth and sub.subscription_term == 'Yearly' and todayMonth == sub.subscription_auto_renewal.month and todayYear == sub.subscription_auto_renewal.year:
-        print(todayDate)
-        print(sub.subscription_auto_renewal)
+        total_subscriptions += sub.cost
         print("Warning A yearly sunscription will auto renew this month delete in Subscription Management to avoid cost this month")
+      elif sub.subscription_term == 'Monthly':
+        print(sub.subscription_name)
+        total_subscriptions += sub.cost
 
+    
     investments = Investments.query.filter(Investments.month == todayDate.month
                                        and Investments.year == todayDate.year
                                        and Investments.username == current_user.username).all()

@@ -21,10 +21,12 @@
                 <td>{{ sub.subscription_auto_renewal.strftime('%d-%m-%Y') }}</td>
                 <td><a class="noline" href="{{ url_for('subscriptionmgmt_delete', id=sub.id) }}"><img class="iconPic2" src="{{ url_for('static', filename='pictures/delete.png') }}"></a></td>
             </tr>
-
             {% endfor %}
         </table>
-        <h4><a class="noline" href="{{ url_for('subscriptions') }}">Add Subscriptions</a></h4>
+        <div class="row">
+            <h4><a class="button noline" href="{{ url_for('subscriptions') }}">Add Subscriptions</a></h4></td>
+            <h4><a class="button noline" href="{{ url_for('accounts') }}">Full Accounts Page</a></h4></td>
+        </div>
     </form>
 </div>
 
