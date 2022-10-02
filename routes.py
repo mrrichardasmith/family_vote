@@ -200,6 +200,9 @@ def accounts():
   account = AccountForm()
   todayDate = datetime.now()
   current_month_text = month_from_number(todayDate.month)
+  todayMonth = todayDate.month
+  todayDay = todayDate.day
+  todayYear = todayDate.year
   
   print(f"{todayDate:%d %B, %Y}")
 
@@ -291,6 +294,16 @@ def accounts():
     subscriptions = Subscriptions.query.filter(Subscriptions.username == current_user.username).all()
 
     total_subscriptions = sum_query_cost(subscriptions)
+
+    for sub in subscriptions:
+      if sub.subscription_term == 'Yearly':
+        print(sub.subscription_name)
+
+    for sub in subscriptions:
+      if sub.subscription_auto_renewal.month == todayMonth and sub.subscription_term == 'Yearly' and todayMonth == sub.subscription_auto_renewal.month and todayYear == sub.subscription_auto_renewal.year:
+        print(todayDate)
+        print(sub.subscription_auto_renewal)
+        print("Warning A yearly sunscription will auto renew this month delete in Subscription Management to avoid cost this month")
 
     investments = Investments.query.filter(Investments.month == todayDate.month
                                        and Investments.year == todayDate.year
@@ -657,6 +670,7 @@ def likesdislikes():
 @app.route('/subscriptions', methods=['GET', 'POST'])
 def subscriptions():
   todayDate = datetime.now()
+  todayDay = int(todayDate.day)
   todayMonth = int(todayDate.month)
   todayYear = int(todayDate.year)
   subs = SubscriptionsForm()
@@ -665,6 +679,16 @@ def subscriptions():
     current_subscriptions = Subscriptions.query.filter(Subscriptions.month == todayMonth
                                                    and Subscriptions.year == todayYear
                                                    and Subscriptions.username == current_user.username).all()
+
+    for sub in current_subscriptions:
+      if sub.subscription_term == 'Yearly':
+        print(sub.subscription_name)
+
+    for sub in current_subscriptions:
+      if sub.subscription_auto_renewal.month == todayMonth and sub.subscription_term == 'Yearly' and todayDay > sub.subscription_auto_renewal.day:
+        print(todayDate)
+        print(sub.subscription_auto_renewal)
+        print("This has billed this month")
 
     return render_template('subscriptions.html', subs=subs, current_subscriptions=current_subscriptions)
 
