@@ -357,15 +357,15 @@ def accounts():
                            active=active,
                            credits=credits,
                            rollover=rollover, 
-                           remaining=remaining, 
-                           workfood_total=workfood_total,
-                           extra_groceries_total=extra_groceries_total,
-                           total_transport=total_transport,
-                           total_subscriptions=total_subscriptions,
-                           total_investments=total_investments,
-                           total_insurance=total_insurance,
-                           total_entertainment=total_entertainment,
-                           total_takeaway=total_takeaway)
+                           remaining=round(remaining, 2), 
+                           workfood_total=round(workfood_total, 2),
+                           extra_groceries_total=round(extra_groceries_total, 2),
+                           total_transport=round(total_transport, 2),
+                           total_subscriptions=round(total_subscriptions, 2),
+                           total_investments=round(total_investments, 2),
+                           total_insurance=round(total_insurance, 2),
+                           total_entertainment=round(total_entertainment, 2),
+                           total_takeaway=round(total_takeaway, 2))
 
   if request.method == 'POST': 
     
