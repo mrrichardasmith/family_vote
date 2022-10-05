@@ -608,7 +608,7 @@ def workfood():
                             sum_social=sum_social,
                             sum_snacks_me=sum_snacks_me,
                             sum_snacks_share=sum_snacks_share,
-                            workfood_total=workfood_total)
+                            workfood_total=round(workfood_total, 2))
 
   if request.method == 'POST':
     sum_food = 0
@@ -871,7 +871,11 @@ def transport():
     transport_methods = ['Train', 'Bus', 'Uber', 'Taxi', 'Plane']
     
     
-    return render_template('transport.html', transp=transp, current_month=current_month, transport_methods=transport_methods, method_totals=method_totals)
+    return render_template('transport.html', 
+                            transp=transp, 
+                            current_month=current_month, 
+                            transport_methods=transport_methods, 
+                            method_totals=method_totals)
 
   if request.method == 'POST' and transp.validate():
 
