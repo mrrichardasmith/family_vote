@@ -1,5 +1,28 @@
 @import url('https://fonts.googleapis.com/css2?family=Bitter:wght@200&display=swap');
 
+.navOption  {
+  margin: 1rem;
+}
+
+.navOption a {
+  text-decoration: none;
+  color: #4d1a16;
+  font-size: 1.25rem;
+}
+
+.pill {
+  border-radius: 20px;
+  border: 2px solid#c0362c;
+  background: #ffa700;
+  line-height: 32px;
+  text-align: center;
+  padding: 5px 10px 5px 10px;
+  margin-left: 15px;
+}
+
+.pill a {
+  color: white;
+}
 
 .page {
   max-width: 600px;
@@ -184,9 +207,6 @@ th, td {
   flex-wrap: wrap;
 }
 
-.navOption  {
-  margin: 1rem;
-}
 
 #landingPic {
     height: 10rem;
@@ -206,12 +226,6 @@ th, td {
 
 .mainTextColor {
   color: #c0362c
-}
-
-.navOption a {
-  text-decoration: none;
-  color: #4d1a16;
-  font-size: 1.25rem;
 }
 
 .green  {
@@ -245,3 +259,5 @@ input.larger[type="checkbox"]:checked  {
   display: flex;
   justify-content: space-between;
   }
+
+
