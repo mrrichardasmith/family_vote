@@ -28,7 +28,12 @@ def login():
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
-    if current_user.is_authenticated:
+    admin = Admin.query.first()
+    print(admin.registration)
+    if admin.registration == False:
+      return render_template('registration_closed.html')  
+    
+    elif current_user.is_authenticated:
       return redirect(url_for('index'))
     form = RegistrationForm()
     if form.validate_on_submit():
@@ -55,21 +60,21 @@ def admin(username):
   admin_form = AdminForm()
   
   if request.method == 'GET':
-    admin = User.query.filter(User.username == username).first()
+    user_object = User.query.filter(User.username == username).first()
+    print("printing user called from database using username")
+    print(user_object)
+
     registration = Admin.query.first()
     if registration != None:
       print(registration.registration)
-      print(admin.username, admin.admin)
-    
-    
-    if admin.admin == 'admin':
       
-      return render_template('admin.html', admin=admin, admin_form=admin_form, registration=registration)
+      
+      return render_template('admin.html', user_object=user_object, admin_form=admin_form, registration=registration)
 
     else:
       print('Supressed Registration Page')
       confirm_admin = False
-      return render_template('admin.html', confirm_admin=confirm_admin, admin=admin)
+      return render_template('admin.html', confirm_admin=confirm_admin, user_object=user_object)
 
   if request.method == 'POST' and admin_form.validate():
     
