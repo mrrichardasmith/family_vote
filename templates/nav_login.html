@@ -1,9 +1,5 @@
 <div class="nav">
-    <div class="innerNav">
-        
-            <div>  
-                <a href="{{ url_for('index') }}">Home</a>
-            </div>       
+    <div class="innerNav">      
         
             {% if current_user.is_anonymous %}
             <div>
