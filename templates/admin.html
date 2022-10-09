@@ -6,7 +6,7 @@
     <div class="form">
         <h1 class="mainTextColor">Family Site Configs</h1>
         {% if user_object.admin == 'admin' %}
-        <h2>{{ user_object.admin }}</h2>
+        <h2>{{ user_object.username }}</h2>
         <form class="login-form" action="" method="post" novalidate>
           {{ admin_form.hidden_tag() }}
         <p>{{ admin_form.registration.label }}</p>

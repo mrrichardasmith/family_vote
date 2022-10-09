@@ -16,6 +16,7 @@ class User(UserMixin, db.Model):
     Likesdislikes = db.relationship('Likesdislikes', backref='user.id', lazy='dynamic')
     thinking = db.relationship('Thinking', backref='', lazy='dynamic')
     admin = db.Column(db.String(5))
+    housekeeping = db.Column(db.String(5))
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
     def check_password(self, password):

@@ -29,10 +29,10 @@ def login():
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     admin = Admin.query.first()
-    print(admin.registration)
-    if admin.registration == False:
-      return render_template('registration_closed.html')  
     
+    if admin == None or admin.registration == False:
+      return render_template('registration_closed.html') 
+        
     elif current_user.is_authenticated:
       return redirect(url_for('index'))
     form = RegistrationForm()
@@ -63,6 +63,8 @@ def admin(username):
     user_object = User.query.filter(User.username == username).first()
     print("printing user called from database using username")
     print(user_object)
+    print(user_object.admin)
+    print(user_object.housekeeping)
 
     registration = Admin.query.first()
     if registration != None:
