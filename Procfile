@@ -1,1 +1,1 @@
-web: gunicorn app:FAMILY_VOTE
+web: gunicorn app:app
