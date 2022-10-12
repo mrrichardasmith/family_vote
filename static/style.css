@@ -31,8 +31,8 @@
 .form {
   position: relative;
   z-index: 1;
-  width: 80%;
-  margin: 0 auto 100px;
+  width: 75%;
+  margin: auto;
   padding: 45px;
   text-align: center;
   box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
@@ -146,6 +146,10 @@
   margin: auto;
 }
 
+.text-left  {
+  text-align: left;
+}
+
 body {
   font-family: Bitter;
 }
@@ -197,6 +201,16 @@ th, td {
   text-decoration: none;
 }
 
+.navOption  {
+  margin: 1rem;
+}
+
+.navOption a {
+  text-decoration: none;
+  color: #4d1a16;
+  font-size: 1.25rem;
+}
+
 .innerNav {
   width: 80%;
   margin: auto;
@@ -239,7 +253,7 @@ th, td {
 }
 
 .halfwidthcentered  {
-  max-width: 50%;
+  max-width: 75%;
   margin: auto;
 }
 

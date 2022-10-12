@@ -810,7 +810,7 @@ def extragroceries():
 
     list = []
     for l in extra_groceries:
-      space = l.grocerydescription.split(' ')
+      space = l.grocerydescription.split(',')
       for s in space:
         list.append(s)
       for a in list:

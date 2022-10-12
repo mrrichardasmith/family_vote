@@ -6,20 +6,13 @@
     <form class="form" action="" method="post" novalidate>
         {{ FamilyentForm.hidden_tag() }}
         <h1 class="mainTextColor">Family Entertainment</h1>
-        <table>
-            <tr>
-                <th>{{ FamilyentForm.entertainment_title.label }}</th>
-                <td>{{ FamilyentForm.entertainment_title }}</td>
-            </tr>
-            <tr>
-                <th>{{ FamilyentForm.entertainment_description.label }}</th>
-                <td><p><textarea id="1" name="entertainment_description" rows="8" cols="40"></textarea></p></td>
-            </tr>
-            <tr>
-                <th>{{ FamilyentForm.cost.label }}</th>
-                <td>{{ FamilyentForm.cost }}</td>
-            </tr>
-        </table>
+        <p>{{ FamilyentForm.entertainment_title.label }}</p>               
+        <p>{{ FamilyentForm.entertainment_title }}</p>
+            
+        <p>{{ FamilyentForm.entertainment_description.label }}</p>
+        <p><textarea id="1" name="entertainment_description" rows="8" cols="40"></textarea></p>
+        <p>{{ FamilyentForm.cost.label }}</p>
+        <p>{{ FamilyentForm.cost }}</p>
         <p>{{ FamilyentForm.submit() }}</p>
         <p><a class="noline" href="{{ url_for('accounts') }}">Full Accounts Page</a></p>
     </form>
