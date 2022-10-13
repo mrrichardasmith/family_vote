@@ -32,7 +32,7 @@ class Likesdislikes(db.Model):
     country = db.Column(db.String(140))
     reason = db.Column(db.String(140))
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
-    username = db.Column(db.Integer, db.ForeignKey('user.username'))
+    username = db.Column(db.String(21), db.ForeignKey('user.username'))
 
     def __repr__(self):
         return '<Likesdislikes {}>'.format(self.reason)
