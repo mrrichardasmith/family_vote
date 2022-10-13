@@ -30,7 +30,7 @@ def login():
 def register():
     admin = Admin.query.first()
     
-    if admin == None or admin.registration == False:
+    if admin != None and admin.registration == False:
       return render_template('registration_closed.html') 
         
     elif current_user.is_authenticated:
