@@ -19,7 +19,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICIATIONS'] = False
 
 # Configure the database URI and name the database file
 #app.config['SQLALCHEMY_DATABASE_URI'] = environ.get('DATABASE_URL') or 'sqlite:///my_database.db'
-app.config['SQLALCHEMY_DATABASE_URI'] = uri.get('DATABASE_URL')
+app.config['SQLALCHEMY_DATABASE_URI'] = uri
 
 # This is the secret key used to protect forms
 app.secret_key = 'secretkeyhardcoded'
