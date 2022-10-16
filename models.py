@@ -28,7 +28,7 @@ class User(UserMixin, db.Model):
 
 class Likesdislikes(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    likes_dislikes = db.Column(db.String(7))
+    likes_dislikes = db.Column(db.String(10))
     country = db.Column(db.String(140))
     reason = db.Column(db.String(140))
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
@@ -59,7 +59,7 @@ class Day_school(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     date = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     yourday = db.Column(db.String(10))
-    why = db.Column(db.String(20))
+    why = db.Column(db.String(120))
     username = db.Column(db.String, db.ForeignKey('user.username'))
 
     def __repr__(self):
