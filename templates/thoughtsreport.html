@@ -6,29 +6,18 @@
 
 <div class="page">
 
-	<div class="page_container">
 		<h1 class="mainTextColor">Family Members Thoughts</h1>
-		<table>
+		
 			{% for thought in thoughts %}
-			<tr>
-				<th>Family Member</th>
-				<td>{{ thought.username }}</td>
-			<tr>
-				<th>Date/Time</th>
-				<td>{{ thought.timestamp }}</td>
-			</tr>
-			<tr>
-				<th>Thought</th>
-				<td>{{ thought.thinking_about }}</td>
-			</tr>
-			<tr>
-				<th>More Words</th>
-				<td>{{ thought.thoughts }}</td>
-			</tr>
-				
+		<div class="container">
+			<div class="card">
+				<p>{{ thought.username.capitalize() }}<p>
+				<p>{{ thought.timestamp.strftime('%a %d-%m-%Y') }}</p>
+				<p>{{ thought.thinking_about }}</p>
+				<p>{{ thought.thoughts }}</p>
+			</div>
+		</div>
 				{% endfor %}
-		</table>
-	</div>
 		
 		{% include "nav_update.html" %}
 </div>

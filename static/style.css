@@ -61,12 +61,20 @@ table {
 
 
 .page {
-  min-width: 100%;
+  max-width: 600px;
+  margin: auto;
 }
 
-.page_container {
-  border-color: green;
+.card {
+  border: 2px solid #4d1a16;
+  border-radius: 7px;
+  box-shadow: -4px -4px 20px rgba(0, 0, 0, 0.505);
   padding: 2vw;
+  max-width: 60%;
+  position: relative;
+  z-index: 1;
+  margin: 20 auto;
+  
 }
 
 .report {
@@ -75,6 +83,7 @@ table {
     
 }
 .form {
+  max-width: 600px;
   position: relative;
   z-index: 1;
   width: 75%;
@@ -198,6 +207,7 @@ table {
 
 body {
   font-family: Bitter;
+  font-weight: 500;
 }
 
 table {
