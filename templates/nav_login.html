@@ -1,16 +1,25 @@
 <div class="nav">
     <div class="innerNav">      
         
-            {% if current_user.is_anonymous %}
-            <div>
-                <a href="{{ url_for('login') }}">Log in</a>
-                <a class="pill" href="{{ url_for('register') }}">Join the Family</a>
-            </div>
-            {% else %}
-            
+        {% if current_user.is_anonymous %}
         <div>
-            <a href="{{ url_for('logout') }}">Logout</a>                
+            <a href="{{ url_for('login') }}">Log in</a>
+            <a class="pill" href="{{ url_for('register') }}">Join the Family</a>
         </div>
+        {% else %}
+        
+    
+        <div class="row_between">
+            <div class="navOption">
+                <a href="{{ url_for('index') }}"><img class="navPic" src="{{ url_for('static', filename='pictures/home.png') }}"></a>  
+                <p><a href="{{ url_for('index') }}">Home</a></p>
+            </div>
+            <div class="navOption">
+                <img class="navPic" src="{{ url_for('static', filename='pictures/exit.png') }}">
+                <p><a href="{{ url_for('logout') }}">Logout</a></p>                
+            </div>
+        </div>                
+        
         {% endif %}
     </div>
 </div>
