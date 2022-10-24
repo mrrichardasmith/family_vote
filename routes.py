@@ -656,8 +656,7 @@ def likesdislikes():
   if request.method == 'GET':
     user = current_user
     user = User.query.filter_by(username=user.username).first()
-    likesdislikes = Likesdislikes.query.filter_by(username=user.username)
-    
+    likesdislikes = Likesdislikes.query.filter_by(username=user.username)   
     
     return render_template('likesdislikes.html', likesdislikes=likesdislikes, form=form)
   
@@ -964,6 +963,7 @@ def likesdislikesreport():
   if request.method == 'GET':
     new_date = datetime.now() - timedelta(days = 30)
     likesdislikes = Likesdislikes.query.filter(Likesdislikes.timestamp > new_date).all()
+    
     return render_template('likesdislikesreport.html', likesdislikes=likesdislikes)
 
 @app.route('/people_report')

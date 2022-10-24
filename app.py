@@ -1,12 +1,13 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
-#from os import environ
-import os
+from os import environ
+#import os
 
-uri = os.getenv("DATABASE_URL")  # or other relevant config var
-if uri.startswith("postgres://"):
-    uri = uri.replace("postgres://", "postgresql://", 1)
+#git push heroku main
+#uri = os.getenv("DATABASE_URL")  # or other relevant config var
+#if uri.startswith("postgres://"):
+#    uri = uri.replace("postgres://", "postgresql://", 1)
 
 #Boiler Plate - Create an Instance of the Flask object called app 
 app = Flask(__name__)
@@ -18,8 +19,8 @@ db = SQLAlchemy(app)
 app.config['SQLALCHEMY_TRACK_MODIFICIATIONS'] = False
 
 # Configure the database URI and name the database file
-#app.config['SQLALCHEMY_DATABASE_URI'] = environ.get('DATABASE_URL') or 'sqlite:///my_database.db'
-app.config['SQLALCHEMY_DATABASE_URI'] = uri
+app.config['SQLALCHEMY_DATABASE_URI'] = environ.get('DATABASE_URL') or 'sqlite:///my_database.db'
+#app.config['SQLALCHEMY_DATABASE_URI'] = uri
 
 # This is the secret key used to protect forms
 app.secret_key = 'secretkeyhardcoded'

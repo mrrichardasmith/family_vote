@@ -2,9 +2,11 @@
     <div class="innerNav">      
         
         {% if current_user.is_anonymous %}
-        <div>
-            <a href="{{ url_for('login') }}">Log in</a>
-            <a class="pill" href="{{ url_for('register') }}">Join the Family</a>
+        <div class="row_between">
+            <div class="navOption">
+                <a href="{{ url_for('login') }}">Log in</a>
+                <a class="pill" href="{{ url_for('register') }}">Join the Family</a>
+            </div>
         </div>
         {% else %}
         

@@ -69,12 +69,24 @@ table {
   border: 2px solid #4d1a16;
   border-radius: 7px;
   box-shadow: -4px -4px 20px rgba(0, 0, 0, 0.505);
-  padding: 2vw;
-  max-width: 80%;
+  padding: 1vw;
   position: relative;
   z-index: 1;
   margin: 20 auto;
   
+}
+
+.red {
+  background-color: #FF0229;
+}
+
+.green {
+  background-color: #A3E30E;
+}
+
+.white_text > p {
+  color: white;
+  font-weight: 600;
 }
 
 .report {
@@ -279,6 +291,7 @@ th, td {
 
 .navPic {
   height: 4rem;
+  margin: 1rem;
 }
 
 .iconPic2 {
@@ -319,6 +332,10 @@ input.larger {
 
 input.larger[type="checkbox"]:checked  {
   background-color: green;
+}
+
+.row  {
+  display: flex;
 }
 
 .row_between {
