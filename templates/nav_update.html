@@ -2,9 +2,8 @@
     <div class="innerNav">
         
             {% if current_user.is_anonymous %}
-            <div class="navOption">
-                <a href="{{ url_for('login') }}"><img class="navPic" src="{{ url_for('static', filename='pictures/lock.png') }}"></a>
-                <p><a href="{{ url_for('login') }}">Login</a></p>
+            <div>
+                <img class="max-width-container" src="{{ url_for('static', filename='pictures/silofam.png') }}">
             </div>
             {% else %}
             <!--<a href="{{ url_for('user', username=current_user.username) }}">Likes Dislikes</a>-->

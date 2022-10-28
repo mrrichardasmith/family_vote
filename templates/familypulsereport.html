@@ -2,33 +2,33 @@
 
 {% block content %}
 
-<center>
-    <div class="report">
-        <div>
-            <h1 class="mainTextColor">Family Daily Pulse</h1>
-            <table>
-                <tr>
-                    <th>Family Member</th>
-                    <th>Date</th>
-                    <th>Day Went</th>
-                    <th>Why</th>
-                    <th>ID</th>
-                </tr>
+<div class="page">
+    <h1 class="mainTextColor">How was your day?</h1>
+    <div class="text-center"><img id="landingPic" src="{{ url_for('static', filename='pictures/howday2.png') }}"></div>              
+        {% for day in days %}
+        <div class="container">
+            {% if day.yourday == 'Great' %}
+            <div class="card green white_text">
+            {% elif day.yourday == 'OK' %}
+            <div class="card yellow grey_text">
+            {% elif day.yourday == 'Blah' %}
+            <div class="card grey white_text">
+            {% elif day.yourday == 'Ugh!' %}
+            <div class="card orange white_text"> 
+            {% else %}
+            <div class="card brown white_text">
+                {% endif %}
+                <p><strong>{{ day.username.capitalize() }}</strong></p>
+                <p>{{ day.yourday }}</p>
+                <p>{{ day.why }}</p>
                 
-                {% for day in days %}
-                <tr>
-                    <td>{{ day.username }}</td>
-                    <td>{{ day.date }}</td>
-                    <td style="color: palevioletred"><strong>{{ day.yourday }}</strong></td>
-                    <td>{{ day.why }} </td>
-                    <td>{{ day.id }}</td>
-                    <td><button><img id="iconPic" src="{{ url_for('static', filename='pictures/trash.png') }}"></button></td>
-                </tr>
-                 {% endfor %}
-            </table>
+            </div>
         </div>
-   </div>
-</center>
+                {% endfor %}
+            
+    </div>
+    {% include "nav_update.html" %}
+  </div>
 
 
 {% endblock %}

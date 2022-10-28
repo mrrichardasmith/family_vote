@@ -7,12 +7,12 @@
         {% if title %}
         <title>{{ title }} - Family Focus</title>
         {% else %}
-        <title>Whats Happening</title>
+        <title>Family Vote</title>
         {% endif %}
     </head>
     <body>
         {% include 'nav_login.html' %}
-        <center><h2 class="headingColor">Family Focus</h2></center>
+        <center><h2 class="headingColor margin-top">Family Focus</h2></center>
         
             <hr>
                 {% with messages = get_flashed_messages() %}
