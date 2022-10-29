@@ -955,7 +955,21 @@ def pulsereport():
   if request.method == 'GET':
     new_date = datetime.now() - timedelta(days = 30)
     days = Day_school.query.filter(Day_school.date > new_date).all()
-    return render_template('familypulsereport.html', days=days, testdelete=testdelete)
+    
+    yourday_total = {
+      "Great":  0,
+      "OK": 0,
+      "Blah": 0,
+      "Ugh": 0,
+      "Bad": 0  
+    }
+    
+    for d in days:
+      for key in yourday_total:
+        if d.yourday == key:
+          yourday_total[key] += 1
+      
+    return render_template('familypulsereport.html', days=days, yourday_total=yourday_total)
 
 @app.route('/likesdislikes_report')
 @login_required
