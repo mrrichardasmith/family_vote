@@ -15,9 +15,9 @@
             <td>{{ account.salary_deposit }}</td>
         </tr>
         {% else %}
-        <tr class="green">
+        <tr class="green_text">
             <th>{{ account.salary_deposit.label }}</th>
-            <td>{{ credits.salary_deposit }}</td>
+            <td><strong>{{ credits.salary_deposit }}</strong></td>
         </tr>
         {% endif %}
         {% if active == None %}
@@ -42,6 +42,167 @@
             <td>{{ credits.windfall }}</td>
         </tr>
         {% endif %}
+
+        {% if active == None or active.housekeeping == 0.0 %}
+        <tr>
+            <th>{{ account.housekeeping.label }}</th>
+            <td>{{ account.housekeeping }}</td>
+        </tr>
+        {% else %}
+        <tr>
+            <th>Housekeeping</th>
+            <td>{{ active.housekeeping }}</td>
+        </tr>
+        {% endif %}
+
+        {% if workfood_total == 0 %}
+        <tr>
+            <th>Work Food</th>
+            <td>0</td>
+            <td><a class="noline" href="{{ url_for('workfood') }}"><img class="iconPic2" src="{{ url_for('static', filename='pictures/plus.png') }}"></a></td>
+        </tr>
+        {% else %}
+        <tr>
+            <th>Work Food</th>
+            <td>{{ workfood_total }}</td>
+            <td><a class="noline" href="{{ url_for('workfood') }}"><img class="iconPic2" src="{{ url_for('static', filename='pictures/plus.png') }}"></a></td>
+        </tr>
+        {% endif %}
+
+        {% if extra_groceries == 0 %}
+        <tr>
+            <th>Extra Groceries</th>
+            <td>0</td>
+            <td><a class="noline" href="{{ url_for('extragroceries') }}"><img class="iconPic2" src="{{ url_for('static', filename='pictures/plus.png') }}"></a></td>
+        </tr>
+        {% else %}
+        <tr>
+            <th>Extra Groceries</th>
+            <td>{{ extra_groceries_total }}</td>
+            <td><a class="noline" href="{{ url_for('extragroceries') }}"><img class="iconPic2" src="{{ url_for('static', filename='pictures/plus.png') }}"></a></td>
+        </tr>
+        {% endif %}
+
+        {% if active == None or active.shopping == 0.0 %}
+        <tr>
+            <th>{{ account.shopping.label }}</th>
+            <td>{{ account.shopping }}</td>
+        </tr>
+        {% else %}
+        <tr>
+            <th>More Stuff</th>
+            <td>{{ active.shopping }}</td>
+        </tr>
+        {% endif %}
+
+        {% if total_subscriptions == 0 %}
+        <tr>
+            <th>Subscriptions</th>
+            <td>0</td>
+            <td><a class="noline" href="{{ url_for('subscriptions') }}"><img class="iconPic2" src="{{ url_for('static', filename='pictures/plus.png') }}"></a></td>
+        </tr>
+        {% else %}
+        <tr>
+            <th>Subscriptions</th>
+            <td>{{ total_subscriptions }}</td>
+            <td><a class="noline" href="{{ url_for('subscriptions') }}"><img class="iconPic2" src="{{ url_for('static', filename='pictures/plus.png') }}"></a></td>
+        </tr>
+        {% endif %}
+
+        {% if total_investments == 0 %}
+        <tr>
+            <th>Investments</th>
+            <td>{{ account.investments }}</td>
+            <td><a class="noline" href="{{ url_for('investments') }}"><img class="iconPic2" src="{{ url_for('static', filename='pictures/plus.png') }}"></a></td>
+        </tr>
+        {% else %}
+        <tr>
+            <th>Investments</th>
+            <td>{{ total_investments }}</td>
+            <td><a class="noline" href="{{ url_for('investments') }}"><img class="iconPic2" src="{{ url_for('static', filename='pictures/plus.png') }}"></a></td>
+        </tr>
+        {% endif %}
+
+        {% if total_entertainment == 0 %}
+        <tr>
+            <th>Family Entertainment</th>
+            <td>0</td>
+            <td><a class="noline" href="{{ url_for('familyentertainment') }}"><img class="iconPic2" src="{{ url_for('static', filename='pictures/plus.png') }}"></a></td>
+        </tr>
+        {% else %}
+        <tr>
+            <th>Family Entertainment</th>
+            <td>{{ total_entertainment }}</td>
+            <td><a class="noline" href="{{ url_for('familyentertainment') }}"><img class="iconPic2" src="{{ url_for('static', filename='pictures/plus.png') }}"></a></td>
+        </tr>
+        {% endif %}
+
+        {% if total_takeaway == 0 %}
+        <tr>
+            <th>Takeaway</th>
+            <td>0</td>
+            <td><a class="noline" href="{{ url_for('takeaway') }}"><img class="iconPic2" src="{{ url_for('static', filename='pictures/plus.png') }}"></a></td>
+        </tr>
+        {% else %}
+        <tr>
+            <th>Takeaway</th>
+            <td>{{ total_takeaway }}</td>
+            <td><a class="noline" href="{{ url_for('takeaway') }}"><img class="iconPic2" src="{{ url_for('static', filename='pictures/plus.png') }}"></a></td>  
+        </tr>
+        {% endif %}
+
+        {% if total_transport == 0 %}
+        <tr>
+            <th>Transport</th>
+            <td>0</td>
+            <td><a class="noline" href="{{ url_for('transport') }}"><img class="iconPic2" src="{{ url_for('static', filename='pictures/plus.png') }}"></a></td>
+        </tr>
+        {% else %}
+        <tr>
+            <th>Transport</th>
+            <td>{{ total_transport }}</td>
+            <td><a class="noline" href="{{ url_for('transport') }}"><img class="iconPic2" src="{{ url_for('static', filename='pictures/plus.png') }}"></a></td>
+        </tr>
+        {% endif %}
+
+        {% if total_insurance == 0 %}
+        <tr>
+            <th>Insurance</th>
+            <td>{{ account.insurance }}</td>
+            <td><a class="noline" href="{{ url_for('insurance') }}"><img class="iconPic2" src="{{ url_for('static', filename='pictures/plus.png') }}"></a></td>
+        </tr>
+        {% else %}
+        <tr>
+            <th>Insurance</th>
+            <td>{{ total_insurance }}</td>
+            <td><a class="noline" href="{{ url_for('insurance') }}"><img class="iconPic2" src="{{ url_for('static', filename='pictures/plus.png') }}"></a></td>
+        </tr>
+        {% endif %}
+
+        {% if active == None or active.fitness == 0.0 %}
+        <tr>
+            <th>{{ account.fitness.label }}</th>
+            <td>{{ account.fitness }}</td>
+        </tr>
+        {% else %}
+        <tr>
+            <th>Fitness</th>
+            <td>{{ active.fitness }}</td>
+        </tr>
+        {% endif %}
+
+        {% if active == None or active.bakery == 0.0 %}
+        <tr>
+            <th>{{ account.bakery.label }}</th>
+            <td>{{ account.bakery }}</td>
+        </tr>
+        {% else %}
+        <tr>
+            <th>Bakery</th>
+            <td>{{ active.bakery }}</td>
+        </tr>
+        {% endif %}
+
         {% if active.rent == 0.0 %}
         <tr>
             <th>{{ account.rent.label }}</th>
@@ -61,126 +222,7 @@
             <td><input class="larger" type="checkbox" id="" name="rent_lock" value=False></td>
         </tr>
         {% endif %}
-        {% if active == None or active.housekeeping == 0.0 %}
-        <tr>
-            <th>{{ account.housekeeping.label }}</th>
-            <td>{{ account.housekeeping }}</td>
-        </tr>
-        {% else %}
-        <tr>
-            <th>Housekeeping</th>
-            <td>{{ active.housekeeping }}</td>
-        </tr>
-        {% endif %}
-        {% if extra_groceries == 0 %}
-        <tr>
-            <th>Extra Groceries</th>
-            <td>0</td>
-            <td><a class="noline" href="{{ url_for('extragroceries') }}"><img class="iconPic2" src="{{ url_for('static', filename='pictures/plus.png') }}"></a></td>
-        </tr>
-        {% else %}
-        <tr>
-            <th>Extra Groceries</th>
-            <td>{{ extra_groceries_total }}</td>
-            <td><a class="noline" href="{{ url_for('extragroceries') }}"><img class="iconPic2" src="{{ url_for('static', filename='pictures/plus.png') }}"></a></td>
-        </tr>
-        {% endif %}
-        {% if active == None or active.water == 0.0 %}
-        <tr>
-            <th>{{ account.water.label }}</th>
-            <td>{{ account.water }}</td>
-            <td><input class="larger" type="checkbox" id="" name="water_lock" value=False></td>
-        </tr>
-        {% elif rollover.water_lock == True %}
-        <tr>
-            <th>{{ account.water.label }}</th>
-            <td>{{ rollover.water_fixed }}</td>
-            <td><input class="larger" type="checkbox" id="" name="water_lock" value=True checked></td>
-        </tr>
-        {% else %}
-        <tr>
-            <th>{{ account.water.label }}</th>
-            <td>{{ active.water }}</td>
-            <td><input class="larger" type="checkbox" id="" name="water_lock" value=False></td>
-        </tr>
-        {% endif %}
-        {% if active == None or active.electric == 0.0 %}
-        <tr>
-            <th>Electric / Gas</th>
-            <td>{{ account.electric }}</td>
-            <td><input class="larger" type="checkbox" id="" name="electric_lock" value=False></td>
-        </tr>
-        {% elif rollover.electric_lock == True %}
-        <tr>
-            <th>Electric / Gas</th>
-            <td>{{ active.electric }}</td>
-            <td><input class="larger" type="checkbox" id="" name="electric_lock" value=True checked></td>
-        </tr>
-        {% else %}
-        <tr>
-            <th>Electric / Gas</th>
-            <td>{{ active.electric }}</td>
-            <td><input class="larger" type="checkbox" id="" name="electric_lock" value=False></td>
-        </tr>
-        {% endif %}
-        {% if active == None or active.internet == 0.0 %}
-        <tr>
-            <th>Internet</th>
-            <td>{{ account.internet }}</td>
-            <td><input class="larger" type="checkbox" id={{ active.id }} name="internet_lock" value=False></td>
-        </tr>
-        {% elif rollover.internet_lock == True %}
-        <tr>
-            <th>Internet</th>
-            <td>{{ rollover.internet_fixed }}</td>
-            <td><input class="larger" type="checkbox" id={{ active.id }} name="internet_lock" value=True checked></td>
-        </tr>
-        {% else %}
-        <tr>
-            <th>Internet</th>
-            <td>{{ active.internet }}</td>
-            <td><input class="larger" type="checkbox" id={{ active.id }} name="internet_lock" value=False></td>
-        </tr>
-        {% endif %}
-        {% if total_subscriptions == 0 %}
-        <tr>
-            <th>Subscriptions</th>
-            <td>0</td>
-            <td><a class="noline" href="{{ url_for('subscriptions') }}"><img class="iconPic2" src="{{ url_for('static', filename='pictures/plus.png') }}"></a></td>
-        </tr>
-        {% else %}
-        <tr>
-            <th>Subscriptions</th>
-            <td>{{ total_subscriptions }}</td>
-            <td><a class="noline" href="{{ url_for('subscriptions') }}"><img class="iconPic2" src="{{ url_for('static', filename='pictures/plus.png') }}"></a></td>
-        </tr>
-        {% endif %}
-        {% if total_investments == 0 %}
-        <tr>
-            <th>Investments</th>
-            <td>{{ account.investments }}</td>
-            <td><a class="noline" href="{{ url_for('investments') }}"><img class="iconPic2" src="{{ url_for('static', filename='pictures/plus.png') }}"></a></td>
-        </tr>
-        {% else %}
-        <tr>
-            <th>Investments</th>
-            <td>{{ total_investments }}</td>
-            <td><a class="noline" href="{{ url_for('investments') }}"><img class="iconPic2" src="{{ url_for('static', filename='pictures/plus.png') }}"></a></td>
-        </tr>
-        {% endif %}
-        {% if total_insurance == 0 %}
-        <tr>
-            <th>Insurance</th>
-            <td>{{ account.insurance }}</td>
-            <td><a class="noline" href="{{ url_for('insurance') }}"><img class="iconPic2" src="{{ url_for('static', filename='pictures/plus.png') }}"></a></td>
-        </tr>
-        {% else %}
-        <tr>
-            <th>Insurance</th>
-            <td>{{ total_insurance }}</td>
-            <td><a class="noline" href="{{ url_for('insurance') }}"><img class="iconPic2" src="{{ url_for('static', filename='pictures/plus.png') }}"></a></td>
-        </tr>
-        {% endif %}
+
         {% if active.counciltax == 0.0 %}
         <tr>
             <th>{{ account.counciltax.label }}</th>
@@ -200,98 +242,73 @@
             <td><input class="larger" type="checkbox" id="" name="counciltax_lock" value=False></td>
         </tr>
         {% endif %}
-        {% if total_entertainment == 0 %}
+
+        {% if active == None or active.electric == 0.0 %}
         <tr>
-            <th>Family Entertainment</th>
-            <td>0</td>
-            <td><a class="noline" href="{{ url_for('familyentertainment') }}"><img class="iconPic2" src="{{ url_for('static', filename='pictures/plus.png') }}"></a></td>
+            <th>Electric / Gas</th>
+            <td>{{ account.electric }}</td>
+            <td><input class="larger" type="checkbox" id="" name="electric_lock" value=False></td>
+        </tr>
+        {% elif rollover.electric_lock == True %}
+        <tr>
+            <th>Electric / Gas</th>
+            <td>{{ active.electric }}</td>
+            <td><input class="larger" type="checkbox" id="" name="electric_lock" value=True checked></td>
         </tr>
         {% else %}
         <tr>
-            <th>Family Entertainment</th>
-            <td>{{ total_entertainment }}</td>
-            <td><a class="noline" href="{{ url_for('familyentertainment') }}"><img class="iconPic2" src="{{ url_for('static', filename='pictures/plus.png') }}"></a></td>
+            <th>Electric / Gas</th>
+            <td>{{ active.electric }}</td>
+            <td><input class="larger" type="checkbox" id="" name="electric_lock" value=False></td>
         </tr>
         {% endif %}
-        {% if total_takeaway == 0 %}
+
+        {% if active == None or active.internet == 0.0 %}
         <tr>
-            <th>Takeaway</th>
-            <td>0</td>
-            <td><a class="noline" href="{{ url_for('takeaway') }}"><img class="iconPic2" src="{{ url_for('static', filename='pictures/plus.png') }}"></a></td>
+            <th>Internet</th>
+            <td>{{ account.internet }}</td>
+            <td><input class="larger" type="checkbox" id={{ active.id }} name="internet_lock" value=False></td>
+        </tr>
+        {% elif rollover.internet_lock == True %}
+        <tr>
+            <th>Internet</th>
+            <td>{{ rollover.internet_fixed }}</td>
+            <td><input class="larger" type="checkbox" id={{ active.id }} name="internet_lock" value=True checked></td>
         </tr>
         {% else %}
         <tr>
-            <th>Takeaway</th>
-            <td>{{ total_takeaway }}</td>
-            <td><a class="noline" href="{{ url_for('takeaway') }}"><img class="iconPic2" src="{{ url_for('static', filename='pictures/plus.png') }}"></a></td>  
+            <th>Internet</th>
+            <td>{{ active.internet }}</td>
+            <td><input class="larger" type="checkbox" id={{ active.id }} name="internet_lock" value=False></td>
         </tr>
         {% endif %}
-        {% if total_transport == 0 %}
+        
+        {% if active == None or active.water == 0.0 %}
         <tr>
-            <th>Transport</th>
-            <td>0</td>
-            <td><a class="noline" href="{{ url_for('transport') }}"><img class="iconPic2" src="{{ url_for('static', filename='pictures/plus.png') }}"></a></td>
+            <th>{{ account.water.label }}</th>
+            <td>{{ account.water }}</td>
+            <td><input class="larger" type="checkbox" id="" name="water_lock" value=False></td>
+        </tr>
+        {% elif rollover.water_lock == True %}
+        <tr>
+            <th>{{ account.water.label }}</th>
+            <td>{{ rollover.water_fixed }}</td>
+            <td><input class="larger" type="checkbox" id="" name="water_lock" value=True checked></td>
         </tr>
         {% else %}
         <tr>
-            <th>Transport</th>
-            <td>{{ total_transport }}</td>
-            <td><a class="noline" href="{{ url_for('transport') }}"><img class="iconPic2" src="{{ url_for('static', filename='pictures/plus.png') }}"></a></td>
-        </tr>
-        {% endif %}
-        {% if active == None or active.fitness == 0.0 %}
-        <tr>
-            <th>{{ account.fitness.label }}</th>
-            <td>{{ account.fitness }}</td>
-        </tr>
-        {% else %}
-        <tr>
-            <th>Fitness</th>
-            <td>{{ active.fitness }}</td>
-        </tr>
-        {% endif %}
-        {% if active == None or active.bakery == 0.0 %}
-        <tr>
-            <th>{{ account.bakery.label }}</th>
-            <td>{{ account.bakery }}</td>
-        </tr>
-        {% else %}
-        <tr>
-            <th>Bakery</th>
-            <td>{{ active.bakery }}</td>
-        </tr>
-        {% endif %}
-        {% if active == None or active.shopping == 0.0 %}
-        <tr>
-            <th>{{ account.shopping.label }}</th>
-            <td>{{ account.shopping }}</td>
-        </tr>
-        {% else %}
-        <tr>
-            <th>More Stuff</th>
-            <td>{{ active.shopping }}</td>
-        </tr>
-        {% endif %}
-        {% if workfood_total == 0 %}
-        <tr>
-            <th>Work Food</th>
-            <td>0</td>
-            <td><a class="noline" href="{{ url_for('workfood') }}"><img class="iconPic2" src="{{ url_for('static', filename='pictures/plus.png') }}"></a></td>
-        </tr>
-        {% else %}
-        <tr>
-            <th>Work Food</th>
-            <td>{{ workfood_total }}</td>
-            <td><a class="noline" href="{{ url_for('workfood') }}"><img class="iconPic2" src="{{ url_for('static', filename='pictures/plus.png') }}"></a></td>
+            <th>{{ account.water.label }}</th>
+            <td>{{ active.water }}</td>
+            <td><input class="larger" type="checkbox" id="" name="water_lock" value=False></td>
         </tr>
         {% endif %}
         
         {% if active.month %}
         {% endif %}
         {% if remaining > 0 %}
-        <tr class="green">
+        <tr class="green_text">
         {% else %}
-        <tr class="red">
+        <tr class="red_text">
         {% endif %}
             <th>Total Remaining</th>
             <td><strong>{{ remaining }}</strong></td>

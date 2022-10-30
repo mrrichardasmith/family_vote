@@ -21,9 +21,12 @@
             </tr>
         </table>
         <p>{{ inv.submit() }}</p>
-        <p><a class="button noline" href="{{ url_for('accounts') }}">Full Accounts Page</a></p>
+        <div class="button">
+            <a class="noline white_text" href="{{ url_for('accounts') }}">Full Accounts Page</a>
+        </div>
         <table>
             <h2 class="mainTextColor">Current Investments</h2>
+            
             {% for i in current_investments %}
             <tr>
                 <th>{{ i.investment_name }}</th>

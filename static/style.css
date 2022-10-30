@@ -80,8 +80,16 @@ table {
   background-color: red;
 }
 
+.red_text {
+  color: red;
+}
+
 .green {
   background-color: hsla(78, 88%, 47%, 0.787);
+}
+
+.green_text {
+  color: green;
 }
 
 .yellow {
@@ -100,7 +108,7 @@ table {
   background-color: hsla(39, 100%, 39%, 0.445);
 }
 
-.white_text > p {
+.white_text {
   color: white;
   font-weight: 600;
 }
@@ -140,7 +148,7 @@ table {
   text-transform: uppercase;
   outline: 0;
   background: #ffa700;
-  width: 100%;
+  width: 70%;
   border: 0;
   border-top-right-radius: 35%;
   border-bottom-left-radius: 35%;
@@ -151,6 +159,7 @@ table {
   transition: all 0.3 ease;
   cursor: pointer;
   padding: 10px;
+  margin: 0.5rem auto 0.5rem;
 }
 
 .button:hover,.form button:active,.form button:focus {

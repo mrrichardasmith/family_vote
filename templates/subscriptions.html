@@ -27,7 +27,9 @@
             </tr>
         </table>
         <p>{{ subs.submit() }}</p>
-        <h4><a class="button noline" href="{{ url_for('accounts') }}">Full Accounts Page</a></h4>
+        <div class="button">
+            <h4><a class="noline white_text" href="{{ url_for('accounts') }}">Full Accounts Page</a></h4>
+        </div>
         <table>
             <h2 class="mainTextColor">Current Subscriptions</h2>
             <tr>
@@ -47,7 +49,9 @@
 
             {% endfor %}
         </table>
-        <h4><a class="button noline" href="{{ url_for('subscriptionmgmt') }}">Manage Subscriptions</a></h4>
+        <div class="button">
+            <h4><a class="noline white_text" href="{{ url_for('subscriptionmgmt') }}">Manage Subscriptions</a></h4>
+        </div>
     </form>
 </div>
 
