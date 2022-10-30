@@ -968,6 +968,7 @@ def pulsereport():
       for key in yourday_total:
         if d.yourday == key:
           yourday_total[key] += 1
+    print(yourday_total)
       
     return render_template('familypulsereport.html', days=days, yourday_total=yourday_total)
 

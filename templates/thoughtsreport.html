@@ -13,8 +13,8 @@
 			<div class="card">
 				<p>{{ thought.username.capitalize() }}<p>
 				<p>{{ thought.timestamp.strftime('%a %d-%m-%Y') }}</p>
-				<p>{{ thought.thinking_about }}</p>
-				<p>{{ thought.thoughts }}</p>
+				<p class="margin-top">{{ thought.thinking_about }}</p>
+				<p class="margin-top">{{ thought.thoughts }}</p>
 			</div>
 		</div>
 				{% endfor %}

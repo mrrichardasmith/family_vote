@@ -77,27 +77,27 @@ table {
 }
 
 .red {
-  background-color: #FF0229;
+  background-color: red;
 }
 
 .green {
-  background-color: #A3E30E;
+  background-color: hsla(78, 88%, 47%, 0.787);
 }
 
 .yellow {
-  background-color: #FFFF02;
+  background-color: hsla(60, 100%, 50%, 0.5);
 }
 
 .grey {
-  background-color: grey;
+  background-color: hsla(0, 0%, 50%, 0.527);
 }
 
 .brown  {
-  background-color: #974A00;
+  background-color: hsla(29, 100%, 30%, 0.459);
 }
 
 .orange {
-  background-color: #C88100;
+  background-color: hsla(39, 100%, 39%, 0.445);
 }
 
 .white_text > p {
@@ -179,7 +179,7 @@ table {
 .container {
   position: relative;
   z-index: 1;
-  max-width: 300px;
+  max-width: 90%;
   margin: 0 auto;
 }
 .container_large  {
@@ -326,14 +326,6 @@ th, td {
 .mainTextColor {
   color: #c0362c;
   text-align: center;
-}
-
-.green  {
-  color: #43A047;
-}
-
-.red {
-  color: #ff5252;
 }
 
 .noline {
