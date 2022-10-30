@@ -21,7 +21,7 @@ class LoginForm(FlaskForm):
 class LikesDislikesForm(FlaskForm):
     likes_dislikes = RadioField('Like or Dislike', choices=['Likes', 'Dislikes'], validators=[DataRequired()])
     country = SelectField(u'Country', choices=[('USA', 'United States'), ('UK', 'United Kingdom'), ('EU', 'Europe')])
-    reason = StringField('More Words')
+    reason = StringField('More Words', validators=[DataRequired()])
     submit = SubmitField('Submit')
 
     def validate_username(self, username):
@@ -93,7 +93,7 @@ class WorkfoodForm(FlaskForm):
 
 class ExtragroceriesForm(FlaskForm):
     extra_groceries_description = TextAreaField('Extra Items', validators=[DataRequired()])
-    extra_groceries = DecimalField('Cost')
+    extra_groceries = DecimalField('Cost', validators=[DataRequired()])
     submit = SubmitField('Declare Extra')
 
 class SubscriptionsForm(FlaskForm):
