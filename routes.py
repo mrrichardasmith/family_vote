@@ -125,7 +125,12 @@ def index():
 def survey():
   form = ThinkingForm()
   if request.method == 'GET':
-    return render_template('survey.html', form=form)
+
+    new_date = datetime.now() - timedelta(days = 30)
+    
+    thoughts = Thinking.query.filter(Thinking.timestamp > new_date).all()
+    
+    return render_template('survey.html', form=form, thoughts=thoughts)
 
   if request.method == 'POST' and form.validate():
 #Thinking is a database class as can be seen if you look at the import statements above and check the models.
