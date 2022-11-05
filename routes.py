@@ -217,10 +217,9 @@ def accounts():
   todayYear = todayDate.year
   
   print(f"{todayDate:%d %B, %Y}")
-
+  #Need a register people into a family feature so that we can call the accounts for family and not by member
   active = Account.query.filter(Account.month == todayDate.month
-                            and Account.year == todayDate.year 
-                            and Account.username == current_user.username).first()
+                            and Account.year == todayDate.year).first()
 
   debit_check = check_if_float_onerow(active)
   debit_total = (total_floats(debit_check))
@@ -239,21 +238,53 @@ def accounts():
   if  request.method == 'GET':
 
     if active == None:
+      last_month = Account.query.filter(Account.month == todayDate.month -1
+                            and Account.year == todayDate.year).first()
+      if last_month == None:
+          new_account = Account(month=todayDate.month, 
+                                year=todayDate.year,   
+                                rent = 0.0,  
+                                housekeeping = 0.0,
+                                subscriptions_monthly_total = 0.0,
+                                subscriptions_yearly_total = 0.0,
+                                workfood_total = 0.0,
+                                investments_total = 0.0,
+                                familyentertainment_total = 0.0,
+                                takeaway_total = 0.0,
+                                transport_total = 0.0,
+                                insurance_total = 0.0,  
+                                water = 0.0,
+                                electric = 0.0, 
+                                internet = 0.0, 
+                                counciltax = 0.0, 
+                                fitness = 0.0, 
+                                bakery = 0.0, 
+                                shopping = 0.0,  
+                                username=current_user.username)
+          print(vars(new_account))
+          db.session.add(new_account)
+      else:      
         new_account = Account(month=todayDate.month, 
                               year=todayDate.year,   
-                              rent = 0.0,  
-                              housekeeping = 0.0,  
-                              water = 0.0,
-                              electric = 0.0, 
-                              internet = 0.0, 
-                              counciltax = 0.0, 
+                              rent = last_month.rent,  
+                              housekeeping = 0.0,
+                              subscriptions_monthly_total = last_month.subscriptions_monthly_total,
+                              subscriptions_yearly_total = 0.0,
+                              workfood_total = 0.0,
+                              investments_total = 0.0,
+                              familyentertainment_total = 0.0,
+                              takeaway_total = 0.0,
+                              transport_total = 0.0,
+                              insurance_total = 0.0,  
+                              water = last_month.water,
+                              electric = last_month.electric, 
+                              internet = last_month.internet, 
+                              counciltax = last_month.counciltax, 
                               fitness = 0.0, 
                               bakery = 0.0, 
                               shopping = 0.0,  
-                              username=current_user.username)
-        print(vars(new_account))
+                              username=current_user.username)        
         db.session.add(new_account)
-    
 
     if credits == None:
         credits = Credits(month=todayDate.month,
@@ -262,7 +293,8 @@ def accounts():
                           windfall = 0.0)
         db.session.add(credits)
     
-
+#Need to add imbedded if's that write the locked rollovers to the table on create.
+  
     if rollover == None:
         rollover = Rollover(day=todayDate.day,
                             month=todayDate.month,
@@ -302,20 +334,33 @@ def accounts():
 
     total_transport = sum_query_cost(transport)
     
-    
-    subscriptions = Subscriptions.query.filter(Subscriptions.username == current_user.username).all()
+    #This will need to be filtered by family when the feature is created to link groups of users
+    subscriptions = Subscriptions.query.all()
 
-    total_subscriptions = 0
-
+    subscriptions_monthly_total = 0
+    #Not sure that I need the yearly total at this point, I just need to know the month the yearly bills
+    subscriptions_yearly_total = 0
+    #I need a total in the account table for monthly and yearly subscriptions
     for sub in subscriptions:
-      if sub.subscription_auto_renewal.month == todayMonth and sub.subscription_term == 'Yearly' and todayMonth == sub.subscription_auto_renewal.month and todayYear == sub.subscription_auto_renewal.year:
-        total_subscriptions += sub.cost
-        print("Warning A yearly sunscription will auto renew this month delete in Subscription Management to avoid cost this month")
+      #First we look to see if the yearly auto renew falls in this month
+      if sub.subscription_term == 'Yearly' and sub.subscription_auto_renewal.month == todayMonth and todayYear == sub.subscription_auto_renewal.year:
+        subscriptions_monthly_total += sub.cost
+      #Then we look to see if the yearly has been started in this month
+      elif sub.subscription_term == 'Yearly' and sub.subscription_start_date.month == todayMonth and sub.subscription_start_date.year == todayYear:
+         subscriptions_monthly_total += sub.cost
+      #finally we total up the Monthly subs that all renew each month
       elif sub.subscription_term == 'Monthly':
         print(sub.subscription_name)
-        total_subscriptions += sub.cost
+        subscriptions_monthly_total += sub.cost
+    #The active not equals none became necessary because the order the code executes produced a None type object.
+    #Total Subs month and year columns added to main account table. Call current figure and if total_subscriptions is higher or lower write new value to Account Table
+    #Currently we are not separating the yearly instead we are looking to see if it renews or starts and adding it this might actually be the better approach.
+    if active != None:
+      if active.subscriptions_monthly_total < subscriptions_monthly_total or active.subscriptions_monthly_total > subscriptions_monthly_total:
+        active.subscriptions_monthly_total = subscriptions_monthly_total
+        print(active.subscriptions_monthly_total)
+        db.session.commit()
 
-    
     investments = Investments.query.filter(Investments.month == todayDate.month
                                        and Investments.year == todayDate.year
                                        and Investments.username == current_user.username).all()
@@ -323,7 +368,6 @@ def accounts():
     total_investments = sum_query_cost(investments)
     
     
-
     insurance = Insurance.query.filter(Insurance.month == todayDate.month 
                                    and Insurance.year == todayDate.year
                                    and Insurance.username == current_user.username).all()
@@ -355,7 +399,7 @@ def accounts():
     #Uses helper function to extract float values from database query
     #Uses helper function on the object of floates to total debits/credits in the provided query object 
       
-    combined_totals = [extra_groceries_total, workfood_total, total_takeaway, total_transport, total_subscriptions, total_investments, total_insurance, total_entertainment] 
+    combined_totals = [extra_groceries_total, workfood_total, total_takeaway, total_transport, subscriptions_monthly_total, total_investments, total_insurance, total_entertainment] 
 
     sum_multiline_items = sum_combined_totals(combined_totals)
 
@@ -373,7 +417,7 @@ def accounts():
                            workfood_total=round(workfood_total, 2),
                            extra_groceries_total=round(extra_groceries_total, 2),
                            total_transport=round(total_transport, 2),
-                           total_subscriptions=round(total_subscriptions, 2),
+                           subscriptions_monthly_total=round(subscriptions_monthly_total, 2),
                            total_investments=round(total_investments, 2),
                            total_insurance=round(total_insurance, 2),
                            total_entertainment=round(total_entertainment, 2),
@@ -686,14 +730,16 @@ def subscriptions():
   subs = SubscriptionsForm()
   if request.method == 'GET':
 
-    current_subscriptions = Subscriptions.query.filter(Subscriptions.month == todayMonth
-                                                   and Subscriptions.year == todayYear
+    current_subscriptions = Subscriptions.query.filter(Subscriptions.year == todayYear
                                                    and Subscriptions.username == current_user.username).all()
 
     for sub in current_subscriptions:
       if sub.subscription_term == 'Yearly':
+        print("These are the yearly subscriptions")
         print(sub.subscription_name)
 
+# This looks at the subscription, checks the auto renew month/year is the same as the current month/year but the day
+# Is after the current date to notify that it should have billed if it has not been cancelled externally. 
     for sub in current_subscriptions:
       if sub.subscription_auto_renewal.month == todayMonth and sub.subscription_term == 'Yearly' and todayDay > sub.subscription_auto_renewal.day:
         print(todayDate)

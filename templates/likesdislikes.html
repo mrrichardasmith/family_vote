@@ -10,12 +10,12 @@
           <h1 style="text-align: center">{{ form.likes_dislikes.label }}</h1>
           <div><img id="landingPic" src="{{ url_for('static', filename='pictures/thumbsupdown.png') }}"></div>
           <table>
-            <tr>
+            
             {% for subfield in form.likes_dislikes %}
-                <td>{{ subfield.label }}</td>
-                <td>{{ subfield }}</td>
+                <p><td>{{ subfield.label }}</td></p>
+                <p><td>{{ subfield }}</td></p>
             {% endfor %}
-            </tr>
+            
           </table>
           {% for error in form.likes_dislikes.errors %}
           <span style="color: red;">[{{ error }}]</span>

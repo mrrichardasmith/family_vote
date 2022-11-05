@@ -104,7 +104,7 @@
         {% else %}
         <tr>
             <th>Subscriptions</th>
-            <td>{{ total_subscriptions }}</td>
+            <td>{{ subscriptions_monthly_total }}</td>
             <td><a class="noline" href="{{ url_for('subscriptions') }}"><img class="iconPic2" src="{{ url_for('static', filename='pictures/plus.png') }}"></a></td>
         </tr>
         {% endif %}
