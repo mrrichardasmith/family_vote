@@ -1,4 +1,4 @@
-<div class="nav">
+<div class="nav background-white">
     <div class="innerNav">      
         
         {% if current_user.is_anonymous %}
@@ -10,9 +10,8 @@
                 <a class="pill" href="{{ url_for('register') }}">Join the Family</a>
             </div>
         </div>
+        <h2 class="headingColor margin-top text-center">Family Focus</h2>
         {% else %}
-        
-    
         <div class="row_between">
             <div class="navOption">
                 <a href="{{ url_for('index') }}"><img class="navPic" src="{{ url_for('static', filename='pictures/home.png') }}"></a>  
@@ -23,7 +22,7 @@
                 <p><a href="{{ url_for('logout') }}">Logout</a></p>                
             </div>
         </div>                
-        
+        <hr>
         {% endif %}
     </div>
 </div>

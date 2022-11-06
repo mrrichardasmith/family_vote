@@ -7,7 +7,7 @@
     <form class="form" action="" method="post" novalidate>
     <h1 class="mainTextColor">Financial Status {{ current_month_text }}</h1>
         {{ account.hidden_tag() }}
-    <table>
+    <table class="data-centered">
         
         {% if credits == None or credits.salary_deposit == 0.0  %}
         <tr>
@@ -72,7 +72,7 @@
         {% if extra_groceries == 0 %}
         <tr>
             <th>Extra Groceries</th>
-            <td>0</td>
+            <td class="text-right">0</td>
             <td><a class="noline" href="{{ url_for('extragroceries') }}"><img class="iconPic2" src="{{ url_for('static', filename='pictures/plus.png') }}"></a></td>
         </tr>
         {% else %}

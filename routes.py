@@ -246,8 +246,8 @@ def accounts():
                                 rent = 0.0,  
                                 housekeeping = 0.0,
                                 subscriptions_monthly_total = 0.0,
-                                subscriptions_yearly_total = 0.0,
                                 workfood_total = 0.0,
+                                groceries_total = 0.0,
                                 investments_total = 0.0,
                                 familyentertainment_total = 0.0,
                                 takeaway_total = 0.0,
@@ -269,8 +269,8 @@ def accounts():
                               rent = last_month.rent,  
                               housekeeping = 0.0,
                               subscriptions_monthly_total = last_month.subscriptions_monthly_total,
-                              subscriptions_yearly_total = 0.0,
                               workfood_total = 0.0,
+                              groceries_total = 0.0,
                               investments_total = 0.0,
                               familyentertainment_total = 0.0,
                               takeaway_total = 0.0,
@@ -326,7 +326,12 @@ def accounts():
                                                   and Extragroceries.year == todayDate.year
                                                   and Extragroceries.username == current_user.username).all()
 
-    extra_groceries_total = sum_query_cost(extra_groceries) 
+    extra_groceries_total = sum_query_cost(extra_groceries)
+
+    if active != None:
+      if active.groceries_total != extra_groceries_total:
+        active.groceries_total = extra_groceries_total
+        db.session.commit()
 
     transport = Transport.query.filter(Transport.month == todayDate.month
                                        and Transport.year == todayDate.year
@@ -334,13 +339,17 @@ def accounts():
 
     total_transport = sum_query_cost(transport)
     
-    #This will need to be filtered by family when the feature is created to link groups of users
+    if active != None:
+      if active.transport_total != total_transport:
+        active.transport_total = total_transport
+        db.session.commit()
+
+    #This will need to be filtered by family when the family feature is created to link groups of users
     subscriptions = Subscriptions.query.all()
 
     subscriptions_monthly_total = 0
-    #Not sure that I need the yearly total at this point, I just need to know the month the yearly bills
-    subscriptions_yearly_total = 0
-    #I need a total in the account table for monthly and yearly subscriptions
+    #Not sure that I need the yearly total as even yearly subscriptions bill in a specific month
+    #I need a total in the account table for monthly subscription totals
     for sub in subscriptions:
       #First we look to see if the yearly auto renew falls in this month
       if sub.subscription_term == 'Yearly' and sub.subscription_auto_renewal.month == todayMonth and todayYear == sub.subscription_auto_renewal.year:
@@ -366,6 +375,11 @@ def accounts():
                                        and Investments.username == current_user.username).all()
     
     total_investments = sum_query_cost(investments)
+
+    if active != None:
+      if active.investments_total != total_investments:
+        active.investments_total = total_investments
+        db.session.commit()
     
     
     insurance = Insurance.query.filter(Insurance.month == todayDate.month 
@@ -373,6 +387,11 @@ def accounts():
                                    and Insurance.username == current_user.username).all()
 
     total_insurance = sum_query_cost(insurance)
+
+    if active != None:
+      if active.insurance_total != total_insurance:
+        active.insurance_total = total_insurance
+        db.session.commit()
     
 
     family_entertainment = Familyentertainment.query.filter(Familyentertainment.month == todayDate.month
@@ -381,20 +400,32 @@ def accounts():
     
     total_entertainment = sum_query_cost(family_entertainment)
     
-    
+    if active != None:
+      if active.familyentertainment_total != total_entertainment:
+        active.familyentertainment_total = total_entertainment
+        db.session.commit()
 
     takeaways = Takeaway.query.filter(Takeaway.month == todayDate.month
                                   and Takeaway.year == todayDate.year
                                   and Takeaway.username == current_user.username).all()
     
     total_takeaway = sum_query_cost(takeaways)
+
+    if active != None:
+      if active.takeaway_total != total_takeaway:
+        active.takeaway_total = total_takeaway
+        db.session.commit()
     
     current_food = Workfood.query.filter(Workfood.month == todayDate.month
                                      and Workfood.year == todayDate.year
                                      and Workfood.username == current_user.username).all()
 
     workfood_total = sum_query_cost(current_food)
-    
+  # Looks at the active account workfood total and if its above or below the total provided by the function it updates account table 
+    if active != None:
+      if active.workfood_total != workfood_total:
+        active.workfood_total = workfood_total
+        db.session.commit()
 
     #Uses helper function to extract float values from database query
     #Uses helper function on the object of floates to total debits/credits in the provided query object 
@@ -732,14 +763,10 @@ def subscriptions():
 
     current_subscriptions = Subscriptions.query.filter(Subscriptions.year == todayYear
                                                    and Subscriptions.username == current_user.username).all()
-
-    for sub in current_subscriptions:
-      if sub.subscription_term == 'Yearly':
-        print("These are the yearly subscriptions")
-        print(sub.subscription_name)
-
+    
 # This looks at the subscription, checks the auto renew month/year is the same as the current month/year but the day
 # Is after the current date to notify that it should have billed if it has not been cancelled externally. 
+#Currently this is only showing a print statement in the console.
     for sub in current_subscriptions:
       if sub.subscription_auto_renewal.month == todayMonth and sub.subscription_term == 'Yearly' and todayDay > sub.subscription_auto_renewal.day:
         print(todayDate)

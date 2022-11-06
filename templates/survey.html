@@ -1,43 +1,42 @@
 {% extends "base.html" %}
 
-{% block content %}
+{% block content %}  
 
-<div class="page">
-      
   <div class="page">
+      <h1 class="mainTextColor margin-top margin-bottom">Family Members Thoughts</h1>
+      
+        {% for thought in thoughts %}
+      <div class="container background-white">
+        <div class="card">
+          <p>{{ thought.username.capitalize() }}<p>
+          <p>{{ thought.timestamp.strftime('%a %d-%m-%Y') }}</p>
+          <p class="margin-top">{{ thought.thinking_about }}</p>
+          <p class="margin-top">{{ thought.thoughts }}</p>
+        </div>
+      </div>
+          {% endfor %}
+      
 
-		<h1 class="mainTextColor margin-top">Family Members Thoughts</h1>
-		
-			{% for thought in thoughts %}
-		<div class="container">
-			<div class="card">
-				<p>{{ thought.username.capitalize() }}<p>
-				<p>{{ thought.timestamp.strftime('%a %d-%m-%Y') }}</p>
-				<p class="margin-top">{{ thought.thinking_about }}</p>
-				<p class="margin-top">{{ thought.thoughts }}</p>
-			</div>
-		</div>
-				{% endfor %}
-		
-</div>
-  <form class="form" method="post">
-    <h1 class="HeadingColor margin-top">Hi {{ current_user.username.capitalize() }} </h1>   
-    <h1 class="HeadingColor margin-top margin-bottom">Sharing your thoughts helps everybody in the family</h1>
-    {{ form.hidden_tag() }}      
+    <form class="form background-white" method="post">
+      <h1 class="HeadingColor margin-top">Hi {{ current_user.username.capitalize() }} </h1>   
+      <h1 class="HeadingColor margin-top margin-bottom">Sharing your thoughts helps everybody in the family</h1>
+      {{ form.hidden_tag() }}      
+      <p>
+      {{ form.thinking_about.label }}<br>
+      <input name="thinking_about" autofocus>
+      </p>
     <p>
-    {{ form.thinking_about.label }}<br>
-    <input name="thinking_about" autofocus>
+      {{ form.thoughts.label }}<br>
+      {{ form.thoughts(size=32)  }}
     </p>
-  <p>
-    {{ form.thoughts.label }}<br>
-    {{ form.thoughts(size=32)  }}
-  </p>
-  <p>
-    {{ form.submit() }}
-  </p>
-  <p class="message">Not feeling it? <a href="{{ url_for('likesdislikes') }}"><strong>Skip question!</strong></a></p>
-  </form>
-</div>
-{% include "nav_update.html" %}
+    <p>
+      {{ form.submit() }}
+    </p>
+    <p class="message">Not feeling it? <a href="{{ url_for('likesdislikes') }}"><strong>Skip question!</strong></a></p>
+    </form>
+  </div>
+
+
+  {% include "nav_update.html" %}
     
-{% endblock %}
+  {% endblock %}
