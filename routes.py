@@ -734,10 +734,8 @@ def workfood():
 def likesdislikes():
   form = LikesDislikesForm()
   if request.method == 'GET':
-    user = current_user
-    user = User.query.filter_by(username=user.username).first()
-    likesdislikes = Likesdislikes.query.filter_by(username=user.username)   
-    
+    new_date = datetime.now() - timedelta(days = 30)
+    likesdislikes = Likesdislikes.query.filter(Likesdislikes.timestamp > new_date).all()
     return render_template('likesdislikes.html', likesdislikes=likesdislikes, form=form)
   
   if request.method == 'POST' and form.validate():
@@ -1050,14 +1048,6 @@ def pulsereport():
       
     return render_template('familypulsereport.html', days=days, yourday_total=yourday_total)
 
-@app.route('/likesdislikes_report')
-@login_required
-def likesdislikesreport():
-  if request.method == 'GET':
-    new_date = datetime.now() - timedelta(days = 30)
-    likesdislikes = Likesdislikes.query.filter(Likesdislikes.timestamp > new_date).all()
-    
-    return render_template('likesdislikesreport.html', likesdislikes=likesdislikes)
 
 @app.route('/people_report')
 @login_required

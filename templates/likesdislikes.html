@@ -3,44 +3,71 @@
 {% block content %}
 
 <center><div class="page">
-    <div class="form">
-      <form class="login-form" action="" method="post" validate>
-        {{ form.hidden_tag() }}
-        
-          <h1 style="text-align: center">{{ form.likes_dislikes.label }}</h1>
-          <div><img id="landingPic" src="{{ url_for('static', filename='pictures/thumbsupdown.png') }}"></div>
-          <table>
+      <div class="form">
+        <form action="" method="post" validate>
+          {{ form.hidden_tag() }}
+          
+            <h1 style="text-align: center">{{ form.likes_dislikes.label }}</h1>
+            <div><img id="landingPic" src="{{ url_for('static', filename='pictures/thumbsupdown.png') }}"></div>
+            <table>
+              
+              {% for subfield in form.likes_dislikes %}
+                <tr>
+                  <td>{{ subfield.label }}</td>
+                  <td>{{ subfield }}</td>
+                </tr>
+              {% endfor %}
+              
+            </table>
+            {% for error in form.likes_dislikes.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+          
+            <p class="country">{{ form.country.label }} {{ form.country(size=1) }}</p>
             
-            {% for subfield in form.likes_dislikes %}
-                <p><td>{{ subfield.label }}</td></p>
-                <p><td>{{ subfield }}</td></p>
+            {% for error in form.country.errors %}
+            <span style="color: red;">[{{ error }}]</span>
             {% endfor %}
             
-          </table>
-          {% for error in form.likes_dislikes.errors %}
-          <span style="color: red;">[{{ error }}]</span>
-          {% endfor %}
-        
-          <p>{{ form.country.label }} {{ form.country(size=1) }}</p>
-          
-          {% for error in form.country.errors %}
-          <span style="color: red;">[{{ error }}]</span>
-          {% endfor %}
-          
-          
-          <p class="margin-top">{{ form.reason.label }}</p>
-          <p>{{ form.reason(size=32) }}</p>
-          {% for error in form.reason.errors %}
-          <span style="color: red;">[{{ error }}]</span>
-          {% endfor %}
-        
-          <p>
-            <td>{{ form.submit() }}</td>
-          </p>
-          <p class="message">Not feeling it? <a href="{{ url_for('index') }}"><strong>Skip question!</strong></a></p>
-     </form>
-   </div>
-   {% include "nav_update.html" %}
+            
+            <p class="margin-top">{{ form.reason.label }}</p>
+            <p>{{ form.reason(size=32) }}</p>
+            {% for error in form.reason.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+            <p>
+              <td>{{ form.submit() }}</td>
+            </p>
+            <p class="message">Not feeling it? <a href="{{ url_for('index') }}"><strong>Skip question!</strong></a></p>
+      </form>
+    </div>
+    <div class="page">
+      <h1 class="mainTextColor">Things we like and dislike about here or there</h1>
+                  
+              {% for likedislike in likesdislikes %}
+          <div class="container">
+              {% if likedislike.likes_dislikes == 'Dislikes' %}
+              <div class="card red black_text">
+              {% else %}
+              <div class="card green black_text"> 
+                  {% endif %}
+                  <p><strong>{{ likedislike.username.capitalize() }}</strong></p>
+                  <div class="black_text row">
+                      {% if likedislike.country == 'USA' %}
+                      <img class="navPic" src="{{ url_for('static', filename='pictures/starsStripes.png') }}">
+                      {% else %}
+                      <img class="navPic" src="{{ url_for('static', filename='pictures/unionJack.png') }}">
+                      {% endif %}
+                      <p class="margin-top">{{ likedislike.reason }}</p>
+                  </div>
+              </div>
+          </div>
+                  {% endfor %}
+              
+      </div>
+      {% include "nav_update.html" %}
+  </div>
+   
 </div>
 </center>
 
