@@ -120,9 +120,9 @@ def index():
 #render template returns the html page and passes the data called through to be unpacked on that page
   return render_template( 'landing_page.html', current_user=current_user )
 
-@app.route('/survey', methods=['GET', 'POST'])
+@app.route('/thoughts', methods=['GET', 'POST'])
 @login_required
-def survey():
+def thoughts():
   form = ThinkingForm()
   if request.method == 'GET':
 
@@ -130,7 +130,7 @@ def survey():
     
     thoughts = Thinking.query.filter(Thinking.timestamp > new_date).all()
     
-    return render_template('survey.html', form=form, thoughts=thoughts)
+    return render_template('thoughts.html', form=form, thoughts=thoughts)
 
   if request.method == 'POST' and form.validate():
 #Thinking is a database class as can be seen if you look at the import statements above and check the models.
@@ -141,7 +141,24 @@ def survey():
     db.session.add(new_thoughts)
     db.session.commit()
 #A redirect statement to the index function/route showing that the view is changing after the render.
-    return redirect(url_for('likesdislikes'))
+    return redirect(url_for('thoughts'))
+
+@app.route('/thought/delete/<id>', methods=['GET', 'POST'])
+def thought_delete(id):
+  if request.method == 'GET':
+    print("We selected delete thought")
+    delete_thought = Thinking.query.get(id)
+    db.session.delete(delete_thought)
+    db.session.commit()
+  return redirect(url_for('thoughts'))
+
+@app.route('/thought/<id>', methods=['GET', 'POST'])
+def thought_thought(id):
+  if request.method == 'GET':
+    print("We selected thought plus")
+    thought_id = Thinking.query.get(id)
+    print(thought_id.id)
+  return redirect(url_for('thoughts'))
 
 @app.route('/day',  methods=['GET', 'POST'])
 @login_required
@@ -175,7 +192,7 @@ def people():
 
     db.session.add(new_people)
     db.session.commit()
-    return redirect(url_for('survey'))
+    return redirect(url_for('thoughts'))
 
 @app.route('/food', methods=['GET', 'POST'])
 def food():

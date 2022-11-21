@@ -66,6 +66,7 @@ table {
 }
 
 .card {
+  max-width: 640px;
   border: 2px solid #4d1a16;
   border-radius: 7px;
   box-shadow: -4px -4px 20px rgba(0, 0, 0, 0.505);
@@ -128,7 +129,7 @@ table {
   position: relative;
   z-index: 1;
   width: 75%;
-  margin: 5vh auto;
+  margin: 1vh auto;
   padding: 15px;
   text-align: center;
   box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
