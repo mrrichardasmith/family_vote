@@ -85,13 +85,14 @@
 
         {% if active == None or active.shopping == 0.0 %}
         <tr>
-            <th>{{ account.shopping.label }}</th>
-            <td>{{ account.shopping }}</td>
+            <th>{{ account.shopping_total.label }}</th>
+            <td>{{ account.shopping_total }}</td>
         </tr>
         {% else %}
         <tr>
             <th>More Stuff</th>
-            <td>{{ active.shopping }}</td>
+            <td>{{ active.shopping_total }}</td>
+            <td><a class="noline" href="{{ url_for('stuff') }}"><img class="iconPic2" src="{{ url_for('static', filename='pictures/plus.png') }}"></a></td>
         </tr>
         {% endif %}
 

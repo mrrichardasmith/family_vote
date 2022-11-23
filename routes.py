@@ -1,6 +1,6 @@
 from flask import request, render_template, flash, redirect, url_for
-from models import Credits, User, Likesdislikes, Thinking, Day_school, People, Admin, Life_hacks, Account, Workfood, Extragroceries, Subscriptions, Transport, Familyentertainment, Takeaway, Insurance, Investments, Rollover
-from forms import RegistrationForm, LoginForm, LikesDislikesForm, ThinkingForm, DaySchoolForm, GoodBadUglyForm, AdminForm, LifeHacksForm, AccountForm, WorkfoodForm, ExtragroceriesForm, SubscriptionsForm, TransportForm, FamilyentertainmentForm, TakeawayForm, InvestmentsForm, InsuranceForm
+from models import Credits, User, Likesdislikes, Thinking, Day_school, People, Admin, Life_hacks, Account, Workfood, Extragroceries, Subscriptions, Transport, Familyentertainment, Takeaway, Insurance, Investments, Rollover, Stuff
+from forms import RegistrationForm, LoginForm, LikesDislikesForm, ThinkingForm, DaySchoolForm, GoodBadUglyForm, AdminForm, LifeHacksForm, AccountForm, WorkfoodForm, ExtragroceriesForm, SubscriptionsForm, TransportForm, FamilyentertainmentForm, TakeawayForm, InvestmentsForm, InsuranceForm, StuffForm
 from werkzeug.urls import url_parse
 from flask_login import current_user, login_user, logout_user, login_required
 from app import app, db
@@ -276,7 +276,7 @@ def accounts():
                                 counciltax = 0.0, 
                                 fitness = 0.0, 
                                 bakery = 0.0, 
-                                shopping = 0.0,  
+                                shopping_total = 0.0,  
                                 username=current_user.username)
           print(vars(new_account))
           db.session.add(new_account)
@@ -299,7 +299,7 @@ def accounts():
                               counciltax = last_month.counciltax, 
                               fitness = 0.0, 
                               bakery = 0.0, 
-                              shopping = 0.0,  
+                              shopping_total = 0.0,  
                               username=current_user.username)        
         db.session.add(new_account)
 
@@ -348,6 +348,19 @@ def accounts():
     if active != None:
       if active.groceries_total != extra_groceries_total:
         active.groceries_total = extra_groceries_total
+        db.session.commit()
+
+    more_stuff = Stuff.query.filter(Stuff.month == todayDate.month
+                                                  and Stuff.year == todayDate.year
+                                                  and Stuff.username == current_user.username).all()
+
+    more_stuff_total = sum_query_cost(more_stuff)
+    print("The more stuff total")
+    print(more_stuff_total)
+
+    if active != None:
+      if active.shopping_total != more_stuff_total:
+        active.shopping_total = more_stuff_total
         db.session.commit()
 
     transport = Transport.query.filter(Transport.month == todayDate.month
@@ -661,8 +674,8 @@ def accounts():
     if account.bakery.data:
       active.bakery = account.bakery.data
       
-    if account.shopping.data:
-      active.shopping = account.shopping.data
+    if account.shopping_total.data:
+      active.shopping_total = account.shopping_total.data
   
   db.session.commit()  
   return redirect(url_for('accounts'))
@@ -813,6 +826,37 @@ def subscriptions():
     db.session.commit()
 
     return redirect(url_for('subscriptions'))
+
+@app.route('/stuff', methods=['GET', 'POST'])
+def stuff():
+  todayDate = datetime.now()
+  todayDay = int(todayDate.day)
+  todayMonth = int(todayDate.month)
+  todayYear = int(todayDate.year)
+  stuff = StuffForm()
+  if request.method == 'GET':
+
+    current_stuff = Stuff.query.filter(Stuff.month == todayMonth
+                                   and Stuff.year == todayYear
+                                   and Stuff.username == current_user.username).all()
+    
+# This looks at the stuff, checks the stuff was bought this month
+
+
+    return render_template('stuff.html', stuff=stuff, current_stuff=current_stuff)
+
+  if request.method == 'POST':
+    
+    new_stuff = Stuff(	month = todayDate.month,
+                        year = todayDate.year,
+                        description = stuff.description.data,
+                        cost = stuff.cost.data,
+                        username=current_user.username)
+
+    db.session.add(new_stuff)
+    db.session.commit()
+
+    return redirect(url_for('stuff'))
 
 @app.route('/subscriptionmgmt', methods=['GET', 'POST'])
 def subscriptionmgmt():

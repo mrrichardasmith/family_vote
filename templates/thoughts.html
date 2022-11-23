@@ -12,7 +12,7 @@
           <p>{{ thought.timestamp.strftime('%a %d-%m-%Y') }}</p>
           <p class="margin-top">{{ thought.thinking_about }}</p>
           <p class="margin-top">{{ thought.thoughts }}</p>
-          <p class="margin-top">
+          <p class="margin-top innerNav">
             <a class="noline" href="{{ url_for('thought_delete', id=thought.id) }}"><img class="iconPic2" src="{{ url_for('static', filename='pictures/delete.png') }}"></a>
             <a class="noline" href="{{ url_for('thought_thought', id=thought.id) }}"><img class="iconPic2" src="{{ url_for('static', filename='pictures/plus.png') }}"></a>
           </p>

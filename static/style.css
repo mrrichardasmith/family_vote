@@ -224,6 +224,10 @@ table {
   text-align: left;
 }
 
+.text-right {
+  text-align: right;
+}
+
 .data-centered td {
   text-align: center;
 }

@@ -1,4 +1,5 @@
-from datetime import datetime
+from calendar import month
+from datetime import date, datetime
 from email.policy import default
 from enum import unique
 from operator import index
@@ -103,7 +104,7 @@ class Account(db.Model):
     internet = db.Column(db.Float)
     fitness = db.Column(db.Float)
     bakery = db.Column(db.Float)
-    shopping = db.Column(db.Float)
+    shopping_total = db.Column(db.Float)
     username = db.Column(db.String, db.ForeignKey('user.username'))
 
 class Credits(db.Model):
@@ -135,6 +136,16 @@ class Extragroceries(db.Model):
     month = db.Column(db.Integer)
     year = db.Column(db.Integer)
     grocerydescription = db.Column(db.String(500))
+    username = db.Column(db.String, db.ForeignKey('user.username'))
+    cost = db.Column(db.Float)
+
+class Stuff(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    date = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+    day = db.Column(db.Integer)
+    month = db.Column(db.Integer)
+    year = db.Column(db.Integer)
+    description = db.Column(db.String(500))
     username = db.Column(db.String, db.ForeignKey('user.username'))
     cost = db.Column(db.Float)
 

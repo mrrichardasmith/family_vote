@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="page">
+    <form class="form" action="" method="post" novalidate>
+        {{ stuff.hidden_tag() }}
+        <h1 class="mainTextColor">More Stuff</h1>
+        <table>
+            <tr>
+                <th>{{ stuff.description.label }}</th>
+                <td>{{ stuff.description }}</td>
+            </tr>
+            <tr>
+                <th>{{ stuff.cost.label }}</th>
+                <td>{{ stuff.cost }}</td>
+            </tr>
+        </table>
+        <p class="margin-top">{{ stuff.submit() }}</p>
+        <div class="button">
+            <a class="noline white_text" href="{{ url_for('accounts') }}">Full Accounts Page</a>
+        </div>
+        <table>
+            <h2 class="mainTextColor margin-top">This months Stuff</h2>
+            
+            {% for s in current_stuff %}
+            <tr>
+                <th class="text-left">{{ s.description }}</th>
+                <td class="text-right">{{ s.cost }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </form>
+</div>
+
+{% endblock %}
