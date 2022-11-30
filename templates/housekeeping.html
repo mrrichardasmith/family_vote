@@ -2,8 +2,49 @@
 
 {% block content %}
 
+<div class="page">
+    <form class="form" action="" method="post" novalidate>
+        {{ house.hidden_tag() }}
+        <h1 class="mainTextColor">Housekeeping</h1>
+        <table>
+            <tr>
+                <th>{{ house.lineitem_description.label }}</th>
+                <td>{{ house.lineitem_description }}</td>
+            </tr>
+            <th>{{ house.lineitem_category.label }}</th>
+            <tr>
+                <td>{{ house.lineitem_category }}</td>
+            </tr>
+            <tr>
+                <th>{{ house.cost.label }}</th>
+                <td>{{ house.cost }}</td>
+            </tr>
+        </table>
+        <p>{{ house.submit() }}</p>
+        <div class="button">
+            <h4><a class="noline white_text" href="{{ url_for('accounts') }}">Full Accounts Page</a></h4>
+        </div>
+        <table>
+            <h2 class="mainTextColor">Current Housekeeping</h2>
+            <tr>
+                <th>Description</th>
+                <th>Category</th>
+                <th>Cost</th>
+                
+            {% for line in current_housekeeping %}
+            <tr>
+                <td>{{ line.lineitem_description }}</td>
+                <td>{{ line.subcategory }}</td>
+                <td>{{ line.cost }}</td>
+                
+            </tr>
 
-<h1>Hello World</h1>
-
+            {% endfor %}
+        </table>
+        <div class="button">
+            <h4><a class="noline white_text" href="{{ url_for('housekeeping') }}">Manage Housekeeping</a></h4>
+        </div>
+    </form>
+</div>
 
 {% endblock %}

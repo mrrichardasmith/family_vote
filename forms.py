@@ -8,8 +8,7 @@ class RegistrationForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
     email = StringField('Email', validators=[DataRequired()])
     password = PasswordField('Password', validators=[DataRequired()])
-    password2 = PasswordField(
-        'Repeat Password', validators=[DataRequired(), EqualTo('password')])
+    password2 = PasswordField('Repeat Password', validators=[DataRequired(), EqualTo('password')])
     submit = SubmitField('Register')
 
 class LoginForm(FlaskForm):
@@ -80,7 +79,7 @@ class AccountForm(FlaskForm):
     streaming = DecimalField('Streaming')
     fitness = DecimalField('Fitness')
     bakery = DecimalField('Bakery')
-    shopping = DecimalField('Shopping')
+    shopping_total = DecimalField('Shopping')
     submit = SubmitField('Update')
 
 class WorkfoodForm(FlaskForm):
@@ -137,3 +136,9 @@ class InsuranceForm(FlaskForm):
     insurance_description = TextAreaField('Insurance Description', validators=[DataRequired()])
     insurance_cost = DecimalField('Insurance Cost', validators=[DataRequired()])
     submit = SubmitField('Protect the Future')
+
+class HousekeepingForm(FlaskForm):
+    lineitem_description = StringField('Description')
+    lineitem_category = RadioField(choices=['Necessary', 'Important', 'Needed', 'Wanted', 'Impulse Buy'], validators=[DataRequired()])
+    cost = DecimalField('Cost', validators=[DataRequired()])
+    submit = SubmitField('Housekeeping')

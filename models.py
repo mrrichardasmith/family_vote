@@ -107,6 +107,16 @@ class Account(db.Model):
     shopping_total = db.Column(db.Float)
     username = db.Column(db.String, db.ForeignKey('user.username'))
 
+class Housekeeping(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    month = db.Column(db.Integer)
+    year = db.Column(db.Integer)
+    lineitem_description = db.Column(db.String(120))
+    lineitem_category = db.Column(db.String(10))
+    family = db.Column(db.String(30))
+    cost = db.Column(db.Float)
+    username = db.Column(db.String, db.ForeignKey('user.username'))
+
 class Credits(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     month = db.Column(db.Integer)

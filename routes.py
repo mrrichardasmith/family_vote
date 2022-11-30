@@ -1,6 +1,6 @@
 from flask import request, render_template, flash, redirect, url_for
-from models import Credits, User, Likesdislikes, Thinking, Day_school, People, Admin, Life_hacks, Account, Workfood, Extragroceries, Subscriptions, Transport, Familyentertainment, Takeaway, Insurance, Investments, Rollover, Stuff
-from forms import RegistrationForm, LoginForm, LikesDislikesForm, ThinkingForm, DaySchoolForm, GoodBadUglyForm, AdminForm, LifeHacksForm, AccountForm, WorkfoodForm, ExtragroceriesForm, SubscriptionsForm, TransportForm, FamilyentertainmentForm, TakeawayForm, InvestmentsForm, InsuranceForm, StuffForm
+from models import Credits, User, Likesdislikes, Thinking, Day_school, People, Admin, Life_hacks, Account, Workfood, Extragroceries, Subscriptions, Transport, Familyentertainment, Takeaway, Insurance, Investments, Rollover, Stuff, Housekeeping
+from forms import RegistrationForm, LoginForm, LikesDislikesForm, ThinkingForm, DaySchoolForm, GoodBadUglyForm, AdminForm, LifeHacksForm, AccountForm, WorkfoodForm, ExtragroceriesForm, SubscriptionsForm, TransportForm, FamilyentertainmentForm, TakeawayForm, InvestmentsForm, InsuranceForm, StuffForm, HousekeepingForm
 from werkzeug.urls import url_parse
 from flask_login import current_user, login_user, logout_user, login_required
 from app import app, db
@@ -11,7 +11,7 @@ import calendar
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
-        return redirect(url_for('index'))
+      return redirect(url_for('index'))
     form = LoginForm()
     if form.validate_on_submit():
         user = User.query.filter_by(username=form.username.data).first()
@@ -221,7 +221,38 @@ def lifehacks():
     db.session.add(new_hack)
     db.session.commit()
     return redirect(url_for('lifehacks'))
+
+@app.route('/housekeeping', methods=['GET', 'POST'])
+@login_required
+def housekeeping():
+  todayDate = datetime.now()
+  todayMonth = int(todayDate.month)
+  todayYear = int(todayDate.year)
+  house = HousekeepingForm()
+  if request.method == 'GET':
+     
+    user_object = User.query.filter(User.username == current_user.username).first()
+    current_housekeeping = Housekeeping.query.filter(Housekeeping.year == todayYear
+                                                and Housekeeping.month == todayMonth).all()
+    print(user_object.username)
+    print(todayYear)
+    print(current_housekeeping)
+
+    return render_template('housekeeping.html', house=house, user_object=user_object, current_housekeeping=current_housekeeping)
+
+  if request.method == 'POST':
+
+    new_housekeeping = Housekeeping(  month = todayDate.month,
+                                      year = todayDate.year,
+                                      lineitem_description=house.lineitem_description.data,
+                                      lineitem_category=house.lineitem_category.data,
+                                      cost=house.cost.data,
+                                      username=current_user.username )
     
+    db.session.add(new_housekeeping)
+    db.session.commit()
+    return redirect(url_for('housekeeping'))
+
 @app.route('/accounts', methods=['GET', 'POST'])
 @login_required
 def accounts():

@@ -29,6 +29,11 @@
         </div>
 
         <div class="navOption">
+            <a href="{{ url_for('housekeeping') }}"><img class="navPic" src="{{ url_for('static', filename='pictures/balance.jpg') }}"></a>  
+            <p><a href="{{ url_for('housekeeping') }}">Housekeeping</a></p>
+        </div>
+
+        <div class="navOption">
             <a href="{{ url_for('lifehacks') }}"><img class="navPic" src="{{ url_for('static', filename='pictures/hacks.png') }}"></a>  
             <p><a href="{{ url_for('lifehacks') }}">Life Hacks</a></p>
         </div>
