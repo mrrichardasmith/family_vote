@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="page">
+    <form class="form" action="" method="post" validate>
+
+        <div class="other_button border_button margin-top">
+            <h4><a class="noline mainTextColor" href="{{ url_for('housekeeping') }}">Back to Houskeeping Page</a></h4>
+        </div>
+        <table>
+            <h2 class="mainTextColor margin-top-bottom">Delete Current Housekeeping Item</h2>
+            <tr>
+                <th>Description</th>
+                <th>Category</th>
+                <th>Cost</th>
+                
+            {% for line in current_housekeeping %}
+            <tr>
+                <td>{{ line.lineitem_description }}</td>
+                <td>{{ line.lineitem_category }}</td>
+                <td>{{ line.cost }}</td>
+                <td><a class="noline" href="{{ url_for('housekeepingmgmt_delete', id=line.id) }}"><img class="iconPic2" src="{{ url_for('static', filename='pictures/delete.png') }}"></a></td>
+                
+            </tr>
+
+            {% endfor %}
+        </table>
+    </form>
+</div>
+
+{% endblock %}
