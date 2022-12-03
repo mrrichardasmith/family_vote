@@ -9,16 +9,14 @@
           
             <h1 style="text-align: center">{{ form.likes_dislikes.label }}</h1>
             <div><img id="landingPic" src="{{ url_for('static', filename='pictures/thumbsupdown.png') }}"></div>
-            <table>
               
               {% for subfield in form.likes_dislikes %}
-                <tr>
-                  <td>{{ subfield.label }}</td>
-                  <td>{{ subfield }}</td>
-                </tr>
+                
+                <p> {{ subfield.label }} </p>
+                <p class="margin-top"> {{ subfield }} </p>
+                
               {% endfor %}
               
-            </table>
             {% for error in form.likes_dislikes.errors %}
             <span style="color: red;">[{{ error }}]</span>
             {% endfor %}
@@ -36,13 +34,13 @@
             <span style="color: red;">[{{ error }}]</span>
             {% endfor %}
             <p>
-              <td>{{ form.submit() }}</td>
+              <button class="primary_button white_text" type="submit">feeling</button>
             </p>
             <p class="message">Not feeling it? <a href="{{ url_for('index') }}"><strong>Skip question!</strong></a></p>
       </form>
     </div>
     <div class="page">
-      <h1 class="mainTextColor">Things we like and dislike about here or there</h1>
+      <h1 class="mainTextColor margin-top-bottom">Likes and Dislikes</h1>
                   
               {% for likedislike in likesdislikes %}
           <div class="container">

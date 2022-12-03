@@ -853,7 +853,7 @@ def likesdislikes():
     db.session.add(new_likesdislikes)
     db.session.commit()
 
-    return redirect(url_for('index'))
+    return redirect(url_for('likesdislikes'))
     
 @app.route('/subscriptions', methods=['GET', 'POST'])
 def subscriptions():

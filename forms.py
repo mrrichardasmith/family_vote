@@ -133,9 +133,9 @@ class InvestmentsForm(FlaskForm):
 
 class InsuranceForm(FlaskForm):
     insurance_name = StringField('Insurance Name', validators=[DataRequired()])
-    insurance_description = TextAreaField('Insurance Description', validators=[DataRequired()])
-    insurance_cost = DecimalField('Insurance Cost', validators=[DataRequired()])
-    submit = SubmitField('Protect the Future')
+    insurance_description = TextAreaField('Type', validators=[DataRequired()])
+    insurance_cost = DecimalField('Cost', validators=[DataRequired()])
+    submit = SubmitField('Mitigate Risk')
 
 class HousekeepingForm(FlaskForm):
     lineitem_description = StringField('Line Item Description', validators=[DataRequired()])

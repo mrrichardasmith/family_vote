@@ -20,10 +20,12 @@
                 <td>{{ ins.insurance_cost }}</td>
             </tr>
         </table>
-        <p>{{ ins.submit() }}</p>
-        <p><a class="button noline" href="{{ url_for('accounts') }}">Full Accounts Page</a></p>
+        <button class="primary_button white_text" type="submit">Mitigate Risk</button>
+        <div class="other_button border_button margin-top">
+            <h4><a class="noline mainTextColor" href="{{ url_for('accounts') }}">Full Accounts Page</a></h4>
+        </div>
         <table>
-            <h2 class="mainTextColor">Current Insurance</h2>
+            <h2 class="mainTextColor margin-top">Current Insurance</h2>
             {% for i in current_insurance %}
             <tr>
                 <th>{{ i.insurance_name }}</th>
