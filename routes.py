@@ -253,6 +253,29 @@ def housekeeping():
     db.session.commit()
     return redirect(url_for('housekeeping'))
 
+@app.route('/housekeepingmgmt', methods=['GET', 'POST'])
+def housekeepingmgmt():
+  todayDate = datetime.now()
+  todayMonth = int(todayDate.month)
+  todayYear = int(todayDate.year)
+
+  if request.method == 'GET':
+
+    current_housekeeping = Housekeeping.query.filter(Housekeeping.year == todayYear
+                                                and Housekeeping.month == todayMonth).all()
+    
+
+    return render_template('housekeepingmgmt.html', current_housekeeping=current_housekeeping)
+
+@app.route('/housekeepingmgmt/delete/<id>', methods=['GET', 'POST'])
+def housekeepingmgmt_delete(id):
+  if request.method == 'GET':
+    print("We selected delete in Houskeepin Management")
+    delete_houskeeping = Housekeeping.query.get(id)
+    db.session.delete(delete_houskeeping)
+    db.session.commit()
+  return redirect(url_for('housekeepingmgmt'))
+
 @app.route('/accounts', methods=['GET', 'POST'])
 @login_required
 def accounts():

@@ -13,10 +13,10 @@
         <p class="submit"> {{ house.lineitem_category }}</p>
         <p class="margin-top-bottom">{{ house.cost.label }}</p>
         <p>{{ house.cost }}</p>
-        <p>{{ house.submit() }}</p>
+        <button class="primary_button white_text" type="submit">Houskeeping</button>
 
-        <div class="other_button">
-            <h4><a class="noline" href="{{ url_for('accounts') }}">Full Accounts Page</a></h4>
+        <div class="other_button border_button margin-top">
+            <h4><a class="noline mainTextColor" href="{{ url_for('accounts') }}">Full Accounts Page</a></h4>
         </div>
         <table>
             <h2 class="mainTextColor margin-top-bottom">Current Housekeeping</h2>
@@ -35,8 +35,8 @@
 
             {% endfor %}
         </table>
-        <div class="margin-top-bottom">
-            <input name="submit" id="submit" type="submit" value="Manage Houskeeping" href="{{ url_for('housekeeping') }}"></input>
+        <div class="margin-top other_button">
+            <h4><a class="mainTextColor noline" href="{{ url_for('housekeepingmgmt') }}">Manage Housekeeping Line Items</a></h4>
         </div>
     </form>
 </div>

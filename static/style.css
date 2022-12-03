@@ -330,6 +330,7 @@ th, td {
 .mainTextColor {
   color: #c0362c;
   text-align: center;
+  font-weight: 800;
 }
 
 .noline {
@@ -396,4 +397,9 @@ input.larger[type="checkbox"]:checked  {
   width: 292px;
   padding: 10px 20px;
   font-size: 18px;
+}
+
+.border_button {
+  border: 1px solid;
+  color: #c0362c;;
 }
