@@ -5,7 +5,7 @@
 <div class="page">
     <form class="form" action="" method="post" novalidate>
         {{ subs.hidden_tag() }}
-        <h1 class="mainTextColor">Subscriptions</h1>
+        <h1 class="mainTextColor margin-top-bottom">Subscriptions</h1>
         <table>
             <tr>
                 <th>{{ subs.subscription_name.label }}</th>
@@ -26,12 +26,12 @@
                 <td>{{ subs.cost}}</td>
             </tr>
         </table>
-        <p>{{ subs.submit() }}</p>
-        <div class="button">
-            <h4><a class="noline white_text" href="{{ url_for('accounts') }}">Full Accounts Page</a></h4>
+        <button class="primary_button white_text" type="submit">Submit Groceries</button>
+        <div class="other_button border_button margin-top">
+            <h4><a class="noline mainTextColor" href="{{ url_for('accounts') }}">Full Accounts Page</a></h4>
         </div>
         <table>
-            <h2 class="mainTextColor">Current Subscriptions</h2>
+            <h2 class="mainTextColor margin-top-bottom">Current Subscriptions</h2>
             <tr>
                 <th>Name</th>
                 <th>Cost</th>
@@ -49,8 +49,8 @@
 
             {% endfor %}
         </table>
-        <div class="button">
-            <h4><a class="noline white_text" href="{{ url_for('subscriptionmgmt') }}">Manage Subscriptions</a></h4>
+        <div class="other_button margin-top">
+            <h4><a class="noline mainTextColor" href="{{ url_for('subscriptionmgmt') }}">Manage Subscriptions</a></h4>
         </div>
     </form>
 </div>

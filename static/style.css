@@ -124,6 +124,7 @@ table {
   padding: 2% 2% 2% 2%;
     
 }
+
 .form {
   max-width: 640px;
   position: relative;
@@ -135,6 +136,7 @@ table {
   box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
   background-color: white;
 }
+
 .form input {
   outline: 0;
   background: #f2f2f2;
@@ -145,6 +147,7 @@ table {
   box-sizing: border-box;
   font-size: 14px;
 }
+
 .primary_button {
   font-family: "Bitter", sans-serif;
   text-transform: uppercase;
@@ -402,4 +405,8 @@ input.larger[type="checkbox"]:checked  {
 .border_button {
   border: 1px solid;
   color: #c0362c;;
+}
+
+.auto {
+  margin: auto;
 }

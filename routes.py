@@ -165,7 +165,28 @@ def thought_thought(id):
 def day():
   dayform = DaySchoolForm()
   if request.method == 'GET':
-    return render_template('day_school.html', dayform=dayform)
+
+    new_date = datetime.now() - timedelta(days = 30)
+    days = Day_school.query.filter(Day_school.date > new_date).all()
+    
+    yourday_total = {
+      "Great":  0,
+      "OK": 0,
+      "Blah": 0,
+      "Ugh": 0,
+      "Bad": 0  
+    }
+    
+    for d in days:
+      for key in yourday_total:
+        if d.yourday == key:
+          yourday_total[key] += 1
+    print(yourday_total)
+
+    for day in days:
+      print(day)
+
+    return render_template('day_school.html', dayform=dayform, days=days)
 
   if request.method == 'POST' and dayform.validate():
     new_day = Day_school(yourday=dayform.yourday.data, 
@@ -174,7 +195,7 @@ def day():
 
     db.session.add(new_day)
     db.session.commit()
-    return redirect(url_for('people'))
+    return redirect(url_for('day'))
 
 @app.route('/people', methods=['GET', 'POST'])
 @login_required
@@ -997,17 +1018,8 @@ def extragroceries():
     extra_groceries = Extragroceries.query.filter(Extragroceries.month == todayMonth
                                               and Extragroceries.year == todayYear
                                               and Extragroceries.username == current_user.username).all()
-
-    list = []
-    for l in extra_groceries:
-      space = l.grocerydescription.split(',')
-      for s in space:
-        list.append(s)
-      for a in list:
-        print(a)
-  
     
-    return render_template('extragroceries.html', extra=extra, list=list, monthNow=monthNow)
+    return render_template('extragroceries.html', extra=extra, list=extra_groceries, monthNow=monthNow)
 
   if request.method == 'POST' and extra.validate():
     new_groceries = Extragroceries(day=todayDate.day,
@@ -1139,29 +1151,6 @@ def reports():
   if request.method == 'GET':
     
     return render_template('reports.html')
-
-@app.route('/pulse_report')
-@login_required
-def pulsereport():
-  if request.method == 'GET':
-    new_date = datetime.now() - timedelta(days = 30)
-    days = Day_school.query.filter(Day_school.date > new_date).all()
-    
-    yourday_total = {
-      "Great":  0,
-      "OK": 0,
-      "Blah": 0,
-      "Ugh": 0,
-      "Bad": 0  
-    }
-    
-    for d in days:
-      for key in yourday_total:
-        if d.yourday == key:
-          yourday_total[key] += 1
-    print(yourday_total)
-      
-    return render_template('familypulsereport.html', days=days, yourday_total=yourday_total)
 
 
 @app.route('/people_report')
