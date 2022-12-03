@@ -138,14 +138,14 @@ table {
 .form input {
   outline: 0;
   background: #f2f2f2;
-  width: 100%;
+  width: 75%;
   border: 0;
   margin: 0 0 15px;
   padding: 15px;
   box-sizing: border-box;
   font-size: 14px;
 }
-.button {
+.primary_button {
   font-family: "Bitter", sans-serif;
   text-transform: uppercase;
   outline: 0;
@@ -162,6 +162,17 @@ table {
   cursor: pointer;
   padding: 10px;
   margin: 0.5rem auto 0.5rem;
+}
+
+.other_button  {
+  outline: 0;
+  background: #f2f2f2;
+  width: 75%;
+  border: 0;
+  margin: auto;
+  padding: 15px;
+  box-sizing: border-box;
+  font-size: 14px;
 }
 
 .button:hover,.form button:active,.form button:focus {
@@ -269,7 +280,7 @@ th, td {
 }
 
 .border  {
-  border: #fff1d8 solid 2px;
+  border: #ae7719 solid 2px;
 }
 
 .nav  {
@@ -368,10 +379,21 @@ input.larger[type="checkbox"]:checked  {
   margin-bottom: 1rem;
 }
 
+.margin-top-bottom  {
+  margin: 1rem
+}
+
 .background-white {
   background-color: white;
 }
 
 .country  {
   margin: 1rem 0
+}
+
+.select {
+  background: transparent;
+  width: 292px;
+  padding: 10px 20px;
+  font-size: 18px;
 }

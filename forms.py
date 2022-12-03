@@ -138,7 +138,7 @@ class InsuranceForm(FlaskForm):
     submit = SubmitField('Protect the Future')
 
 class HousekeepingForm(FlaskForm):
-    lineitem_description = StringField('Description')
-    lineitem_category = RadioField(choices=['Necessary', 'Important', 'Needed', 'Wanted', 'Impulse Buy'], validators=[DataRequired()])
+    lineitem_description = StringField('Line Item Description', validators=[DataRequired()])
+    lineitem_category = SelectField(u'Cost Category', choices=['Necessary', 'Important', 'Needed', 'Wanted', 'Impulse Buy', 'Revenge Spending'], validators=[DataRequired()])
     cost = DecimalField('Cost', validators=[DataRequired()])
     submit = SubmitField('Housekeeping')

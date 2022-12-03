@@ -3,29 +3,23 @@
 {% block content %}
 
 <div class="page">
-    <form class="form" action="" method="post" novalidate>
+    <form class="form" action="" method="post" validate>
         {{ house.hidden_tag() }}
-        <h1 class="mainTextColor">Housekeeping</h1>
-        <table>
-            <tr>
-                <th>{{ house.lineitem_description.label }}</th>
-                <td>{{ house.lineitem_description }}</td>
-            </tr>
-            <th>{{ house.lineitem_category.label }}</th>
-            <tr>
-                <td>{{ house.lineitem_category }}</td>
-            </tr>
-            <tr>
-                <th>{{ house.cost.label }}</th>
-                <td>{{ house.cost }}</td>
-            </tr>
-        </table>
+        <h1 class="mainTextColor margin-top-bottom">Housekeeping</h1>
+
+        <p class="margin-top-bottom">{{ house.lineitem_description.label }}</p>
+        <p>{{ house.lineitem_description }}</p>  
+        <p class="margin-top-bottom">{{ house.lineitem_category.label }}</p>  
+        <p class="submit"> {{ house.lineitem_category }}</p>
+        <p class="margin-top-bottom">{{ house.cost.label }}</p>
+        <p>{{ house.cost }}</p>
         <p>{{ house.submit() }}</p>
-        <div class="button">
-            <h4><a class="noline white_text" href="{{ url_for('accounts') }}">Full Accounts Page</a></h4>
+
+        <div class="other_button">
+            <h4><a class="noline" href="{{ url_for('accounts') }}">Full Accounts Page</a></h4>
         </div>
         <table>
-            <h2 class="mainTextColor">Current Housekeeping</h2>
+            <h2 class="mainTextColor margin-top-bottom">Current Housekeeping</h2>
             <tr>
                 <th>Description</th>
                 <th>Category</th>
@@ -34,15 +28,15 @@
             {% for line in current_housekeeping %}
             <tr>
                 <td>{{ line.lineitem_description }}</td>
-                <td>{{ line.subcategory }}</td>
+                <td>{{ line.lineitem_category }}</td>
                 <td>{{ line.cost }}</td>
                 
             </tr>
 
             {% endfor %}
         </table>
-        <div class="button">
-            <h4><a class="noline white_text" href="{{ url_for('housekeeping') }}">Manage Housekeeping</a></h4>
+        <div class="margin-top-bottom">
+            <input name="submit" id="submit" type="submit" value="Manage Houskeeping" href="{{ url_for('housekeeping') }}"></input>
         </div>
     </form>
 </div>
