@@ -255,9 +255,7 @@ def housekeeping():
     user_object = User.query.filter(User.username == current_user.username).first()
     current_housekeeping = Housekeeping.query.filter(Housekeeping.year == todayYear
                                                 and Housekeeping.month == todayMonth).all()
-    print(user_object.username)
-    print(todayYear)
-    print(current_housekeeping)
+    
 
     return render_template('housekeeping.html', house=house, user_object=user_object, current_housekeeping=current_housekeeping)
 
@@ -275,20 +273,23 @@ def housekeeping():
     return redirect(url_for('housekeeping'))
 
 @app.route('/housekeepingmgmt', methods=['GET', 'POST'])
+@login_required
 def housekeepingmgmt():
   todayDate = datetime.now()
   todayMonth = int(todayDate.month)
   todayYear = int(todayDate.year)
 
   if request.method == 'GET':
-
+    user_object = User.query.filter(User.username == current_user.username).first()
     current_housekeeping = Housekeeping.query.filter(Housekeeping.year == todayYear
                                                 and Housekeeping.month == todayMonth).all()
-    
+    print(user_object)
+    print(user_object.housekeeping)
 
-    return render_template('housekeepingmgmt.html', current_housekeeping=current_housekeeping)
+    return render_template('housekeepingmgmt.html', current_housekeeping=current_housekeeping, user_object=user_object)
 
 @app.route('/housekeepingmgmt/delete/<id>', methods=['GET', 'POST'])
+@login_required
 def housekeepingmgmt_delete(id):
   if request.method == 'GET':
     print("We selected delete in Houskeepin Management")
@@ -536,7 +537,7 @@ def accounts():
                                                and Housekeeping.year == todayDate.year)
     
     total_housekeeping = sum_query_cost(housekeeping)
-    print(total_housekeeping)
+    remaining_housekeeping = active.housekeeping - total_housekeeping
 
     #Uses helper function to extract float values from database query
     #Uses helper function on the object of floates to total debits/credits in the provided query object 
@@ -558,7 +559,7 @@ def accounts():
                            remaining=round(remaining, 2), 
                            workfood_total=round(workfood_total, 2),
                            extra_groceries_total=round(extra_groceries_total, 2),
-                           total_housekeeping=round(total_housekeeping, 2),
+                           remaining_housekeeping=round(remaining_housekeeping, 2),
                            total_transport=round(total_transport, 2),
                            subscriptions_monthly_total=round(subscriptions_monthly_total, 2),
                            total_investments=round(total_investments, 2),
@@ -863,6 +864,7 @@ def likesdislikes():
     return redirect(url_for('likesdislikes'))
     
 @app.route('/subscriptions', methods=['GET', 'POST'])
+@login_required
 def subscriptions():
   todayDate = datetime.now()
   todayDay = int(todayDate.day)
@@ -910,6 +912,7 @@ def subscriptions():
     return redirect(url_for('subscriptions'))
 
 @app.route('/stuff', methods=['GET', 'POST'])
+@login_required
 def stuff():
   todayDate = datetime.now()
   todayDay = int(todayDate.day)
@@ -941,6 +944,7 @@ def stuff():
     return redirect(url_for('stuff'))
 
 @app.route('/subscriptionmgmt', methods=['GET', 'POST'])
+@login_required
 def subscriptionmgmt():
   todayDate = datetime.now()
   todayMonth = int(todayDate.month)
@@ -955,6 +959,7 @@ def subscriptionmgmt():
     return render_template('subscriptionsmgmt.html', current_subscriptions=current_subscriptions)
 
 @app.route('/subscriptionmgmt/delete/<id>', methods=['GET', 'POST'])
+@login_required
 def subscriptionmgmt_delete(id):
   if request.method == 'GET':
     print("We selected delete")
@@ -964,6 +969,7 @@ def subscriptionmgmt_delete(id):
   return redirect(url_for('subscriptionmgmt'))
 
 @app.route('/investments', methods=['GET', 'POST'])
+@login_required
 def investments():
   todayDate = datetime.now()
   inv = InvestmentsForm()
@@ -987,6 +993,7 @@ def investments():
     return redirect(url_for('investments'))
 
 @app.route('/insurance', methods=['GET', 'POST'])
+@login_required
 def insurance():
   todayDate = datetime.now()
   ins = InsuranceForm()
@@ -1199,12 +1206,6 @@ def logout():
     return redirect(url_for('login'))
 
 
-def testdelete(id):
-  delete = Day_school.query.filter(Day_school.id == id).first()
-  db.session.delete(delete)
-  db.session.commit()
-    
-  return 'This is a test delete route'
 
 @app.route('/testupdate/<id>/<yourday>', methods=['GET', 'POST'])
 def testupdate(id, yourday):

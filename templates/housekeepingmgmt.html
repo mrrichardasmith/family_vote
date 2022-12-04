@@ -9,7 +9,7 @@
             <h4><a class="noline mainTextColor" href="{{ url_for('housekeeping') }}">Back to Houskeeping Page</a></h4>
         </div>
         <table>
-            <h2 class="mainTextColor margin-top-bottom">Delete Current Housekeeping Item</h2>
+            <h2 class="mainTextColor margin-top-bottom">Delete Housekeeping Line Item</h2>
             <tr>
                 <th>Description</th>
                 <th>Category</th>
@@ -21,7 +21,6 @@
                 <td>{{ line.lineitem_category }}</td>
                 <td>{{ line.cost }}</td>
                 <td><a class="noline" href="{{ url_for('housekeepingmgmt_delete', id=line.id) }}"><img class="iconPic2" src="{{ url_for('static', filename='pictures/delete.png') }}"></a></td>
-                
             </tr>
 
             {% endfor %}

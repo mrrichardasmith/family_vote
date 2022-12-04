@@ -47,13 +47,13 @@
         <tr>
             <th>{{ account.housekeeping.label }}</th>
             <td>{{ account.housekeeping }}</td>
-            <td>{{ total_housekeeping }}</td>
+            <td>{{ remaining_housekeeping }} Remaining</td>
         </tr>
         {% else %}
         <tr>
             <th>Housekeeping</th>
             <td>{{ active.housekeeping }}</td>
-            <td>{{ total_housekeeping }}</td>
+            <td>{{ remaining_housekeeping }} Remaining</td>
         </tr>
         {% endif %}
 
