@@ -5,18 +5,18 @@
 <div class="page">
     <form class="form" action="" method="post" novalidate>
         {{ ins.hidden_tag() }}
-        <h1 class="mainTextColor">Insurance</h1>
+        <h1 class="mainTextColor margin-top-bottom">Insurance</h1>
         <table>
             <tr>
-                <th>{{ ins.insurance_name.label }}</th>
+                <th class="text-left">{{ ins.insurance_name.label }}</th>
                 <td>{{ ins.insurance_name }}</td>
             </tr>
             <tr>
-                <th>{{ ins.insurance_description.label }}</th>
+                <th class="text-left">{{ ins.insurance_description.label }}</th>
                 <td>{{ ins.insurance_description }}</td>
             </tr>
             <tr>
-                <th>{{ ins.insurance_cost.label }}</th>
+                <th class="text-left">{{ ins.insurance_cost.label }}</th>
                 <td>{{ ins.insurance_cost }}</td>
             </tr>
         </table>
@@ -28,9 +28,9 @@
             <h2 class="mainTextColor margin-top">Current Insurance</h2>
             {% for i in current_insurance %}
             <tr>
-                <th>{{ i.insurance_name }}</th>
-                <td>{{ i.insurance_description }}</td>
-                <td>{{ i.insurance_cost }}</td>
+                <th class="text-left">{{ i.insurance_name }}</th>
+                <td class="text-left">{{ i.insurance_description }}</td>
+                <td>{{ i.cost }}</td>
             </tr>
             {% endfor %}
         </table>

@@ -532,6 +532,12 @@ def accounts():
         active.workfood_total = workfood_total
         db.session.commit()
 
+    housekeeping = Housekeeping.query.filter(Housekeeping.month == todayDate.month
+                                               and Housekeeping.year == todayDate.year)
+    
+    total_housekeeping = sum_query_cost(housekeeping)
+    print(total_housekeeping)
+
     #Uses helper function to extract float values from database query
     #Uses helper function on the object of floates to total debits/credits in the provided query object 
       
@@ -552,6 +558,7 @@ def accounts():
                            remaining=round(remaining, 2), 
                            workfood_total=round(workfood_total, 2),
                            extra_groceries_total=round(extra_groceries_total, 2),
+                           total_housekeeping=round(total_housekeeping, 2),
                            total_transport=round(total_transport, 2),
                            subscriptions_monthly_total=round(subscriptions_monthly_total, 2),
                            total_investments=round(total_investments, 2),

@@ -47,11 +47,13 @@
         <tr>
             <th>{{ account.housekeeping.label }}</th>
             <td>{{ account.housekeeping }}</td>
+            <td>{{ total_housekeeping }}</td>
         </tr>
         {% else %}
         <tr>
             <th>Housekeeping</th>
             <td>{{ active.housekeeping }}</td>
+            <td>{{ total_housekeeping }}</td>
         </tr>
         {% endif %}
 
@@ -315,7 +317,7 @@
             <td><strong>{{ remaining }}</strong></td>
         </tr>
     </table>
-    <p>{{ account.submit() }}</p>
+    <button class="primary_button white_text" type="submit">Update</button>
 </form>
     
     
