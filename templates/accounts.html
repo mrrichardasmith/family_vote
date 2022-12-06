@@ -210,7 +210,8 @@
         <tr>
             <th>{{ account.rent.label }}</th>
             <td>{{ account.rent }}</td>
-            <td><input class="larger" type="checkbox" id={{ account.id }} name="rent_lock" value=False></td>
+            <!-- Odd bug when id={{ account.id }} the check box would not stay active when checked along with a new value only after a value had been recorded -->
+            <td><input class="larger" type="checkbox" id="" name="rent_lock" value=False></td>
         </tr>
         {% elif rollover.rent_lock == True %}
         <tr>
