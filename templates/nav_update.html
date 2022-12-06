@@ -2,11 +2,23 @@
     <div class="innerNav">
         
             {% if current_user.is_anonymous %}
-            <div>
-                <img class="max-width-container" src="{{ url_for('static', filename='pictures/siloFam.png') }}">
-            </div>
+        <div>
+            <img class="max-width-container" src="{{ url_for('static', filename='pictures/siloFam.png') }}">
+        </div>
             {% else %}
-            <!--<a href="{{ url_for('user', username=current_user.username) }}">Likes Dislikes</a>-->
+            
+        <!-- Using both a url for the image and for the linked text this is a page navlinks -->
+        
+        <div class="navOption">
+            <a href="{{ url_for('accounts') }}"><img class="navPic" src="{{ url_for('static', filename='pictures/key.png') }}"></a>  
+            <p><a href="{{ url_for('accounts') }}">Financial Status</a></p>
+        </div>
+        
+        <div class="navOption">
+            <a href="{{ url_for('housekeeping') }}"><img class="navPic" src="{{ url_for('static', filename='pictures/balance.jpg') }}"></a>  
+            <p><a href="{{ url_for('housekeeping') }}">Housekeeping</a></p>
+        </div>
+
         <div class="navOption">
             <a href="{{ url_for('day') }}"><img class="navPic" src="{{ url_for('static', filename='pictures/howday2.png') }}"></a>
             <p><a href="{{ url_for('day') }}">Your day</a></p>
@@ -29,11 +41,6 @@
         </div>
 
         <div class="navOption">
-            <a href="{{ url_for('housekeeping') }}"><img class="navPic" src="{{ url_for('static', filename='pictures/balance.jpg') }}"></a>  
-            <p><a href="{{ url_for('housekeeping') }}">Housekeeping</a></p>
-        </div>
-
-        <div class="navOption">
             <a href="{{ url_for('lifehacks') }}"><img class="navPic" src="{{ url_for('static', filename='pictures/hacks.png') }}"></a>  
             <p><a href="{{ url_for('lifehacks') }}">Life Hacks</a></p>
         </div>
@@ -41,11 +48,6 @@
         <div class="navOption">
             <a href="{{ url_for('reports') }}"><img class="navPic" src="{{ url_for('static', filename='pictures/report.jpg') }}"></a>  
             <p><a href="{{ url_for('reports') }}">Reports</a></p>
-        </div>
-        
-        <div class="navOption">
-            <a href="{{ url_for('accounts') }}"><img class="navPic" src="{{ url_for('static', filename='pictures/key.png') }}"></a>  
-            <p><a href="{{ url_for('accounts') }}">Financial Status</a></p>
         </div>
     
     {% endif %}
