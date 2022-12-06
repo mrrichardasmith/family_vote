@@ -536,8 +536,10 @@ def accounts():
     housekeeping = Housekeeping.query.filter(Housekeeping.month == todayDate.month
                                                and Housekeeping.year == todayDate.year)
     
-    total_housekeeping = sum_query_cost(housekeeping)
-    remaining_housekeeping = active.housekeeping - total_housekeeping
+    #Not sure what best practice for this is but the if was needed to prevent error when the database was empty.
+    if housekeeping != None:
+      total_housekeeping = sum_query_cost(housekeeping)
+      remaining_housekeeping = active.housekeeping - total_housekeeping
 
     #Uses helper function to extract float values from database query
     #Uses helper function on the object of floates to total debits/credits in the provided query object 
