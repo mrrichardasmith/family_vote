@@ -1050,6 +1050,16 @@ def extragroceries():
 
     return redirect(url_for('extragroceries'))
 
+@app.route('/extragroceries/delete/<id>', methods=['GET', 'POST'])
+@login_required
+def extragroceries_delete(id):
+  if request.method == 'GET':
+    print("We selected delete an extra grocery item")
+    delete_extragroceries = Extragroceries.query.get(id)
+    db.session.delete(delete_extragroceries)
+    db.session.commit()
+  return redirect(url_for('extragroceries'))
+
 @app.route('/transport', methods=['GET', 'POST'])
 @login_required
 def transport():

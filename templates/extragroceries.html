@@ -35,6 +35,7 @@
                 <td class="text-left">{{ l.grocerydescription }}</td>
                 <td class="text-right">{{ l.cost }}</td>
                 <td class="text-right">{{ l.day }}</td>
+                <td><a class="noline" href="{{ url_for('extragroceries_delete', id=l.id) }}"><img class="iconPic2" src="{{ url_for('static', filename='pictures/delete.png') }}"></a></td>
             </tr>
             {% endfor %}
         </table>
