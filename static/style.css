@@ -59,6 +59,12 @@ table {
   background: #ffa700;
 }
 
+@media (max-width: 359) and (orientation: portrait) {
+  .hide-column  {
+    display: none;
+  }
+ }
+
 
 .page {
   max-width: 640px;
@@ -129,7 +135,7 @@ table {
   max-width: 640px;
   position: relative;
   z-index: 1;
-  width: 75%;
+  width: 85%;
   margin: 1vh auto;
   padding: 15px;
   text-align: center;
@@ -410,4 +416,6 @@ input.larger[type="checkbox"]:checked  {
 .auto {
   margin: auto;
 }
+
+
 

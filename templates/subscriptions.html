@@ -36,15 +36,15 @@
                 <th>Name</th>
                 <th>Cost</th>
                 <th>Term</th>
-                <th>Start</th>
-                <th>Auto Renewal Date</th>
+                <th class="hide-column">Start/Renew</th>
+                
             {% for sub in current_subscriptions %}
             <tr>
                 <td>{{ sub.subscription_name }}</td>
                 <td>{{ sub.cost }}</td>
                 <td>{{ sub.subscription_term }}</td>
-                <td>{{ sub.subscription_start_date.strftime('%d-%m-%Y') }}</td>
-                <td>{{ sub.subscription_auto_renewal.strftime('%d-%m-%Y') }}</td>
+                <!--reformating of the date-->
+                <td class="hide-column">{{ sub.subscription_start_date.strftime('%d-%m-%Y') }}</td>
             </tr>
 
             {% endfor %}
