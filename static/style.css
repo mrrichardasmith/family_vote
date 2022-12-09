@@ -59,12 +59,6 @@ table {
   background: #ffa700;
 }
 
-@media (max-width: 359) and (orientation: portrait) {
-  .hide-column  {
-    display: none;
-  }
- }
-
 
 .page {
   max-width: 640px;
@@ -417,5 +411,9 @@ input.larger[type="checkbox"]:checked  {
   margin: auto;
 }
 
-
+@media screen and (max-width: 359px) and (orientation: portrait) {
+  .hide-column  {
+    display: none;
+  }
+ }
 
