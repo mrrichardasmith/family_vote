@@ -27,6 +27,7 @@
             <tr>
                 <th class="text-left">{{ s.description }}</th>
                 <td class="text-right">{{ s.cost }}</td>
+                <td class="margin-top text-center"><div><a class="noline" href="{{ url_for('stuff_delete', id=s.id) }}"><img class="iconPic2" src="{{ url_for('static', filename='pictures/delete.png') }}"></a></td>
             </tr>
             {% endfor %}
         </table>

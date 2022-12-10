@@ -6,17 +6,32 @@
     
     <h2 class="mainTextColor">Current Subscriptions</h2>
         
+    <div class="row">
     {% for sub in current_subscriptions %}
-    <div class="card">
-
-        <p>{{ sub.subscription_name }}</p>
-        <p>£{{ sub.cost }}</p>
-        <p>{{ sub.subscription_term }}</p>
-        <p>Start:{{ sub.subscription_start_date.strftime('%d-%m-%Y') }}</p>
-        <p>Renews:{{ sub.subscription_auto_renewal.strftime('%d-%m-%Y') }}</p>
-        <p><a class="noline" href="{{ url_for('subscriptionmgmt_delete', id=sub.id) }}"><img class="iconPic2" src="{{ url_for('static', filename='pictures/delete.png') }}"></a></p>
-    </div>
+        <div class="card_small">
+            <table>
+                <tr>
+                    <td class="black_text_heavy"><h1>{{ sub.subscription_name }}</h1></td>
+                </tr>
+                <tr>
+                    <td>£{{ sub.cost }}</td>
+                </tr>
+                <tr>
+                    <td>{{ sub.subscription_term }}</td>
+                </tr>
+                <tr>
+                    <td>Start:{{ sub.subscription_start_date.strftime('%d-%m-%Y') }}</td>
+                </tr>
+                <tr>
+                    <td>Renews:{{ sub.subscription_auto_renewal.strftime('%d-%m-%Y') }}</td>
+                </tr>
+                <tr>
+                    <td class="margin-top"><p class="halfwidthcentered text-center"><a class="noline" href="{{ url_for('subscriptionmgmt_delete', id=sub.id) }}"><img class="iconPic2" src="{{ url_for('static', filename='pictures/delete.png') }}"></a></p></td>
+                </tr>
+            </table>
+        </div>
     {% endfor %}
+    </div>
 
         <div class="card row">
             <div class="button">

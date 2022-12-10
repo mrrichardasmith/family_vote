@@ -865,6 +865,49 @@ def likesdislikes():
 
     return redirect(url_for('likesdislikes'))
     
+
+@app.route('/stuff', methods=['GET', 'POST'])
+@login_required
+def stuff():
+  todayDate = datetime.now()
+  todayDay = int(todayDate.day)
+  todayMonth = int(todayDate.month)
+  todayYear = int(todayDate.year)
+  stuff = StuffForm()
+  if request.method == 'GET':
+
+    current_stuff = Stuff.query.filter(Stuff.month == todayMonth
+                                   and Stuff.year == todayYear
+                                   and Stuff.username == current_user.username).all()
+    
+# This looks at the stuff, checks the stuff was bought this month
+
+
+    return render_template('stuff.html', stuff=stuff, current_stuff=current_stuff)
+
+  if request.method == 'POST':
+    
+    new_stuff = Stuff(	month = todayDate.month,
+                        year = todayDate.year,
+                        description = stuff.description.data,
+                        cost = stuff.cost.data,
+                        username=current_user.username)
+
+    db.session.add(new_stuff)
+    db.session.commit()
+
+    return redirect(url_for('stuff'))
+
+@app.route('/stuff/delete/<id>', methods=['GET', 'POST'])
+@login_required
+def stuff_delete(id):
+  if request.method == 'GET':
+    print("Selected delete stuff")
+    delete_stuff = Stuff.query.get(id)
+    db.session.delete(delete_stuff)
+    db.session.commit()
+  return redirect(url_for('stuff'))
+
 @app.route('/subscriptions', methods=['GET', 'POST'])
 @login_required
 def subscriptions():
@@ -912,38 +955,6 @@ def subscriptions():
     db.session.commit()
 
     return redirect(url_for('subscriptions'))
-
-@app.route('/stuff', methods=['GET', 'POST'])
-@login_required
-def stuff():
-  todayDate = datetime.now()
-  todayDay = int(todayDate.day)
-  todayMonth = int(todayDate.month)
-  todayYear = int(todayDate.year)
-  stuff = StuffForm()
-  if request.method == 'GET':
-
-    current_stuff = Stuff.query.filter(Stuff.month == todayMonth
-                                   and Stuff.year == todayYear
-                                   and Stuff.username == current_user.username).all()
-    
-# This looks at the stuff, checks the stuff was bought this month
-
-
-    return render_template('stuff.html', stuff=stuff, current_stuff=current_stuff)
-
-  if request.method == 'POST':
-    
-    new_stuff = Stuff(	month = todayDate.month,
-                        year = todayDate.year,
-                        description = stuff.description.data,
-                        cost = stuff.cost.data,
-                        username=current_user.username)
-
-    db.session.add(new_stuff)
-    db.session.commit()
-
-    return redirect(url_for('stuff'))
 
 @app.route('/subscriptionmgmt', methods=['GET', 'POST'])
 @login_required
@@ -1227,10 +1238,3 @@ def testupdate(id, yourday):
     db.session.commit()
 
   return 'This is a test update'
-
-
-
-
-
-    
-  

@@ -77,6 +77,17 @@ table {
   width: 80%;
 }
 
+.card_small {
+  max-width: 45%;
+  border: 2px solid #4d1a16;
+  border-radius: 7px;
+  box-shadow: -4px -4px 20px rgba(0, 0, 0, 0.505);
+  padding: 2vw;
+  position: relative;
+  z-index: 1;
+  margin: 20 auto;
+}
+
 .red {
   background-color: rgb(219, 131, 131);
 }
@@ -119,6 +130,10 @@ table {
   font-weight: 600;
 }
 
+.black_text_heavy {
+  font-weight: bold;
+}
+
 .report {
   max-width: 50rem;
   padding: 2% 2% 2% 2%;
@@ -140,7 +155,7 @@ table {
 .form input {
   outline: 0;
   background: #f2f2f2;
-  width: 75%;
+  width: 100%;
   border: 0;
   margin: 0 0 15px;
   padding: 15px;
@@ -231,7 +246,6 @@ table {
 
 .text-center  {
   text-align: center;
-  margin: auto;
 }
 
 .text-left  {
@@ -261,7 +275,7 @@ table tr:nth-child(even){
 
 th, td {
   border-bottom: 1px solid #ffa700;
-  padding: 10px;
+  padding: 5px;
 }
 
 
@@ -323,7 +337,7 @@ th, td {
 }
 
 .iconPic2 {
-  height: 1.25rem;
+  height: 1.50rem;
 }
 
 .iconPic  {
@@ -341,7 +355,7 @@ th, td {
 }
 
 .halfwidthcentered  {
-  max-width: 75%;
+  width: 50%;
   margin: auto;
 }
 
@@ -350,17 +364,20 @@ th, td {
 }
 
 input.larger {
-  width: 40px;
-  height: 40px;
+  width: 30px;
+  height: 30px;
   border-radius: 50%;
+  background: green;
 }
 
-input.larger[type="checkbox"]:checked  {
-  background-color: green;
+input.larger[type="checkbox"]:active  {
+  background: green;
 }
 
 .row  {
   display: flex;
+  flex-wrap:wrap;
+
 }
 
 .row_between {
@@ -384,7 +401,11 @@ input.larger[type="checkbox"]:checked  {
 }
 
 .margin-top-bottom  {
-  margin: 1rem
+  margin: 1rem;
+}
+
+.margin-right {
+  margin-right: 1rem;
 }
 
 .background-white {
