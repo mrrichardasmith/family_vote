@@ -10,7 +10,7 @@
         <p class="margin-top-bottom">{{ house.lineitem_description.label }}</p>
         <p>{{ house.lineitem_description }}</p>  
         <p class="margin-top-bottom">{{ house.lineitem_category.label }}</p>  
-        <p class="submit"> {{ house.lineitem_category }}</p>
+        <p class="submit"> {{ house.lineitem_category }} </p>
         <p class="margin-top-bottom">{{ house.cost.label }}</p>
         <p>{{ house.cost }}</p>
         <button class="primary_button white_text" type="submit">Houskeeping</button>
@@ -20,16 +20,16 @@
         </div>
         <table>
             <h2 class="mainTextColor margin-top-bottom">Current Housekeeping</h2>
-            <tr>
+            <tr class="text-left">
                 <th>Description</th>
                 <th>Category</th>
                 <th>Cost</th>
                 
             {% for line in current_housekeeping %}
             <tr>
-                <td>{{ line.lineitem_description }}</td>
+                <td class="text-left">{{ line.lineitem_description }}</td>
                 <td>{{ line.lineitem_category }}</td>
-                <td>{{ line.cost }}</td>
+                <td class="text-right">{{ line.cost }}</td>
                 
             </tr>
 

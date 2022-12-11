@@ -112,7 +112,7 @@ class Housekeeping(db.Model):
     month = db.Column(db.Integer)
     year = db.Column(db.Integer)
     lineitem_description = db.Column(db.String(120))
-    lineitem_category = db.Column(db.String(10))
+    lineitem_category = db.Column(db.String(20))
     family = db.Column(db.String(30))
     cost = db.Column(db.Float)
     username = db.Column(db.String, db.ForeignKey('user.username'))
