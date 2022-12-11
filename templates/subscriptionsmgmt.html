@@ -33,13 +33,13 @@
     {% endfor %}
     </div>
 
-        <div class="card row">
-            <div class="button">
-                <h4><a class="noline" href="{{ url_for('subscriptions') }}">Add Subscriptions</a></h4>
-            </div>
-            <div class="button">
-                <h4><a class="noline" href="{{ url_for('accounts') }}">Full Accounts Page</a></h4>
-            </div>
+    <div class="other_button margin-top">
+        <h4 class="text-center"><a class="noline mainTextColor" href="{{ url_for('subscriptions') }}">Add Subscriptions</a></h4>
+    </div>    
+    <div class="other_button border_button margin-top margin-bottom">
+        <h4 class="text-center"><a class="noline mainTextColor" href="{{ url_for('accounts') }}">Full Accounts Page</a></h4>
     </div>
+    
+    
 
 {% endblock %}

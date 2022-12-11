@@ -5,7 +5,7 @@
 <div class="page">
     
     <form class="form" action="" method="post" novalidate>
-    <h1 class="mainTextColor margin-top-bottom">Financial Status {{ current_month_text }}</h1>
+    <h1 class="mainTextColor margin-top margin-bottom">Financial Status {{ current_month_text }}</h1>
         {{ account.hidden_tag() }}
     <table class="data-centered">
         
@@ -318,7 +318,7 @@
             <td><strong>{{ remaining }}</strong></td>
         </tr>
     </table>
-    <button class="primary_button white_text" type="submit">Update</button>
+    <button class="primary_button white_text margin-top" type="submit">Update</button>
 </form>
     
     

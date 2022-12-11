@@ -359,6 +359,11 @@ th, td {
   margin: auto;
 }
 
+.threequarterwidthcentered  {
+  width: 50%;
+  margin: auto;
+}
+
 .max-width-container  {
   max-width: 100%;
 }
@@ -398,10 +403,6 @@ input.larger[type="checkbox"]:active  {
 
 .margin-bottom  {
   margin-bottom: 1rem;
-}
-
-.margin-top-bottom  {
-  margin: 1rem;
 }
 
 .margin-right {
