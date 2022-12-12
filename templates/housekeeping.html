@@ -7,19 +7,19 @@
         {{ house.hidden_tag() }}
         <h1 class="mainTextColor margin-top-bottom">Housekeeping</h1>
 
-        <p class="margin-top-bottom">{{ house.lineitem_description.label }}</p>
+        <p class="margin-top">{{ house.lineitem_description.label }}</p>
         <p>{{ house.lineitem_description }}</p>  
-        <p class="margin-top-bottom">{{ house.lineitem_category.label }}</p>  
+        <p class="margin-top">{{ house.lineitem_category.label }}</p>  
         <p class="submit"> {{ house.lineitem_category }} </p>
-        <p class="margin-top-bottom">{{ house.cost.label }}</p>
+        <p class="margin-top">{{ house.cost.label }}</p>
         <p>{{ house.cost }}</p>
-        <button class="primary_button white_text" type="submit">Houskeeping</button>
+        <button class="primary_button white_text margin-top" type="submit">Houskeeping</button>
 
         <div class="other_button border_button margin-top">
             <h4><a class="noline mainTextColor" href="{{ url_for('accounts') }}">Full Accounts Page</a></h4>
         </div>
         <table>
-            <h2 class="mainTextColor margin-top-bottom">Current Housekeeping</h2>
+            <h2 class="mainTextColor margin-top">Current Housekeeping</h2>
             <tr class="text-left">
                 <th>Description</th>
                 <th>Category</th>

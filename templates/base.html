@@ -3,12 +3,6 @@
  
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-     
-        {% if title %}
-        <title>{{ title }} - Family Focus</title>
-        {% else %}
-        <title>Family Vote</title>
-        {% endif %}
     </head>
     <body>
         {% include 'nav_login.html' %}
