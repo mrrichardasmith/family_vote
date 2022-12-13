@@ -4,21 +4,52 @@
 
 <div class="page">
     {% include "nav_update.html" %}
-	<div class="container">
-		<h1 class="text-center">Feature List</h1>
-		<h2 class="margin-top">Master Budget</h2>
-		<p class="margin-top">Monthly expenses that repeat are setup and checked as rollover values. A housekeeping budget
-							  feature allows a portion of income to assigned and then deducted from.
-		<p class="margin-top">The benefit being that monthly inevitable costs can be deducted from the Income from day 1 in the month keeping the 
+	<div class="card">
+		<h1 class="text-center mainTextColor">Feature List</h1>
+
+		<h2 class="margin-top black_text_heavy">Master Budget</h2>
+		<img class="navPic" src="{{ url_for('static', filename='pictures/budget.jpg') }}">
+		<p class="margin-top">Monthly expenses that repeat are set as rollover values. A housekeeping budget
+							  feature allows a portion of income to be assigned.
+		<p class="margin-top">The benefit being that monthly inevitable costs are deducted from Income from day 1 in the month keeping the 
 		   					  disposable income in focus from payday.</p>
 		</p>
-		<h2 class="margin-top">How was your day?</h2>
-		<p class="margin-top">A simple how was your day, with a range of one word responses but also the option to provide more 
+
+		<h2 class="margin-top black_text_heavy">How was your day?</h2>
+		<img class="navPic" src="{{ url_for('static', filename='pictures/howday2.png') }}">
+		<p class="margin-top">A pulse radiator with a range of one word responses but also the option to provide more 
 			words why?
 		</p>
 		<P class="margin-top">
-			a simple pulse survey to keep an eye on the day to day of family members.
+			Considering expanding the feature to enable family members to record their perception of other members days.
 		</P>
+
+		<h2 class="margin-top black_text_heavy">Likes and dislikes feature</h2>
+		<img class="navPic" src="{{ url_for('static', filename='pictures/thumbsupdown.png') }}">
+		<p class="margin-top">
+			Currently records likes and dislikes of living in one country or another but this feature
+			should be expanded to make it possible to set different topics.
+		</p>
+
+		<h2 class="margin-top black_text_heavy"> Life Hacks</h2>
+		<img class="navPic" src="{{ url_for('static', filename='pictures/hacks.png') }}">
+		<p class="margin-top">
+			Life is not easy we all have similar but different challenges, often we forget to share our solutions with
+			each other and life hacks is where we hope this will happen.
+		</p>
+
+		<h2 class="margin-top black_text_heavy">Thoughts</h2>
+		<img class="navPic" src="{{ url_for('static', filename='pictures/bulb.png') }}">
+		<p class="margin-top">
+			Thoughts are like footprints in the sand, leave a few behind so that you can revisit them from time to time.
+		</p>
+
+		<h2 class="margin-top black_text_heavy">People</h2>
+		<img class="navPic" src="{{ url_for('static', filename='pictures/people.jpg') }}">
+		<p class="margin-top">
+			The people in our lives help us grow and stop us from becoming isolated and disconnected.
+			People can also be challenging, this feature helps to keep an eye on the way people are treating us.
+		</p>
 	</div>
 	
 </div>
