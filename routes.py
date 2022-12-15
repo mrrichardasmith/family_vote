@@ -65,6 +65,7 @@ def admin(username):
     print(user_object)
     print(user_object.admin)
     print(user_object.housekeeping)
+    print(user_object.id)
 
     registration = Admin.query.first()
     if registration != None:
@@ -537,7 +538,7 @@ def accounts():
                                                and Housekeeping.year == todayDate.year)
     
     #Not sure what best practice for this is but the if was needed to prevent error when the database was empty.
-    if housekeeping != None:
+    if housekeeping != None and active != None:
       total_housekeeping = sum_query_cost(housekeeping)
       remaining_housekeeping = active.housekeeping - total_housekeeping
 

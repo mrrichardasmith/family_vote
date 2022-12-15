@@ -5,15 +5,15 @@
 <center><div class="page">
     <div class="form">
         <h1 class="mainTextColor">Family Site Configs</h1>
-        {% if user_object.admin == 'admin' %}
-        <h2>{{ user_object.username }}</h2>
+        {% if user_object.admin == 'admin' or user_object.id == 1 %}
+        <h2 class="margin-top">{{ user_object.username.capitalize() }}</h2>
         <form class="login-form" action="" method="post" novalidate>
           {{ admin_form.hidden_tag() }}
-        <p>{{ admin_form.registration.label }}</p>
+        <p class="margin-top">{{ admin_form.registration.label }}</p>
         {% if registration.registration == True %}
-        <p><input type="checkbox" id={{ registration.registration }} name={{ registration.registration }} value=True checked></p>
+        <p class="margin-top"><input type="checkbox" id={{ registration.registration }} name={{ registration.registration }} value=True checked></p>
         {% else %}
-        <p><input type="checkbox" id={{ registration.registration }} name={{ registration.registration }} value=True ></p>
+        <p class="margin-top"><input type="checkbox" id={{ registration.registration }} name={{ registration.registration }} value=True ></p>
         {% endif %}
         <p>{{ admin_form.submit() }}</p>
         </form>

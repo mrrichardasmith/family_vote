@@ -56,7 +56,7 @@ class GoodBadUglyForm(FlaskForm):
     submit = SubmitField('Submit')
 
 class AdminForm(FlaskForm):
-    registration = BooleanField('Disable Registration')  
+    registration = BooleanField('Enable Registration')  
     submit = SubmitField('Save Change')
 
 class AccountForm(FlaskForm):
