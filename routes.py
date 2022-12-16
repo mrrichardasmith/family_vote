@@ -63,18 +63,19 @@ def admin(username):
     user_object = User.query.filter(User.username == username).first()
     admin = Admin.query.first()
     if admin == None:
-      
+      #If there is no record in the table add one making registration possible.
       registration = Admin(registration=True)
       db.session.add(registration)
       db.session.commit()
-      print(registration.id)
-      print(registration.registration)
 
       return render_template('admin.html', user_object=user_object, admin_form=admin_form, registration=registration)
       
     elif admin.registration == True or user_object.id == 1:
-
-      return render_template('admin.html', user_object=user_object, admin_form=admin_form, admin=admin)
+      all_users = User.query.all()
+      for u in all_users:
+        print(u.username)
+      
+      return render_template('admin.html', user_object=user_object, admin_form=admin_form, admin=admin, all_users=all_users)
     #I had to add the admin form for this option even though it isn't needed because the html page references it.
     else:
       print('Supressed Registration Page')

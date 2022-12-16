@@ -17,6 +17,12 @@
         {% endif %}
         <p>{{ admin_form.submit() }}</p>
         </form>
+        <div class="card">
+          <h1>Current List of Users in the user table</h1>
+          {% for u in all_users %}
+          <p class="margin-top">{{ u.username }}</p>
+          {% endfor %}
+        </div>
         {% else %}
         <h2>You don't have Admin permissions but they only let you close the registration</h2>
         <h3>If you want admin just ask</h3>
