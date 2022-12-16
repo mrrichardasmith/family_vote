@@ -10,10 +10,10 @@
         <form class="login-form" action="" method="post" novalidate>
           {{ admin_form.hidden_tag() }}
         <p class="margin-top">{{ admin_form.registration.label }}</p>
-        {% if registration.registration == True %}
-        <p class="margin-top"><input type="checkbox" id={{ registration.registration }} name={{ registration.registration }} value=True checked></p>
+        {% if admin.registration == True %}
+        <p class="margin-top"><input type="checkbox" id="" name="registration" value=True checked></p>
         {% else %}
-        <p class="margin-top"><input type="checkbox" id={{ registration.registration }} name={{ registration.registration }} value=True ></p>
+        <p class="margin-top"><input type="checkbox" id="" name="registration" value=False></p>
         {% endif %}
         <p>{{ admin_form.submit() }}</p>
         </form>

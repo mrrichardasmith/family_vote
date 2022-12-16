@@ -61,32 +61,35 @@ def admin(username):
   
   if request.method == 'GET':
     user_object = User.query.filter(User.username == username).first()
-    print("printing user called from database using username")
-    print(user_object)
-    print(user_object.admin)
-    print(user_object.housekeeping)
-    print(user_object.id)
-
-    registration = Admin.query.first()
-    if registration != None:
+    admin = Admin.query.first()
+    if admin == None:
+      
+      registration = Admin(registration=True)
+      db.session.add(registration)
+      db.session.commit()
+      print(registration.id)
       print(registration.registration)
-      
-      
-      return render_template('admin.html', user_object=user_object, admin_form=admin_form, registration=registration)
 
+      return render_template('admin.html', user_object=user_object, admin_form=admin_form, registration=registration)
+      
+    elif admin.registration == True or user_object.id == 1:
+
+      return render_template('admin.html', user_object=user_object, admin_form=admin_form, admin=admin)
+    #I had to add the admin form for this option even though it isn't needed because the html page references it.
     else:
       print('Supressed Registration Page')
-      confirm_admin = False
-      return render_template('admin.html', confirm_admin=confirm_admin, user_object=user_object)
+      return render_template('admin.html', user_object=user_object, admin_form=admin_form, admin=admin)
 
   if request.method == 'POST' and admin_form.validate():
-    
-    new_admin = Admin.query.get(1)
-    print(new_admin)
-    if new_admin.registration == True:
-      new_admin.registration = False
-    else:
-      new_admin.registration = True
+    #There is a problem here somewhere we need to check the other checkbox code its not updating to true but does to false.
+    new_admin = Admin.query.first()
+    print("This is the Admin query to database and the registration property")
+    print(new_admin.registration)
+    print("This is the admin form state on arrival in the POST route")
+    print(admin_form.registration.data)
+    new_admin.registration = admin_form.registration.data
+    print("This is the state of New Admin before the commit")
+    print(new_admin.registration)
     db.session.commit()
     return redirect(url_for('admin', username=current_user.username))
 
