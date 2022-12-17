@@ -39,6 +39,8 @@ def check_query_none_onerow(instance):
                 none_values.append([p, getattr(instance, p)])
         return none_values
 
+#This was a more abstracted way to solve the problem instead of itterating with a given param 
+#it looks for the data type float and adds those. Assumes there are only one category of float in the object
 
 def check_if_float_onerow(instance):
     if instance == None:
@@ -54,6 +56,7 @@ def check_if_float_onerow(instance):
                 float_values.update({key:value})
         return float_values
 
+#This is looking at the object properties and datatypes and adding the float values
 def total_floats(object):
     total = 0
     if hasattr(object, '__iter__'):

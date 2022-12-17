@@ -1,3 +1,4 @@
+from optparse import Values
 from flask import request, render_template, flash, redirect, url_for
 from models import Credits, User, Likesdislikes, Thinking, Day_school, People, Admin, Life_hacks, Account, Workfood, Extragroceries, Subscriptions, Transport, Familyentertainment, Takeaway, Insurance, Investments, Rollover, Stuff, Housekeeping
 from forms import RegistrationForm, LoginForm, LikesDislikesForm, ThinkingForm, DaySchoolForm, GoodBadUglyForm, AdminForm, LifeHacksForm, AccountForm, WorkfoodForm, ExtragroceriesForm, SubscriptionsForm, TransportForm, FamilyentertainmentForm, TakeawayForm, InvestmentsForm, InsuranceForm, StuffForm, HousekeepingForm
@@ -318,20 +319,22 @@ def accounts():
   #Need a register people into a family feature so that we can call the accounts for family and not by member
   active = Account.query.filter(Account.month == todayDate.month
                             and Account.year == todayDate.year).first()
-
+  
+  #This got confusing after we created multi line items but then updated the account table with the totals which then
+  #created a duplicate value which started to apprear in the calculation.
   debit_check = check_if_float_onerow(active)
+  print("This is the onerow check")
+  print(debit_check)
   debit_total = (total_floats(debit_check))
   
   credits = Credits.query.filter(Credits.month == todayDate.month
-                             and Credits.year == todayDate.year
-                             and Credits.username == current_user.username).first()
+                             and Credits.year == todayDate.year).first()
 
   credit_check = check_if_float_onerow(credits)
   credit_total_single_values = total_floats(credit_check)
 
 
-  rollover = Rollover.query.filter(Rollover.year == todayDate.year
-                               and Rollover.username == current_user.username).first()
+  rollover = Rollover.query.filter(Rollover.year == todayDate.year).first()
 
   if  request.method == 'GET':
 
@@ -528,10 +531,11 @@ def accounts():
         db.session.commit()
     
     current_food = Workfood.query.filter(Workfood.month == todayDate.month
-                                     and Workfood.year == todayDate.year
-                                     and Workfood.username == current_user.username).all()
+                                     and Workfood.year == todayDate.year).all()
 
     workfood_total = sum_query_cost(current_food)
+    print("Work Food Total")
+    print(workfood_total)
   # Looks at the active account workfood total and if its above or below the total provided by the function it updates account table 
     if active != None:
       if active.workfood_total != workfood_total:
@@ -549,12 +553,21 @@ def accounts():
     #Uses helper function to extract float values from database query
     #Uses helper function on the object of floates to total debits/credits in the provided query object 
       
-    combined_totals = [extra_groceries_total, workfood_total, total_takeaway, total_transport, subscriptions_monthly_total, total_investments, total_insurance, total_entertainment] 
-
+    combined_totals = [total_housekeeping, extra_groceries_total, workfood_total, total_takeaway, total_transport, subscriptions_monthly_total, total_investments, total_insurance, total_entertainment] 
+    print("This is the combined totals")
+    print(combined_totals)
     sum_multiline_items = sum_combined_totals(combined_totals)
-
-    remaining = credit_total_single_values - (sum_multiline_items + debit_total)
+    print("Sum Multi Line Items")
+    print(sum_multiline_items)
+    #removed sum_multiline_items  from the final calc as these totals are floats and were added to the account page as totals.
+    remaining = credit_total_single_values - (debit_total)
+    print("This is the credit Total single Values")
+    print(credit_total_single_values)
+    print("This is the debit total")
+    print(debit_total)
     remaining_formatted = '{:.2f}'.format(remaining)
+    print("This is remaining formatted")
+    print(remaining_formatted)
     
     return render_template('accounts.html', 
                            user=current_user,
@@ -623,8 +636,6 @@ def accounts():
     # Houskeeping starts here     
     if account.housekeeping.data:
       active.housekeeping = account.housekeeping.data
-
-    
 
     # Water section starts here
     print("Water section start")
@@ -786,12 +797,10 @@ def workfood():
     sum_snacks_share = 0
 
     current_food = Workfood.query.filter(Workfood.month == todayMonth
-                                         and Workfood.year == todayYear
-                                         and Workfood.username == current_user.username).all()
-
+                                         and Workfood.year == todayYear).all()
 
     workfood_total = sum_query_cost(current_food)
-    
+    print(workfood_total)
     
     
     for food in current_food:
@@ -993,7 +1002,7 @@ def investments():
   inv = InvestmentsForm()
   if request.method == 'GET':
 
-    current_investments = Investments.query.filter(Investments.username == current_user.username, Investments.month == todayDate.month, Investments.year == todayDate.year).all()
+    current_investments = Investments.query.filter(Investments.month == todayDate.month, Investments.year == todayDate.year).all()
     
     return render_template('investments.html', inv=inv, current_investments=current_investments)
 

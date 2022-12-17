@@ -4,7 +4,7 @@
 
 <div class="page">
     <div class="form">
-      <h1 class="mainTextColor">Takeaway Night</h1>
+      <h1 class="mainTextColor margin-bottom">Takeaway Night</h1>
       <form class="login-form" action="" method="post" novalidate>
         {{ takeaway.hidden_tag() }}
       <tabel>
@@ -23,8 +23,10 @@
             <td>{{ takeaway.takeaway_cost }}</td>
         </tr>
       </tabel>
-      <p>{{ takeaway.submit() }}</p>
-      <p><a class="button noline" href="{{ url_for('accounts') }}">Full Accounts Page</a></p>
+      <button class="primary_button white_text" type="submit">Takeaway</button>
+      <div class="other_button border_button margin-top">
+        <h4><a class="noline mainTextColor" href="{{ url_for('accounts') }}">Full Accounts Page</a></h4>
+    </div>
     </form>
     </div>
 </div>
