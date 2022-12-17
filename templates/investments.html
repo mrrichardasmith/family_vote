@@ -5,7 +5,7 @@
 <div class="page">
     <form class="form" action="" method="post" novalidate>
         {{ inv.hidden_tag() }}
-        <h1 class="mainTextColor">Investments</h1>
+        <h1 class="mainTextColor margin-bottom">Investments</h1>
         <table>
             <tr>
                 <th>{{ inv.investment_name.label }}</th>
@@ -20,18 +20,24 @@
                 <td>{{ inv.investment_cost}}</td>
             </tr>
         </table>
-        <p>{{ inv.submit() }}</p>
-        <div class="button">
-            <a class="noline white_text" href="{{ url_for('accounts') }}">Full Accounts Page</a>
+        <button class="primary_button white_text" type="submit">Invest</button>
+        <div class="other_button border_button margin-top">
+            <h4><a class="noline mainTextColor" href="{{ url_for('accounts') }}">Full Accounts Page</a></h4>
         </div>
         <table>
-            <h2 class="mainTextColor">Current Investments</h2>
+            <h2 class="mainTextColor margin-top">Current Investments</h2>
+            <tr>
+                <th>Name</th>
+                <th>Decscription</th>
+                <th>Cost</th>
+            </tr>
             
             {% for i in current_investments %}
             <tr>
-                <th>{{ i.investment_name }}</th>
+                <td>{{ i.investment_name }}</td>
                 <td>{{ i.investment_description }}</td>
-                <td>{{ i.investment_cost }}</td>
+                <td>{{ i.cost }}</td>
+                <td><a class="noline" href="{{ url_for('investments_delete', id=i.id) }}"><img class="iconPic2" src="{{ url_for('static', filename='pictures/delete.png') }}"></a></td>
             </tr>
             {% endfor %}
         </table>

@@ -1010,6 +1010,16 @@ def investments():
     db.session.commit()
     return redirect(url_for('investments'))
 
+@app.route('/investments/delete/<id>', methods=['GET', 'POST'])
+@login_required
+def investments_delete(id):
+  if request.method == 'GET':
+    print("We selected delete an investment")
+    delete_investments = Investments.query.get(id)
+    db.session.delete(delete_investments)
+    db.session.commit()
+  return redirect(url_for('investments'))
+
 @app.route('/insurance', methods=['GET', 'POST'])
 @login_required
 def insurance():
