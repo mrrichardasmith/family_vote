@@ -560,6 +560,7 @@ def accounts():
     print("Sum Multi Line Items")
     print(sum_multiline_items)
     #removed sum_multiline_items  from the final calc as these totals are floats and were added to the account page as totals.
+    #This causes a problem because it requires a double refresh to pull the correct value into the calculation.
     remaining = credit_total_single_values - (debit_total)
     print("This is the credit Total single Values")
     print(credit_total_single_values)
@@ -980,8 +981,7 @@ def subscriptionmgmt():
   if request.method == 'GET':
 
     current_subscriptions = Subscriptions.query.filter(Subscriptions.month == todayMonth
-                                                   and Subscriptions.year == todayYear
-                                                   and Subscriptions.username == current_user.username).all()
+                                                   and Subscriptions.year == todayYear).all()
 
     return render_template('subscriptionsmgmt.html', current_subscriptions=current_subscriptions)
 
@@ -1036,7 +1036,7 @@ def insurance():
   ins = InsuranceForm()
     
   if request.method == 'GET':
-    current_insurance = Insurance.query.filter(Insurance.username == current_user.username and Insurance.month == todayDate.month).all()  
+    current_insurance = Insurance.query.filter(Insurance.month == todayDate.month).all()  
     
     return render_template('insurance.html', ins=ins, current_insurance=current_insurance)
   
@@ -1067,8 +1067,7 @@ def extragroceries():
   if request.method == 'GET':
     
     extra_groceries = Extragroceries.query.filter(Extragroceries.month == todayMonth
-                                              and Extragroceries.year == todayYear
-                                              and Extragroceries.username == current_user.username).all()
+                                              and Extragroceries.year == todayYear).all()
     
     return render_template('extragroceries.html', extra=extra, list=extra_groceries, monthNow=monthNow)
 
@@ -1114,8 +1113,7 @@ def transport():
     method_totals = []
 
     get_transp = Transport.query.filter(Transport.month==todayMonth
-                                        and Transport.year==todayYear
-                                        and Transport.username == current_user.username).all()
+                                        and Transport.year==todayYear).all()
     
 
     if get_transp != None:
